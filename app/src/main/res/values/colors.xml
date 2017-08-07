@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="bg_topbar">#FF4081</color>
+    <color name="text_topbar">#FF4081</color>
+    <color name="div_white">#080808</color>
+    <color name="bg_white">#080808</color>
+
+
+    <color name="textColorforItemTitle">#ff666666</color>
+    <color name="buy">#ff22a7ff</color>
+    <color name="black">#ff000000</color>
+    <color name="bg1_whole">#ffdfe2e6</color>
+    <color name="bg2_title">#ffebecf0</color>
+    <color name="bg4_default">#ffdadde0</color>
+    <color name="red">#d53c3c</color>
+    <color name="red_1">#ff2400</color>
+    <color name="green">#ff29a968</color>
+    <color name="blue">#ff1384d4</color>
+    <color name="dark3">#ff46494b</color>
+    <color name="gray1">#ff75767b</color>
+    <color name="gray2">#ff86878b</color>
+    <color name="gray3">#ffa7a7ab</color>
+    <color name="gray4">#ff787878</color>
+    <color name="white1">#ffeeeef1</color>
+    <color name="white2">#ffffffff</color>
+    <color name="transparent">#00000000</color>
+    <color name="dialog_divider_color">#ffcccdd1</color>
+    <color name="gray">#eaeaea</color>
+    <color name="deepgray">#aeaeae</color>
+    <color name="background_tab_pressed">#6633B5E5</color>
+    <color name="horizontalLine">#ffeeeeee</color>
+
+    <color name="dark_blue">#22A7FF</color>
+    <color name="dark_bule_press">#1D7FC0</color>
+    <color name="gray_item">#d2d2d2</color>
+    <color name="blue_item">#22a7ff</color>
+    <color name="black_text">#080808</color>
+    <color name="red_buy">#ff391e</color>
+
+    <color name="white">#ffffffff</color>
+    <color name="green_text">#ff7beb1d</color>
+    <color name="white_text">#ffffffff</color>
+    <color name="main_blue">#ff54bceb</color>
+    <color name="pay_green">#FF52CAFF</color>
+    <color name="yellow">#ffffff00</color>
+    <color name="price_blue">#ff52caff</color>
+    <color name="lgtblue">#23b5f3</color>
+    <color name="translucent_background">#e0000000</color>
+
+    <!-- Grey-->
+    <color name="Grey_300">#E0E0E0</color>
+    <color name="simple_player_stream_name_playing">#ff0043bd</color>
+    <color name="simple_player_stream_name_normal">#ffffffff</color>
+
+    <color name="result_view">#b0000000</color>
+    <color name="viewfinder_mask">#29000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+</resources>

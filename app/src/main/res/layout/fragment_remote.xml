@@ -1,0 +1,700 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="gos.media.fragment.RemoteFragment">
+    <gos.media.view.TitleBar
+        android:id="@+id/titlebar"
+        style="@style/Titlebar">
+
+    </gos.media.view.TitleBar>
+    <LinearLayout
+        android:id="@+id/mainFrame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:background="@drawable/all_background"
+        android:orientation="vertical">
+
+        <TableRow
+            android:id="@+id/tablerow1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="8dp"
+
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1.5"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/power"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/big_button"
+                android:onClick="remoterFuncOnClick"
+                android:padding="4dp"
+                app:srcCompat="@drawable/ic_power_settings_new_red_24dp" />
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/settings_remote"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:padding="4dp"
+                app:srcCompat="@drawable/ic_settings_remote" />
+
+            <Button
+                android:id="@+id/menue"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/big_button"
+                android:onClick="remoterFuncOnClick"
+                android:text="MENU" />
+        </TableRow>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/function"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1.5"
+                    android:background="@drawable/sewa"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <Button
+                        android:id="@+id/btn_red"
+                        android:layout_width="30dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="2dp"
+                        android:background="#00000000"
+                        android:onClick="remoterFuncOnClick" />
+
+                    <Button
+                        android:id="@+id/btn_green"
+                        android:layout_width="30dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="65dp"
+                        android:layout_marginStart="61dp"
+                        android:layout_toEndOf="@+id/btn_red"
+                        android:background="#00000000"
+                        android:onClick="remoterFuncOnClick" />
+
+                    <Button
+                        android:id="@+id/btn_blue"
+                        android:layout_width="30dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:background="#00000000"
+                        android:onClick="remoterFuncOnClick" />
+
+                    <Button
+                        android:id="@+id/btn_yellow"
+                        android:layout_width="30dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginEnd="63dp"
+                        android:layout_toStartOf="@+id/btn_blue"
+                        android:background="#00000000"
+                        android:onClick="remoterFuncOnClick" />
+
+                </RelativeLayout>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/fast_rewind"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:padding="4dp"
+                        android:text="1"
+                        app:srcCompat="@drawable/ic_fast_rewind_black_30dp" />
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/play"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_play_arrow_black_30dp" />
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/pause"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_pause_black_30dp" />
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/fast_forward"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_fast_forward_black_30dp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/skip_previous"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_skip_previous_black_30dp" />
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/record"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:padding="6dp"
+                        app:srcCompat="@drawable/ic_fiber_manual_record_red_24dp" />
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/stop"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_stop_black_30dp" />
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/skip_next"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_skip_next_black_30dp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <Button
+                        android:id="@+id/set"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="SET" />
+
+                    <Button
+                        android:id="@+id/excite"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="EXCITE" />
+
+                    <Button
+                        android:id="@+id/help"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="HELP" />
+
+                    <Button
+                        android:id="@+id/figure"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:text="123..." />
+                </TableRow>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/digit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <Button
+                        android:id="@+id/mute"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="MUTE" />
+
+                    <Button
+                        android:id="@+id/fav"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="FAV" />
+
+                    <Button
+                        android:id="@+id/pvr"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="PVR" />
+
+                    <Button
+                        android:id="@+id/exit"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="EXIT" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <Button
+                        android:id="@+id/number1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="1 ,.;@" />
+
+                    <Button
+                        android:id="@+id/number2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="2 abc" />
+
+                    <Button
+                        android:id="@+id/number3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="3 def" />
+
+                    <Button
+                        android:id="@+id/func1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="*+" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <Button
+                        android:id="@+id/number4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="4 ghi" />
+
+                    <Button
+                        android:id="@+id/number5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="5 jkl" />
+
+                    <Button
+                        android:id="@+id/number6"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="6 mno" />
+
+                    <Button
+                        android:id="@+id/number0"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="0" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <Button
+                        android:id="@+id/number7"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="7 pqrs" />
+
+                    <Button
+                        android:id="@+id/number8"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="8 tuv" />
+
+                    <Button
+                        android:id="@+id/number9"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:onClick="remoterFuncOnClick"
+                        android:text="9 wxyz" />
+
+                    <Button
+                        android:id="@+id/funcButton"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/little_button"
+                        android:text="Hot Key" />
+                </TableRow>
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5.5"
+            android:elevation="0dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/control"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/vol_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:onClick="remoterFuncOnClick"
+                    android:text="VOL+"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/vol_sub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:onClick="remoterFuncOnClick"
+                    android:text="VOL-"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@drawable/background">
+
+                <Button
+                    android:id="@+id/up"
+                    android:layout_width="58dp"
+                    android:layout_height="30dp"
+                    android:layout_above="@+id/ok"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="11dp"
+                    android:background="@android:color/transparent"
+                    android:forceHasOverlappingRendering="false"
+                    android:onClick="remoterFuncOnClick" />
+
+                <Button
+                    android:id="@+id/right"
+                    android:layout_width="30dp"
+                    android:layout_height="58dp"
+                    android:layout_alignTop="@+id/left"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toEndOf="@+id/ok"
+                    android:background="@android:color/transparent"
+                    android:onClick="remoterFuncOnClick" />
+
+                <Button
+                    android:id="@+id/left"
+                    android:layout_width="30dp"
+                    android:layout_height="58dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="12dp"
+                    android:layout_toLeftOf="@+id/ok"
+                    android:background="@android:color/transparent"
+                    android:onClick="remoterFuncOnClick" />
+
+                <Button
+                    android:id="@+id/down"
+                    android:layout_width="58dp"
+                    android:layout_height="30dp"
+                    android:layout_alignStart="@+id/up"
+                    android:layout_below="@+id/ok"
+                    android:layout_marginTop="12dp"
+                    android:background="@android:color/transparent"
+                    android:onClick="remoterFuncOnClick"
+                    android:scaleType="center" />
+
+                <Button
+                    android:id="@+id/ok"
+                    android:layout_width="58dp"
+                    android:layout_height="58dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:onClick="remoterFuncOnClick" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/control"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ch_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:onClick="remoterFuncOnClick"
+                    android:text="CH+"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/ch_sub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:onClick="remoterFuncOnClick"
+                    android:text="CH-"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1.5"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/guide"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/big_button"
+                android:onClick="remoterFuncOnClick"
+                android:text="GUIDE" />
+
+            <Button
+                android:id="@+id/info"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/big_button"
+                android:onClick="remoterFuncOnClick"
+                android:text="INFO" />
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/big_button"
+                android:onClick="remoterFuncOnClick"
+                android:scaleType="center"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_keyboard_backspace_black_30dp" />
+        </TableRow>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

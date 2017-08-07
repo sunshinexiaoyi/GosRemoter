@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gos Media</string>
+    <string name="title_activity_init">InitActivity</string>
+
+    <string name="tab_menu_remote">Remote</string>
+    <string name="tab_menu_live">Live</string>
+    <string name="tab_menu_connect">Connect</string>
+
+    <!--退出弹出框-->
+    <string name="exit_dialog_title">System Info</string>
+    <string name="exit_dialog_content">Are you sure to exit?</string>
+    <string name="exit_dialog_cancel">cancel</string>
+    <string name="exit_dialog_confirm">confirm</string>
+
+    <!--连接模块-->
+
+    <!--服务器连接界面设置 -->
+    <string name = "connect_set_server">Set the address of the server</string>
+    <string name = "connect_edit_server_address">Please enter the address of the server</string>
+    <string name = "connect_confirm">CONNECT</string>
+    <string name = "connect_format">Address format error, please enter again</string>
+    <string name = "connect_hint">address can not null</string>
+    <string name = "connect_attach">Device is connected</string>
+    <string name = "connect_detach">Device has been disconnected</string>
+    <string name = "connect_detach_hint">detach the device</string>
+    <string name = "connect_try_connect">Try to connect device...</string>
+
+    <!--扫码-->
+
+    <string name="ret">back</string>
+    <string name="scan_title">Scan Connect Device</string>
+    <string name="menu_settings">Settings</string>
+    <string name="scan_text">Please put the qr code/bar code in the box</string>
+    <string name="scan_data_parse_error">Data analytical data parsing anomaly</string>
+    <string name="allow_camera_permission">Please allow camera permissions</string>
+
+    <!--播放器部分-->
+    <string name="small_problem">player small problem</string>
+    <string name="not_support">player not support</string>
+
+    <string name="pref_key_enable_background_play">pref.enable_background_play</string>
+
+    <string name="pref_key_player">pref.player</string>
+    <string name="switch_freq">Switch frequency point, is nearing the end of the current live</string>
+    <string name="heartbeat_stop">With the server lost</string>
+    <!-- 直播部分 -->
+    <string name="jump_connect">There is no connection, please connect</string>
+    <string name="jump">Click to connect</string>
+
+    <string name="pref_key_using_media_codec">pref.using_media_codec</string>
+
+    <string name="pref_key_using_media_codec_auto_rotate">pref.using_media_codec_auto_rotate</string>
+
+    <string name="pref_key_media_codec_handle_resolution_change">pref.media_codec_handle_resolution_change</string>
+
+    <string name="pref_key_pixel_format">pref.pixel_format</string>
+
+    <!-- -->
+
+    <string name="pref_key_using_opensl_es">pref.using_opensl_es</string>
+
+    <!-- -->
+
+    <string name="pref_key_enable_no_view">pref.enable_no_view</string>
+
+    <string name="pref_key_enable_surface_view">pref.enable_surface_view</string>
+
+    <string name="pref_key_enable_texture_view">pref.enable_texture_view</string>
+
+    <string name="pref_key_enable_detached_surface_texture">pref.enable_detached_surface_texture</string>
+
+    <!-- -->
+    <string name="pref_key_using_mediadatasource">pref.using_mediadatasource</string>
+
+    <!-- -->
+    <string name="pref_key_last_directory"></string>
+
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="pulldown_refresh">Pull down to refreshing…</string>
+    <string name="pulldown_refresh_ready">Loosen to load…</string>
+    <string name="pulldown_refreshing">Refreshing…</string>
+    <string name="pullup_load">Pull up to loading…</string>
+    <string name="pullup_load_ready">Loosen to loading…</string>
+    <string name="pullup_loading">Loading…</string>
+    <string name="exit">Are you sure to exit GOSPELL OTT?</string>
+    <string name="exit2">Click again to exit</string>
+    <string name="loading">Loading…</string>
+    <string name="more">More</string>
+    <string name="clickRefresh">Click to fresh</string>
+    <string name="refresh_time">Date of update:</string>
+    <string name="last_refresh_time">The latest update:</string>
+    <string name="empty_list">No data</string>
+    <string name="netError">Network connection error</string>
+    <string name="serverError">An error occurred on the server</string>
+    <string name="live">Live</string>
+
+    <string name="wifi">WiFi</string>
+    <string name="setting">Navigation Setting</string>
+    <string name="set_server">set navigation server address</string>
+    <string name="edit_server">please input set navigation server address</string>
+    <string name="daohangassress_null">navigation server is null</string>
+    <string name="daohangassress_failed">navigation server connect failed, please reset</string>
+    <string name="please_wait">please wait...</string>
+    <string name="comfirm">Confirm</string>
+
+    <string name="search_channel">Enter the key words</string>
+    <string name="grid_TVplay">TV</string>
+    <string name="grid_Documentary">Documentary</string>
+    <string name="grid_Cartoon">Cartoon</string>
+    <string name="grid_Film">Movie</string>
+    <string name="grid_Music">Music</string>
+    <string name="grid_Variety">Variety shows</string>
+    <string name="grid_Entertainment">Entertainment</string>
+    <string name="toast_search">Keyword search can not be empty</string>
+    <string name="tv_search_result">Result for Search</string>
+    <string name="tv_score">score：</string>
+    <string name="tv_vedio_score">Vedio Score</string>
+    <string name="tv_vedio_name">Vedio Name</string>
+    <string name="tv_screen">Screen</string>
+    <string name="tv_sorting">Sort</string>
+    <string name="tv_type">Type</string>
+    <string name="tv_area">Country</string>
+    <string name="tv_year">Year</string>
+    <string name="tv_dialog_msg">Would you like to pay to watch this?</string>
+    <string name="btn_screning_cancel">Cancel</string>
+    <string name="btn_screning_commit">Confirm</string>
+    <string name="tv_vedio_save">My favorite</string>
+    <string name="tv_vedio_director">The director:</string>
+    <string name="tv_vedio_year">Year:</string>
+    <string name="tv_vedio_cost">Cost:</string>
+    <string name="tv_vedio_cost_num">Free</string>
+    <string name="tv_vedio_leading_role">Actor:</string>
+    <string name="tv_series">Series</string>
+    <string name="tv_vedio_recomend">May like to watch</string>
+    <string name="tv_vedio_recomend_score">92% are positive comments</string>
+    <string name="retrieve_area">Country</string>
+    <string name="retrieve_year">Year</string>
+    <string name="all">All</string>
+    <string name="music">Music</string>
+    <string name="stream_standard">SD</string>
+    <string name="stream_high">HD</string>
+    <string name="series_title" formatted="false">%s-%s</string>
+    <string name="series_current" formatted="false">update to %s part/</string>
+    <string name="series_total" formatted="false">Totally %s part</string>
+    <string name="do_login_prompt">Please login </string>
+    <string name="add_favor_success">Successful to cancellation</string>
+    <string name="add_favor_failed">Failed to cancellation</string>
+    <string name="cancel_favor_success">Successful to cancellation</string>
+    <string name="cancel_favor_failed">Failed to cancellation</string>
+    <string name="pay_failed">Failure to pay this</string>
+    <string name="not_enough_balance">Sorry, your balance has been insufficient, please promptly value.</string>
+    <string name="sort_by_new">Newest</string>
+    <string name="sort_by_update">New update</string>
+    <string name="sort_by_score">Top</string>
+    <string name="sort_by_a_z">A~Z</string>
+
+    <!-- me -->
+    <string name="tv_myself">Me</string>
+    <string name="tv_click_login">Login</string>
+    <string name="tv_login_info">Login for cloud synchronization and more privileges</string>
+    <string name="tv_login_tip">Login for more information</string>
+    <string name="tv_login">Login</string>
+    <string name="tv_account_login">User Login</string>
+    <string name="edit_account">Please enter username</string>
+    <string name="edit_password">Please enter password</string>
+    <string name="tv_palyhistory">Watch history</string>
+    <string name="tv_paly_date">Date of watch:</string>
+    <string name="tv_paly_time">Point of watch:</string>
+    <string name="tv_collection">My favorite</string>
+    <string name="tv_buy_packages">Buy Package</string>
+    <string name="tv_rechargerecord">Recharge record</string>
+    <string name="tv_consumerecord">My purchases</string>
+    <string name="tv_userfeedback">Feedback</string>
+    <string name="account_error">Login failed (name/password refused) </string>
+    <string name="tv_myselfinfo">User Information</string>
+    <string name="tv_myselfinfo_logout">Logout</string>
+    <string name="tv_myselfinfo_logo">Image</string>
+    <string name="tv_myselfinfo_name">Nickname</string>
+    <string name="tv_myselfinfo_email">Email</string>
+    <string name="tv_myselfinfo_mobile">Mobile</string>
+    <string name="tv_myselfinfo_gen">Sex</string>
+    <string name="tv_myselfinfo_birthday">Date of Birth</string>
+    <string name="del_all_favor">Clear your favorites?</string>
+    <string name="del_all_playrecord">Clear your watch history?</string>
+    <string name="del_single_record">Delete？</string>
+    <string name="del_single_failed">Clear History failed, please try again later</string>
+    <string name="del_all_failed">Clear failed, please try again later</string>
+    <string name="logout_failed">Logout failed, please try again later</string>
+    <string name="buy_package_tips">Purchase packages can watch video for free</string>
+    <string name="buy">Buy</string>
+    <string name="whether_to_buy">Confirm whether to buy</string>
+    <string name="package_of_price">Price of packages</string>
+    <string name="Balance_of_account">Balance of account</string>
+    <string name="recharge_amount">Recharge amount：</string>
+    <string name="currency_type">¥</string>
+    <string name="recharge_time">Recharge time:</string>
+    <string name="consumption_amount">Consumption amount:</string>
+    <string name="consumption_package">Consumption packages:</string>
+    <string name="consumption_time">Consumption time:</string>
+    <string name="dialog_button_ok">Confirm</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="toast_no_more_to_display">No more data can be displayed</string>
+
+
+    <string name="buy_package_prompt_msg">package purchasing is unfinished, exit or not?</string>
+    <string name="ok_quit_buy_package">yes</string>
+    <string name="cancel_quit_buy_package">no</string>
+    <string name="wrong_pwd">Incorrect password, please try again</string>
+    <string name="stream_not_found">This film has been rolled off the production line</string>
+    <string name="nightprompt">The night is deep, please pay attention to rest</string>
+    <string name="exit_later">Continue to watch</string>
+    <string name="Do_not_support_the_fast_forward_fast_rewind"> Fast forward/fast reverse of live TV are not currently supported</string>
+    <string name="live_play_loading_live"> %s : loading live tv...</string>
+    <string name="live_play_loading_tstv"> %s : loading time shift...</string>
+    <string name="live_play_loading"> %s : loading information...</string>
+    <string name="input_pwd">Password：</string>
+    <string name="ok">OK</string>
+    <string name="view_pwd_tips">Tip: please enter your access code .</string>
+    <string name="The_channel_cannot_watch">The channel can not watching now!</string>
+    <string name="network_unavailable">The network is not available</string>
+    <string name="now_play_txt_simple">00:00:00</string>
+    <string name="all_play_txt_simple">00:00:00</string>
+    <string name="now_play_download_txt">0 KB/S</string>
+    <string name="timeshift">timeshift</string>
+    <string name="sound_txt">60</string>
+    <string name="pay_faild">payment failed! </string>
+    <string name="buy_succeed_congratulations">Successful purchase ！</string>
+    <string name="buy_confirm_title">Confirm payment</string>
+    <string name="buy_select_package_please_buy_fisrt">You are viewing the paid sources, please buy first</string>
+    <string name="buy_confirm_need_le_point">Original Price：</string>
+    <string name="buy_confirm_current_le_point">Balance：</string>
+    <string name="buy_confirm_discount_le_point">Discounted Price：</string>
+
+    <string name="buy_confirm_confirm_pay">Confirm</string>
+    <string name="buy_confirm_cancel_pay">Cancel</string>
+    <string name="money_unit"> $ </string>
+    <string name="input_pwd_hint">Please enter the access code</string>
+    <string name="vaild_day">Validity：</string>
+    <string name="password_not_null">The password can not be empty!</string>
+    <string name="off">off</string>
+    <string name="play_error">network busy, please try again later!</string>
+    <string name="no_play_url">network busy, please try again later!</string>
+    <string name="player_exception">channel under maintenance please try again later!</string>
+    <string name="user_kicked">Login failed, please login again!</string>
+    <string name="cancel">Cancel</string>
+    <string name="drm_auth_exception">The film is not by DRM licensing...</string>
+    <string name="once_more">one more try</string>
+    <string name="quit_playing">Exit the watch</string>
+    <string name="server_exception">network anomal! </string>
+    <string name="operation_data_exception">service exception!</string>
+    <string name="turn_page_tips">Turn Page</string>
+    <string name="no_data_now">no data</string>
+
+    <string name="server_ip">192.168.3.242</string>
+    <string name="N_A">N/A</string>
+    <string name="close">Close</string>
+    <string name="vdec">vdec</string>
+    <string name="fps">fps</string>
+    <string name="v_cache">v-cache</string>
+    <string name="a_cache">a-cache</string>
+    <string name="load_cost">load-cost</string>
+    <string name="seek_cost">seek_cost</string>
+    <string name="seek_load_cost">seek_load_cost</string>
+    <string name="tcp_speed">tcp_speed</string>
+    <string name="bit_rate">bit_rate</string>
+
+    <string name="media_information">Media Information</string>
+    <string name="mi_player">Player</string>
+    <string name="mi_media">Media</string>
+    <string name="mi_profile_level">Profile level</string>
+    <string name="mi_pixel_format">Pixel format</string>
+    <string name="mi_resolution">Resolution</string>
+    <string name="mi_length">Length</string>
+    <string name="mi_stream_fmt1">Stream #%d</string>
+    <string name="mi_type">Type</string>
+    <string name="mi_language">Language</string>
+    <string name="mi_codec">Codec</string>
+    <string name="mi_frame_rate">Frame rate</string>
+    <string name="mi_bit_rate">Bit rate</string>
+    <string name="mi_sample_rate">Sample rate</string>
+    <string name="mi_channels">Channels</string>
+    <string name="mi__selected_video_track">*</string>
+    <string name="mi__selected_audio_track">*</string>
+    <string name="mi__selected_subtitle_track">*</string>
+
+    <string name="TrackType_video">Video</string>
+    <string name="TrackType_audio">Audio</string>
+    <string name="TrackType_subtitle">Subtitle</string>
+    <string name="TrackType_timedtext">Timed text</string>
+    <string name="TrackType_metadata">Meta data</string>
+    <string name="TrackType_unknown">Unknown</string>
+
+    <string name="VideoView_error_text_invalid_progressive_playback">Invalid progressive playback</string>
+    <string name="VideoView_error_text_unknown">Unknown</string>
+    <string name="VideoView_error_button">OK</string>
+
+    <string name="VideoView_ar_aspect_fit_parent">Aspect / Fit parent</string>
+    <string name="VideoView_ar_aspect_fill_parent">Aspect / Fill parent</string>
+    <string name="VideoView_ar_aspect_wrap_content">Aspect / Wrap content</string>
+    <string name="VideoView_ar_match_parent">Free / Fill parent</string>
+    <string name="VideoView_ar_16_9_fit_parent">16:9 / Fit parent</string>
+    <string name="VideoView_ar_4_3_fit_parent">4:3 / Fit parent</string>
+
+    <string name="VideoView_render_none">Render: None</string>
+    <string name="VideoView_render_surface_view">Render: SurfaceView</string>
+    <string name="VideoView_render_texture_view">Render: TextureView</string>
+
+    <string name="VideoView_player_AndroidMediaPlayer">Player: AndroidMediaPlayer</string>
+    <string name="VideoView_player_IjkMediaPlayer">Player: IjkMediaPlayer</string>
+    <string name="VideoView_player_IjkExoMediaPlayer">Player: IjkExoMediaPlayer</string>
+</resources>

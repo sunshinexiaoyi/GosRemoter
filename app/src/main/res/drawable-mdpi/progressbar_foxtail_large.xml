@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/loading_center1"
+        android:duration="66" />
+    <item
+        android:drawable="@drawable/loading_center2"
+        android:duration="66" />
+    <item
+        android:drawable="@drawable/loading_center3"
+        android:duration="66" />
+    <item
+        android:drawable="@drawable/loading_center4"
+        android:duration="66" />
+    <item
+        android:drawable="@drawable/loading_center5"
+        android:duration="66" />
+    <item
+        android:drawable="@drawable/loading_center6"
+        android:duration="66" />
+    <item
+        android:drawable="@drawable/loading_center7"
+        android:duration="66" />
+    <item
+        android:drawable="@drawable/loading_center8"
+        android:duration="66" />
+
+</animation-list>

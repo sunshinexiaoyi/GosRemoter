@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tab_menu_text">15sp</dimen>
+    <dimen name="tab_menu_paddig">3sp</dimen>
+    <dimen name="titlebar_height">45.0dip</dimen>
+
+</resources>

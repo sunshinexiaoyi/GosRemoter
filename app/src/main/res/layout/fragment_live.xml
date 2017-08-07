@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:visibility="visible"
+    tools:context="gos.media.fragment.LiveFragment">
+
+    <gos.media.view.TitleBar
+        android:id="@+id/titlebar"
+        style="@style/Titlebar">
+
+    </gos.media.view.TitleBar>
+
+    <gos.media.view.ErrorMaskView
+        android:id="@+id/maskView"
+        style="@style/ErrorMaskView"/>
+
+    <ListView
+        android:id="@+id/programList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

@@ -172,9 +172,4 @@ public class ExampleUnitTest {
         return dataPackage.toByte();
     }
 
-    private void test(){
-        byte a = -5;
-        System.out.println(a>>3);
-    }
-
 }

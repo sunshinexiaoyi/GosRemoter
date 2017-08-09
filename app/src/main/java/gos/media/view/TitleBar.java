@@ -67,7 +67,7 @@ public class TitleBar extends RelativeLayout {
     }
 
     public void hideRightImageView() {
-        rightImageView.setVisibility(View.INVISIBLE);
+        rightImageView.setVisibility(View.GONE);
     }
 
     public void showRightImageView() {
@@ -81,6 +81,13 @@ public class TitleBar extends RelativeLayout {
         paramImageView.setVisibility(View.VISIBLE);
     }
 
+
+    public void setTitleInfoWithText(int paramInt1) {
+        View view = LayoutInflater.from(this.mContext).inflate(R.layout.title, this, true);
+        wrapLayout = (RelativeLayout) findViewById(R.id.RE_Wrap);
+        leftTextView = (TextView) view.findViewById(R.id.tv_title_name);
+        setTextView(leftTextView, paramInt1);
+    }
     public void setTitleInfoWithText(int paramInt1, int paramInt2, View.OnClickListener paramOnClickListener) {
         View view = LayoutInflater.from(this.mContext).inflate(R.layout.title, this, true);
         wrapLayout = (RelativeLayout) findViewById(R.id.RE_Wrap);

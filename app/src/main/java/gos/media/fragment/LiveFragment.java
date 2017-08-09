@@ -225,12 +225,7 @@ public class LiveFragment extends Fragment {
 
     protected void initLayout(View view) {
         TitleBar mTitleBar = (TitleBar) view.findViewById(R.id.titlebar);
-        mTitleBar.setTitleInfoWithText(R.string.app_name, R.drawable.tab_menu_live, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, R.string.tab_menu_live, Toast.LENGTH_SHORT).show();
-            }
-        });
+        mTitleBar.setTitleInfoWithText(R.string.app_name);
 
         listView = (ListView) rootView.findViewById(R.id.programList);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

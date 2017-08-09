@@ -96,6 +96,7 @@ public class LiveActivity extends Activity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mVideoView.onConfigurationChanged(newConfig);
+        Log.i("live","onConfigurationChanged");
     }
 
     /**
@@ -119,7 +120,9 @@ public class LiveActivity extends Activity {
         mVideoView.setScaleType(PlayStateParams.fitparent);
         mVideoView.forbidTouch(false);
         mVideoView.hideMenu(true);
-        mVideoView.setOnlyFullScreen(true);
+        mVideoView.hideRotation(true);
+        mVideoView.enableOrientationEventListener();
+        //mVideoView.setOnlyFullScreen(true);
     }
 
     private void startPlay(){
@@ -150,5 +153,8 @@ public class LiveActivity extends Activity {
             }
         },delay);
     }
+
+
+
 
 }

@@ -196,15 +196,7 @@ public class RemoteFragment extends Fragment {
     protected void initLayout(View view) {
 
         TitleBar mTitleBar = (TitleBar) view.findViewById(R.id.titlebar);
-        mTitleBar.setTitleInfoWithText(R.string.app_name, R.drawable.tab_menu_remote, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context,R.string.tab_menu_remote, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-
+        mTitleBar.setTitleInfoWithText(R.string.app_name);
 
         Button figureBn = (Button)rootView.findViewById(R.id.figure);
         figureBn.setOnClickListener(new View.OnClickListener() {

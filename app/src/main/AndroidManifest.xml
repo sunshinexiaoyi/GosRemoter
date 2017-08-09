@@ -32,7 +32,11 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"><!--键盘会覆盖屏幕,避免屏幕整体上移-->
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+            <!--键盘会覆盖屏幕,避免屏幕整体上移-->
+            <!--主页面只允许竖屏，遥控器显示不允许横屏-->
+
         </activity>
 
         <service
@@ -40,9 +44,10 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.LiveActivity">
-
+        <activity android:name=".activity.LiveActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"><!--非重启Activity的横竖屏切换-->
         </activity>
+
         <activity
             android:name="qr.zxing.MipcaActivityCapture"
             android:configChanges="orientation|keyboardHidden"

@@ -27,13 +27,15 @@ import gos.media.define.*;
 public class ExampleUnitTest {
     String[] testUrl = new String[]{
             "http://192.168.1.109:1026/hls_encrypt/out/langyb/program.m3u8",
-            "http://192.168.100.17/hls_media_1_33.ts" ,
+            "http://192.168.100.103/hls_media_1.m3u8" ,
     "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
     "http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8" ,
     "http://playertest.longtailvideo.com/adaptive/oceans_aes/oceans_aes.m3u8" ,
     "http://playertest.longtailvideo.com/adaptive/captions/playlist.m3u8",
     };
-    
+
+    InetAddress local =null;
+
     @Test
     public void addition_isCorrect() throws Exception {
         startServer();
@@ -46,7 +48,8 @@ public class ExampleUnitTest {
          * 接收客户端发送的数据
          */
         // 1.创建服务器端DatagramSocket，指定端口
-        DatagramSocket socket = new DatagramSocket(NetProtocol.sendPort,InetAddress.getByName("192.168.100.17"));
+        local = InetAddress.getLocalHost();
+        DatagramSocket socket = new DatagramSocket(NetProtocol.sendPort,local);
         System.out.println("服务器配置");
         System.out.println("ip:"+socket.getLocalAddress());
         System.out.println("port:"+socket.getLocalPort());
@@ -112,7 +115,7 @@ public class ExampleUnitTest {
                 System.out.println("查找设备");
                 dataPackage.command = CommandType.COM_CONNECT_SET_DEVICE;
 
-                Device device = new Device("192.168.100.17","ff:ee:34:63:23","2017");
+                Device device = new Device(local.getHostAddress(),"ff:ee:34:63:23","2017");
                 sendData = JSON.toJSONString(device);
                 break;      //
 

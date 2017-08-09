@@ -1,0 +1,14 @@
+Index: app/src/test/java/gos/media/ExampleUnitTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/test/java/gos/media/ExampleUnitTest.java	(date 1502157321000)
++++ app/src/test/java/gos/media/ExampleUnitTest.java	(date 1502158266000)
+@@ -174,4 +174,5 @@
+ 
+     void fun(){}
+ 
++
+ }
+\ No newline at end of file

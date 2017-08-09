@@ -844,6 +844,15 @@ public class PlayerView {
      * ==========================================对外的方法=============================
      */
 
+    /**
+     *  使能Activity界面方向监听
+     */
+    public void enableOrientationEventListener()
+    {
+        if(null != orientationEventListener){
+            orientationEventListener.enable();
+        }
+    }
 
     /**
      * 显示缩略图

@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSON;
 import java.util.ArrayList;
 
 import gos.media.data.Device;
+import gos.media.data.EpgProgram;
 import gos.media.data.IndexClass;
 import gos.media.data.Program;
+import gos.media.data.ReserveEventSend;
 import gos.media.data.Respond;
 
 /**
@@ -30,4 +32,14 @@ public class DataParse {
     public static IndexClass getIndexClass(String data){
         return JSON.parseObject(data,IndexClass.class);
     }
+
+    public static EpgProgram getEpgProgram(String data){
+        return JSON.parseObject(data,EpgProgram.class);
+    }
+
+    public static ReserveEventSend getReserveEventSend(String data){
+        return JSON.parseObject(data,ReserveEventSend.class);
+    }
+
+
 }

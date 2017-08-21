@@ -8,7 +8,7 @@ import org.greenrobot.eventbus.EventBus;
  * Created by wuxy on 2017/7/14.
  */
 
-public class EventManager {
+public class  EventManager {
 
     /**
      * 事件发送
@@ -18,6 +18,16 @@ public class EventManager {
      */
     public static void send(byte command, String data, EventMode eventMode){
         EventBus.getDefault().post(new EventMsg(command,data, eventMode));
+    }
+
+    /**
+     * 事件粘性发送
+     * @param command   命令
+     * @param data      数据
+     * @param eventMode      模式
+     */
+    public static void sendSticky(byte command, String data, EventMode eventMode){
+        EventBus.getDefault().postSticky(new EventMsg(command,data, eventMode));
     }
 
     /**

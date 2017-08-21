@@ -24,6 +24,8 @@ import gos.media.event.EventMsg;
 import gos.media.heartbeat.HeartbeatPacket;
 import gos.media.heartbeat.HeartbeatStop;
 
+import static gos.media.define.CommandType.*;   //导入静态命令集
+
 public class NetService extends Service {
     private  final String TAG = this.getClass().getSimpleName();
     public static NetProtocol.UdpUnicastSocket netSender = null;
@@ -36,7 +38,7 @@ public class NetService extends Service {
     private String deviceIP;
 
     private HeartbeatPacket heartbeatPacket = null;
-    private int heartbeatInterval = 10; //设置心跳包超时时间为10s
+    private int heartbeatInterval = 1000; //设置心跳包超时时间为10s
 
     public NetService() {
     }
@@ -53,9 +55,11 @@ public class NetService extends Service {
             dataPackage.command = msg.getCommand();
             dataPackage.setData(msg.getData());
             Log.i(TAG,"发送命令:"+dataPackage.getCommand());
+            Log.i(TAG,"发送数据:"+new String(dataPackage.getData()));
+
             switch (dataPackage.getCommand())
             {
-                case CommandType.COM_CONNECT_GET_DEVICE:    //获取设备，发送udp广播
+                case COM_CONNECT_GET_DEVICE:    //获取设备，发送udp广播
                     Log.i(TAG,"command:"+"获取设备，发送udp广播");
                     try {
                         NetProtocol.UdpUnicastSocket broadSender = new NetProtocol.UdpUnicastSocket("255.255.255.255", NetProtocol.sendPort,NetProtocol.SocketType.SEND);
@@ -144,7 +148,7 @@ public class NetService extends Service {
 
     void sendHeartbeatStop(){
         Log.i(TAG,"sendHeartbeat");
-        EventManager.send(CommandType.COM_SYS_HEARTBEAT_STOP,"", EventMode.IN);
+        EventManager.send(COM_SYS_HEARTBEAT_STOP,"", EventMode.IN);
     }
 
     void startServer(){
@@ -158,7 +162,7 @@ public class NetService extends Service {
                 public void run() {
                     byte[] recvData = netReceiver.receive();
                     try {
-                        Log.i(TAG,DataPackage.getFormatStr(recvData));
+                       // Log.i(TAG,DataPackage.getFormatStr(recvData));
                         DataPackage dataPackage = new DataPackage(recvData);
                         parseDataPackage(dataPackage);
                     }catch (Exception e){
@@ -178,16 +182,16 @@ public class NetService extends Service {
      */
     private void parseDataPackage(DataPackage dataPackage){
         Log.i(TAG,"接收命令:"+dataPackage.getCommand());
-        if(CommandType.COM_SYSTEM_RESPOND == dataPackage.getCommand())//回应
+        if(COM_SYSTEM_RESPOND == dataPackage.getCommand())//回应
         {
             Respond respond = DataParse.getRespond(dataPackage.data);
             switch (respond.getCommand()){
-                case CommandType.COM_CONNECT_DETACH:
+                case COM_CONNECT_DETACH:
                     heartbeatPacket.stop();
                     break;
-                case CommandType.COM_LIVE_STOP_PROGRAM:
+                case COM_LIVE_STOP_PROGRAM:
                     break;
-                case CommandType.COM_CONNECT_ATTACH:
+                case COM_CONNECT_ATTACH:
                     Log.i(TAG,"连接设备");
                     //开启心跳包
                     heartbeatPacket.start();
@@ -196,7 +200,7 @@ public class NetService extends Service {
                     break;
             }
             postDataPackage(dataPackage, EventMode.IN);
-        } else if(CommandType.COM_SYSTEM_HEARTBEAT_PACKET == dataPackage.getCommand()){//心跳包
+        } else if(COM_SYSTEM_HEARTBEAT_PACKET == dataPackage.getCommand()){//心跳包
             heartbeatPacket.recover();
             sendRespond(dataPackage);
         }else{
@@ -220,7 +224,7 @@ public class NetService extends Service {
     private void sendRespond(DataPackage dataPackage){
 
         Respond respond = new Respond(dataPackage.getCommand(),true);
-        EventManager.send(CommandType.COM_SYSTEM_RESPOND, JSON.toJSONString(respond), EventMode.OUT);
+        EventManager.send(COM_SYSTEM_RESPOND, JSON.toJSONString(respond), EventMode.OUT);
     }
 
     private String getLocalIP( WifiInfo wifiInfo) {

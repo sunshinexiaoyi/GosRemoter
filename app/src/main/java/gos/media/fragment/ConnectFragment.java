@@ -42,7 +42,6 @@ import gos.media.R;
 import gos.media.adapter.ServiceSettingListAdapter;
 import gos.media.data.Device;
 import gos.media.data.Respond;
-import gos.media.define.CommandType;
 import gos.media.define.DataParse;
 import gos.media.define.InputCheck;
 import gos.media.define.NetProtocol;
@@ -53,6 +52,9 @@ import gos.media.event.EventMode;
 import gos.media.event.EventMsg;
 import gos.media.service.NetService;
 import gos.media.view.TitleBar;
+
+import static gos.media.define.CommandType.*;   //导入静态命令集
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,7 +70,7 @@ public class ConnectFragment extends Fragment implements OnClickListener,OnItemC
     private  final String TAG = this.getClass().getSimpleName();
     private View rootView = null;   //缓存页面
     private Context context;
-
+    
     private LinearLayout ll_connect = null;
     private LinearLayout ll_disconnect = null;
     private EditText editText = null;
@@ -222,26 +224,26 @@ public class ConnectFragment extends Fragment implements OnClickListener,OnItemC
     public void onRecviveEvent(EventMsg msg){
         if(EventMode.IN == msg.getEventMode()){  //对内
             switch (msg.getCommand()){
-                case CommandType.COM_SYS_HEARTBEAT_STOP:
+                case COM_SYS_HEARTBEAT_STOP:
                     detach();
                     break;
-                case CommandType.COM_CONNECT_SET_DEVICE:
+                case COM_CONNECT_SET_DEVICE:
                     addDevice(msg.getData());
                     break;
-                case CommandType.COM_SYS_EXIT:  //系统退出时，断开连接
+                case COM_SYS_EXIT:  //系统退出时，断开连接
                     detachDevice();
                     break;
-                case CommandType.COM_SYSTEM_RESPOND:
+                case COM_SYSTEM_RESPOND:
                     Respond respond = DataParse.getRespond(msg.getData());
                     switch (respond.getCommand()){
-                        case CommandType.COM_CONNECT_DETACH:
+                        case COM_CONNECT_DETACH:
                             if(respond.getFlag()){
                                 detach();
                             }else{
                                 Log.i(TAG,"断开连接失败");
                             }
                             break;
-                        case CommandType.COM_CONNECT_ATTACH:
+                        case COM_CONNECT_ATTACH:
                             if(respond.getFlag()){
                                 attach();
                             }else {
@@ -438,7 +440,7 @@ public class ConnectFragment extends Fragment implements OnClickListener,OnItemC
         getDevice();
     }
     private void getDevice(){
-        EventManager.send(CommandType.COM_CONNECT_GET_DEVICE,"", EventMode.OUT);
+        EventManager.send(COM_CONNECT_GET_DEVICE,"", EventMode.OUT);
     }
 
     private void attachDevice(Device device){
@@ -453,7 +455,7 @@ public class ConnectFragment extends Fragment implements OnClickListener,OnItemC
             System.out.println("port:"+NetService.netSender.getPort());
             System.out.println("ip:"+NetService.netSender.getAddress());
             String data = JSON.toJSONString(device);
-            EventManager.send(CommandType.COM_CONNECT_ATTACH,data, EventMode.OUT);
+            EventManager.send(COM_CONNECT_ATTACH,data, EventMode.OUT);
             //设置服务器设备信息
             SystemInfo.getInstance().setService(device);
 
@@ -465,7 +467,7 @@ public class ConnectFragment extends Fragment implements OnClickListener,OnItemC
     //断开与服务器的连接
     private void detachDevice(){
         if(SystemState.ATTACH == SystemInfo.getInstance().getState()) {
-            EventManager.send(CommandType.COM_CONNECT_DETACH, "", EventMode.OUT);
+            EventManager.send(COM_CONNECT_DETACH, "", EventMode.OUT);
         }
     }
 
@@ -478,7 +480,7 @@ public class ConnectFragment extends Fragment implements OnClickListener,OnItemC
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                EventManager.send(CommandType.COM_SYS_JUMP_LIVE,"", EventMode.IN);
+                EventManager.send(COM_SYS_JUMP_LIVE,"", EventMode.IN);
             }
         },delay);
     }

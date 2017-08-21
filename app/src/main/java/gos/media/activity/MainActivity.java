@@ -32,8 +32,11 @@ import gos.media.event.EventManager;
 import gos.media.event.EventMode;
 import gos.media.event.EventMsg;
 import gos.media.fragment.ConnectFragment;
+import gos.media.fragment.EpgFragment;
 import gos.media.fragment.RemoteFragment;
 import gos.media.fragment.LiveFragment;
+
+import static gos.media.define.CommandType.*;   //导入静态命令集
 
 public class MainActivity extends FragmentActivity {
     private  final String TAG = this.getClass().getSimpleName();
@@ -72,10 +75,10 @@ public class MainActivity extends FragmentActivity {
     public void onRecviveEvent(EventMsg msg){
         if(EventMode.IN == msg.getEventMode()){  //对内
             switch (msg.getCommand()){
-                case CommandType.COM_SYS_JUMP_CONNECT:
+                case COM_SYS_JUMP_CONNECT:
                     jumpToFragment(2);//跳转到连接界面
                     break;
-                case CommandType.COM_SYS_JUMP_LIVE:
+                case COM_SYS_JUMP_LIVE:
                     jumpToFragment(1);//跳转到直播界面
                     break;
                 default:
@@ -100,8 +103,9 @@ public class MainActivity extends FragmentActivity {
         tabMenuManager.addTabMenuItem(R.string.tab_menu_remote, R.drawable.tab_menu_remote,RemoteFragment.class);
         tabMenuManager.addTabMenuItem(R.string.tab_menu_live, R.drawable.tab_menu_live,LiveFragment.class);
         tabMenuManager.addTabMenuItem(R.string.tab_menu_connect, R.drawable.tab_menu_connect,ConnectFragment.class);
+        tabMenuManager.addTabMenuItem(R.string.tab_menu_epg, R.drawable.tab_menu_epg,EpgFragment.class);
 
-        menuBar = (RadioGroup) findViewById(R.id.rg_tab_bar);
+        menuBar = (RadioGroup) findViewById(R.id.tab_menu);
         menuBar.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
             @Override
@@ -119,6 +123,9 @@ public class MainActivity extends FragmentActivity {
                         break;
                     case R.id.tab_menu_connect:
                         position = 2;
+                        break;
+                    case R.id.tab_menu_epg:
+                        position = 3;
                         break;
                     default:
                         break;
@@ -141,10 +148,12 @@ public class MainActivity extends FragmentActivity {
         LiveFragment liveFragment = new LiveFragment();
         RemoteFragment remoteFragment = new RemoteFragment();
         ConnectFragment connectFragment = new ConnectFragment();
+        EpgFragment epgFragment = new EpgFragment();
 
         list.add(remoteFragment);
         list.add(liveFragment);
         list.add(connectFragment);
+        list.add(epgFragment);
         tabMenuAdapter= new TabMenuAdapter(getSupportFragmentManager());
         tabMenuAdapter.setFragmentList(list);
 
@@ -239,11 +248,11 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void sendSysExit(){
-        EventManager.send(CommandType.COM_SYS_EXIT,"",EventMode.IN);
+        EventManager.send(COM_SYS_EXIT,"",EventMode.IN);
     }
 
     public void remoterFuncOnClick(View source) {
         IndexClass indexClass = new IndexClass(source.getId());
-        EventManager.send(CommandType.COM_SYS_REMOTE_ID, JSON.toJSONString(indexClass),EventMode.IN);
+        EventManager.send(COM_SYS_REMOTE_ID, JSON.toJSONString(indexClass),EventMode.IN);
     }
 }

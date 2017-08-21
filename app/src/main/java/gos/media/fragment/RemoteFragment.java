@@ -31,6 +31,9 @@ import gos.media.event.EventMsg;
 import gos.media.view.TitleBar;
 import gos.media.define.KeyValue;
 
+import static gos.media.define.CommandType.*;   //导入静态命令集
+
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -182,7 +185,7 @@ public class RemoteFragment extends Fragment {
     public void onRecviveEvent(EventMsg msg){
         if(EventMode.IN == msg.getEventMode()){  //对内
             switch (msg.getCommand()){
-                case CommandType.COM_SYS_REMOTE_ID:
+                case COM_SYS_REMOTE_ID:
                     IndexClass IndexClass = DataParse.getIndexClass(msg.getData());
                     sendRemoteKey(IndexClass.getIndex());
                     break;
@@ -314,7 +317,7 @@ public class RemoteFragment extends Fragment {
         if (-1 != keyValue) {
 
             IndexClass indexClass = new IndexClass(keyValue);
-            EventManager.send(CommandType.COM_REMOTE_SET_KEY, JSON.toJSONString(indexClass),EventMode.OUT);
+            EventManager.send(COM_REMOTE_SET_KEY, JSON.toJSONString(indexClass),EventMode.OUT);
 
             settingsRemote.setSelected(true);
             handler.sendEmptyMessageDelayed(WHAT_SETTING_REMOTE_CANCLE,300);

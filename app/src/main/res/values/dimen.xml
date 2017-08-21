@@ -4,4 +4,26 @@
     <dimen name="tab_menu_paddig">3sp</dimen>
     <dimen name="titlebar_height">45.0dip</dimen>
 
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="font_size_h1">20sp</dimen>
+    <dimen name="font_size_h2">18sp</dimen>
+    <dimen name="font_size_h3">15sp</dimen>
+
+    <dimen name="icon_size_width">24dp</dimen>
+    <dimen name="icon_size_height">24dp</dimen>
+
+    <dimen name="show_list_height">40dp</dimen>
+
+    <!--底部菜单高度-->
+    <dimen name="tab_menu_height">60dp</dimen>
+
+
+    <integer name="switch_pro_interval">500</integer>
+
+    <integer name="headbeat_interval">30000</integer>
+
+
+
 </resources>

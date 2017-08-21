@@ -26,9 +26,7 @@
                 android:id="@+id/images_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/back"
-                android:scaleY="2"
-                android:scaleX="2"/>
+                android:src="@drawable/back" />
 
         </LinearLayout>
 

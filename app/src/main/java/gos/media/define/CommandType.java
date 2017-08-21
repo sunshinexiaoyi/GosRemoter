@@ -1,8 +1,8 @@
 package gos.media.define;
 
 /**
+ * 命令集
  * Created by wuxy on 2017/7/7.
- * 通信的命令类型
  */
 
 public class CommandType implements CommandOut,CommandIn{
@@ -18,7 +18,7 @@ interface CommandOut{
     byte COM_SYSTEM_RESPOND = 1;     //回应
     byte COM_SYSTEM_HEARTBEAT_PACKET = 2;     //心跳包
 
-    /* 连接模块命令*/
+    /* 连接模块命令 */
     byte COM_CONNECT_GET_DEVICE = 10;       //查找设备
     byte COM_CONNECT_SET_DEVICE = 11;       //添加设备
 
@@ -35,8 +35,15 @@ interface CommandOut{
     byte COM_LIVE_STOP_PROGRAM = 24;     //停止节目
     byte COM_LIVE_UPDATE_PROGRAM_LIST = 25; //更新节目列表
 
-    /*遥控器模块命令*/
+    /* 遥控器模块命令 */
     byte COM_REMOTE_SET_KEY = 30; //发送遥控器键值
+
+    /* EPG 模块命令 */
+    byte COM_EPG_GET_SELECT_PROGRAM = 40;//获取选择的节目epg信息
+    byte COM_EPG_SET_SELECT_PROGRAM = 41;
+
+    byte COM_EPG_SET_RESERVE = 42;   //设置epg预定事件
+    byte COM_EPG_CLASH_RESERVE = 42; //epg预定事件冲突
 
 }
 
@@ -56,7 +63,6 @@ interface CommandIn{
     byte COM_SYS_FINISH_LIVE = 105;     //接收直播
 
     byte COM_SYS_REMOTE_ID = 106;     //遥控器id
-
 
 }
 

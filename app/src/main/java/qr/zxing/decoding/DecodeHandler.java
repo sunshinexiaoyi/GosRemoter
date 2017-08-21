@@ -63,7 +63,7 @@ final class DecodeHandler extends Handler {
   }
 
   /**
-   * Decode the data within the viewfinder rectangle, and time how long it took. For efficiency,
+   * Decode the data within the viewfinder rectangle, and Time how long it took. For efficiency,
    * reuse the same reader objects from one decode to the next.
    *
    * @param data   The YUV preview frame.

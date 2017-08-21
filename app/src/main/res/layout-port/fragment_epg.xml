@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="gos.media.fragment.EpgFragment">
+    <gos.media.view.TitleBar
+        android:id="@+id/titlebar"
+        style="@style/Titlebar">
+
+    </gos.media.view.TitleBar>
+
+    <gos.media.view.ErrorMaskView
+        android:id="@+id/maskView"
+        style="@style/ErrorMaskView"/>
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="13.5">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent">
+
+            <LinearLayout
+                android:id="@+id/dateFrame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/dateExit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="0.06"
+                        android:background="@drawable/btn_style_one"
+                        app:srcCompat="@drawable/back"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/dateTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.88"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_size_h2" />
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/dateListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/programFrame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/programExit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="0.06"
+                        android:background="@drawable/btn_style_one"
+                        app:srcCompat="@drawable/back"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/programTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.88"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_size_h2" />
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/programListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/contentFrame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:clickable="true"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/programBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="0.13"
+                        android:background="@drawable/btn_style_one"
+                        app:srcCompat="@drawable/ic_epg_program_list"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/programText"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.97"
+                        android:clickable="true"
+                        android:ellipsize="marquee"
+                        android:gravity="center"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/font_size_h2" />
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/timeBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="0.12"
+                        android:background="@drawable/btn_style_one"
+                        app:srcCompat="@drawable/ic_epg_date"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/dateText"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.97"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:textColor="@color/blue"
+
+                        android:textSize="@dimen/font_size_h2"
+
+                        /><!--内容超出，跑马灯效果-->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:text="@string/epg_tab_reserve"
+                        android:textAllCaps="false"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/font_size_h2"
+                        tools:ignore="ButtonStyle" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:text="@string/epg_tab_time"
+                        android:textAllCaps="false"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/font_size_h2"
+                        tools:ignore="ButtonStyle" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:text="@string/epg_tab_event"
+                        android:textAllCaps="false"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/font_size_h2"
+                        tools:ignore="ButtonStyle" />
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/epgView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+    </FrameLayout>
+
+</LinearLayout>

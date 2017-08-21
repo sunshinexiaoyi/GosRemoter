@@ -38,11 +38,12 @@
         <item name="android:button">@null</item>
         <item name="android:gravity">center</item>
         <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
         <item name="android:textColor">@drawable/tab_menu_text</item>
         <item name="android:textSize">18sp</item>
     </style>
 
-    <!--连接失败或暂无数据-->
+
     <style name="ErrorMaskView">
         <item name="android:background">@color/bg1_whole</item>
         <item name="android:clickable">true</item>

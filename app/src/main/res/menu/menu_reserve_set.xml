@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_view"
+        android:icon="@drawable/ic_record"
+        android:title="@string/epg_reserve_menu_view" />
+
+    <item
+        android:id="@+id/menu_view_series"
+        android:icon="@drawable/ic_record"
+        android:title="@string/epg_reserve_menu_view_series" />
+
+    <item
+        android:id="@+id/menu_record"
+        android:icon="@drawable/ic_av_timer"
+        android:title="@string/epg_reserve_menu_record" />
+
+    <item
+        android:id="@+id/menu_record_series"
+        android:icon="@drawable/ic_av_timer"
+        android:title="@string/epg_reserve_menu_record_series" />
+</menu>

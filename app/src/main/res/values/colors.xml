@@ -10,6 +10,9 @@
     <color name="bg_white">#080808</color>
 
 
+    <color name="dialog_out_back">#e5e5e5</color>
+    <color name="dialog_in_back">#FFE5E5E5</color>
+
     <color name="textColorforItemTitle">#ff666666</color>
     <color name="buy">#ff22a7ff</color>
     <color name="black">#ff000000</color>

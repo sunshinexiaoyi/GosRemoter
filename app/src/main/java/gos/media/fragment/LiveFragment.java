@@ -36,7 +36,10 @@ import gos.media.event.MsgKey;
 import gos.media.event.EventMode;
 import gos.media.view.ErrorMaskView;
 import gos.media.view.TitleBar;
- import gos.media.activity.*;
+import gos.media.activity.*;
+
+import static gos.media.define.CommandType.*;   //导入静态命令集
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -110,7 +113,6 @@ public class LiveFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i(TAG,"onCreateView");
         if(null == rootView){
 
             rootView   = inflater.inflate(R.layout.fragment_live, container, false);
@@ -171,13 +173,13 @@ public class LiveFragment extends Fragment {
     public void onRecviveEvent(EventMsg msg){
         if(EventMode.IN == msg.getEventMode()){//对内
             switch (msg.getCommand()){
-                case CommandType.COM_SYS_HEARTBEAT_STOP:
+                case COM_SYS_HEARTBEAT_STOP:
                     detach();
                     break;
-                case CommandType.COM_LIVE_SET_PROGRAM_LIST:
+                case COM_LIVE_SET_PROGRAM_LIST:
                     setProgramList(parseProgramData(msg.getData()));
                     break;
-                case CommandType.COM_LIVE_SET_PROGRAM_URL:
+                case COM_LIVE_SET_PROGRAM_URL:
                     errorMaskView.setVisibleGone();
                     ProgramUrl programUrl = JSON.parseObject(msg.getData(),ProgramUrl.class);
                     if(curProgram == null)
@@ -187,28 +189,28 @@ public class LiveFragment extends Fragment {
                         startPlayByUrl(programUrl.getUrl());
                     }
                     break;
-                case CommandType.COM_LIVE_UPDATE_PROGRAM_LIST:
+                case COM_LIVE_UPDATE_PROGRAM_LIST:
                     sendFinishLive();
                     getProgramList();   //节目列表更新时，重新获取节目列表
                     break;
-                case CommandType.COM_SYSTEM_RESPOND:    //回应
+                case COM_SYSTEM_RESPOND:    //回应
                     Respond respond = DataParse.getRespond(msg.getData());
                     switch (respond.getCommand()){
-                        case CommandType.COM_CONNECT_DETACH:
+                        case COM_CONNECT_DETACH:
                             if(respond.getFlag()){
                                 detach();
                             }
                             break;
-                        case CommandType.COM_CONNECT_ATTACH:
+                        case COM_CONNECT_ATTACH:
                             if(respond.getFlag()){
                                 attach();
                             }
                             break;
-                        case CommandType.COM_LIVE_STOP_PROGRAM:
+                        case COM_LIVE_STOP_PROGRAM:
                             Log.i(TAG,"停止当前播放节目成功");
                             curProgram = null;
                             break;
-                        case CommandType.COM_LIVE_SET_PROGRAM_URL:
+                        case COM_LIVE_SET_PROGRAM_URL:
                             if(!respond.getFlag()){     //获取节目url失败
                                 errorMaskView.setVisibleGone();
                             }
@@ -259,7 +261,7 @@ public class LiveFragment extends Fragment {
     private void getProgramList(){
         Log.i(TAG,"获取节目列表:");
         errorMaskView.setLoadingStatus();
-        EventManager.send(CommandType.COM_LIVE_GET_PROGRAM_LIST,"", EventMode.OUT);
+        EventManager.send(COM_LIVE_GET_PROGRAM_LIST,"", EventMode.OUT);
     }
 
     /**
@@ -270,7 +272,7 @@ public class LiveFragment extends Fragment {
         Log.i(TAG,"获取节目url:"+index);
         errorMaskView.setLoadingStatus();
         IndexClass indexClass = new IndexClass(index);
-        EventManager.send(CommandType.COM_LIVE_GET_PROGRAM_URL, JSON.toJSONString(indexClass), EventMode.OUT);
+        EventManager.send(COM_LIVE_GET_PROGRAM_URL, JSON.toJSONString(indexClass), EventMode.OUT);
     }
 
     /**
@@ -279,7 +281,7 @@ public class LiveFragment extends Fragment {
     private void stopProgram(int index ){
         Log.i(TAG,"停止节目:"+index);
         IndexClass indexClass = new IndexClass(index);
-        EventManager.send(CommandType.COM_LIVE_STOP_PROGRAM,JSON.toJSONString(indexClass), EventMode.OUT);
+        EventManager.send(COM_LIVE_STOP_PROGRAM,JSON.toJSONString(indexClass), EventMode.OUT);
     }
 
     /**
@@ -288,7 +290,7 @@ public class LiveFragment extends Fragment {
      */
     private void jumpToConnect(){
         Log.i(TAG,"jumpToConnect:");
-        EventManager.send(CommandType.COM_SYS_JUMP_CONNECT,"", EventMode.IN);
+        EventManager.send(COM_SYS_JUMP_CONNECT,"", EventMode.IN);
     }
 
     private void setProgramList(String[] programs)
@@ -339,7 +341,7 @@ public class LiveFragment extends Fragment {
      * 结束直播activity
      */
     private void sendFinishLive(){
-        EventManager.send(CommandType.COM_SYS_FINISH_LIVE,"",EventMode.IN);
+        EventManager.send(COM_SYS_FINISH_LIVE,"",EventMode.IN);
     }
 
     private void detach(){

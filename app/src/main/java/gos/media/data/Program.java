@@ -5,9 +5,9 @@ package gos.media.data;
  */
 
 public class Program extends IndexClass{
-    String name;
-    int lcn;
-    int serviceId;
+    private String name;
+    private int lcn;
+    private int serviceId;
 
     public Program(){
         this("",-1);
@@ -22,25 +22,27 @@ public class Program extends IndexClass{
         this.lcn = lcn;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
-    public void setName(String name){
+
+    public void setName(String name) {
         this.name = name;
     }
 
-    public int getLcn(){
+    public int getLcn() {
         return lcn;
     }
-    public void setLcn(int name){
+
+    public void setLcn(int lcn) {
         this.lcn = lcn;
     }
 
-    public int getServiceId(){
+    public int getServiceId() {
         return serviceId;
     }
-    public void setServiceId(int index){
+
+    public void setServiceId(int serviceId) {
         this.serviceId = serviceId;
     }
-
 }

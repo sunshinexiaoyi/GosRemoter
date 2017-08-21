@@ -6,6 +6,7 @@
     <string name="tab_menu_remote">Remote</string>
     <string name="tab_menu_live">Live</string>
     <string name="tab_menu_connect">Connect</string>
+    <string name="tab_menu_epg">EPG</string>
 
     <!--退出弹出框-->
     <string name="exit_dialog_title">System Info</string>
@@ -26,6 +27,7 @@
     <string name = "connect_detach_hint">detach the device</string>
     <string name = "connect_try_connect">Try to connect device...</string>
 
+
     <!--扫码-->
 
     <string name="ret">back</string>
@@ -34,6 +36,57 @@
     <string name="scan_text">Please put the qr code/bar code in the box</string>
     <string name="scan_data_parse_error">Data analytical data parsing anomaly</string>
     <string name="allow_camera_permission">Please allow camera permissions</string>
+
+
+    <!-- egp -->
+    <string name="epg_program_title">Select Program</string>
+    <string name="epg_time_title">Select Date</string>
+    <string name="epg_tab_start_time">Start Time</string>
+    <string name="epg_tab_end_time">End Time</string>
+
+    <string name="epg_tab_reserve">Reserve</string>
+    <string name="epg_tab_time">Time</string>
+    <string name="epg_tab_event">Events</string>
+
+    <!--epg dialog-->
+    <string name="epg_dialog_title">Epg Detail Info</string>
+    <string name="epg_dialog_pro_name">Name:</string>
+    <string name="epg_dialog_date">Date:</string>
+    <string name="epg_dialog_start_time">Start Time:</string>
+    <string name="epg_dialog_end_time">End Time:</string>
+    <string name="epg_dialog_event_name">Events:</string>
+    <string name="epg_dialog_short_descriptor">Descriptions:</string>
+    <string name="epg_dialog_confirm">Confirm</string>
+    <string name="epg_dialog_test">ccc</string>
+
+    <!-- epg reserve -->
+    <string name="epg_reserve_event_info">event info</string>
+
+    <string name="epg_reserve_event_type">event type</string>
+    <string name="epg_reserve_event_id">event id</string>
+    <string name="epg_reserve_job_index">job index</string>
+    <string name="epg_reserve_program_index">program index</string>
+
+    <string name="epg_reserve_date">date</string>
+    <string name="epg_reserve_start_time">start time</string>
+    <string name="epg_reserve_end_time">end time</string>
+    <string name="epg_reserve_event">event</string>
+    <string name="epg_reserve_boot_type">book type</string>
+
+
+    <string name="epg_reserve_select">select</string>
+    <string name="epg_reserve_conflict">conflict</string>
+
+
+    <string name="epg_reserve_menu_view">View</string>
+    <string name="epg_reserve_menu_view_series">View Series</string>
+    <string name="epg_reserve_menu_record">Record</string>
+    <string name="epg_reserve_menu_record_series">Record Series</string>
+
+    <!-- epg clash dialog-->
+    <string name="epg_clash_dialog_title">Following reminders are conflicting with eath other</string>
+    <string name="epg_clash_dialog_confirm">Confirm</string>
+    <string name="epg_clash_dialog_cancel">Cancel</string>
 
     <!--播放器部分-->
     <string name="small_problem">player small problem</string>
@@ -44,6 +97,9 @@
     <string name="pref_key_player">pref.player</string>
     <string name="switch_freq">Switch frequency point, is nearing the end of the current live</string>
     <string name="heartbeat_stop">With the server lost</string>
+
+
+
     <!-- 直播部分 -->
     <string name="jump_connect">There is no connection, please connect</string>
     <string name="jump">Click to connect</string>

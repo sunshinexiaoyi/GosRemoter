@@ -17,7 +17,7 @@ public class DataPackage extends PackageHead{
     public String data = null;
     public int testCrc = 2017;
 
-    public  byte[] byteData =  new byte[1024];
+    public  byte[] byteData =  new byte[1024*10];
 
     public DataPackage(){}
 

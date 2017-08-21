@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:state_pressed="true" >
+    <shape android:shape="rectangle">
+        <!-- 渐变 -->
+        <gradient
+            android:startColor="#4a7cb9"
+            android:endColor="#FFFFFF"
+            android:type="radial"
+            android:gradientRadius="50" />
+
+
+        <!-- 圆角 -->
+        <corners
+            android:radius="2dp" />
+
+    </shape>
+</item>
+
+<item>
+    <shape>
+        <!--solid：内部填充-->
+        <!--solid android:color="#00ffffff"/-->
+
+        <!-- 描边 -->
+        <!--
+          android:width 整型 描边的宽度
+          android:color 颜色值 描边的颜色
+          android:dashWidth 整型 表示描边的样式是虚线的宽度， 值为0时，表示为实线。值大于0则为虚线。
+          android:dashGap 整型 表示描边为虚线时，虚线之间的间隔 即“ - - - - ”
+      -->
+
+        <!-- 圆角  -->
+        <corners
+            android:topRightRadius="5dp"
+            android:bottomLeftRadius="5dp"
+            android:topLeftRadius="0dp"
+            android:bottomRightRadius="0dp" />
+
+        <!-- 渐变  -->
+        <!-- type = linear线性渐变；radial 放射性渐变，以开始色为中心。sweep 扫描线式的渐变。-->
+        <gradient
+            android:startColor="#00ffffff"
+            android:endColor="#00ffffff"
+            android:type="sweep"
+            android:gradientRadius="50" />
+
+
+
+
+    </shape>
+</item>
+</selector>

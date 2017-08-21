@@ -22,6 +22,9 @@ import gos.media.event.EventMode;
 import gos.media.event.EventMsg;
 import gos.media.event.MsgKey;
 
+import static gos.media.define.CommandType.*;   //导入静态命令集
+
+
 public class LiveActivity extends Activity {
     private PlayerView mVideoView;
 
@@ -29,10 +32,10 @@ public class LiveActivity extends Activity {
     public void onRecviveEvent(EventMsg msg) {
         if (EventMode.IN == msg.getEventMode()) {//对内
             switch (msg.getCommand()) {
-                case CommandType.COM_SYS_FINISH_LIVE:
+                case COM_SYS_FINISH_LIVE:
                     delayFinish(3000, getResources().getString(R.string.switch_freq));
                     break;
-                case CommandType.COM_SYS_HEARTBEAT_STOP:
+                case COM_SYS_HEARTBEAT_STOP:
                     delayFinish(0, getResources().getString(R.string.heartbeat_stop));
                     break;
                 default:

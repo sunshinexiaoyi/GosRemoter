@@ -47,7 +47,7 @@ final class CameraConfigurationManager {
   }
 
   /**
-   * Reads, one time, values from the camera that are needed by the app.
+   * Reads, one Time, values from the camera that are needed by the app.
    */
   void initFromCameraParameters(Camera camera) {
     Camera.Parameters parameters = camera.getParameters();

@@ -8,6 +8,8 @@
     <string name="tab_menu_connect">Connect</string>
     <string name="tab_menu_epg">EPG</string>
 
+    <string name="mask_stop_loading">stop loading</string>
+
     <!--退出弹出框-->
     <string name="exit_dialog_title">System Info</string>
     <string name="exit_dialog_content">Are you sure to exit?</string>

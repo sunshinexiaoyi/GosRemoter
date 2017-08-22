@@ -11,7 +11,7 @@
     <style name="Titlebar">
         <item name="android:background">@color/bg2_title</item>
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">@dimen/titlebar_height</item>
+        <item name="android:layout_height">@dimen/title_height</item>
     </style>
     <style name="SeekBarAppTheme">
         <item name="android:indeterminateOnly">false</item>

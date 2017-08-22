@@ -425,15 +425,11 @@ public class ConnectFragment extends Fragment implements OnClickListener,OnItemC
         return null;
     }
 
-    // 设置光标位置
-    public void setEditSelectionLoc(int index) {
-        editText.setSelection(index);
-    }
 
     public void onItemClick(AdapterView<?> arg0, View view, int position, long id)
     {
         editText.setText(allAddress.get(position));
-        setEditSelectionLoc(allAddress.get(position).toString().length());
+        editText.clearFocus();  //清除输入框焦点，隐藏小键盘
     }
 
     private void initData(){

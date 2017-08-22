@@ -19,7 +19,6 @@
         android:allowBackup="true"
         android:icon="@drawable/gospell_icon_indonesia"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.InitActivity">

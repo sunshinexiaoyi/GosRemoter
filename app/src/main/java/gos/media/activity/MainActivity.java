@@ -1,6 +1,7 @@
 package gos.media.activity;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -94,6 +96,7 @@ public class MainActivity extends FragmentActivity {
         initTabMenu();
         initViewpager();
         initExitDialog();
+        initState();
     }
 
     /**
@@ -254,5 +257,18 @@ public class MainActivity extends FragmentActivity {
     public void remoterFuncOnClick(View source) {
         IndexClass indexClass = new IndexClass(source.getId());
         EventManager.send(COM_SYS_REMOTE_ID, JSON.toJSONString(indexClass),EventMode.IN);
+    }
+
+
+    /**
+     * 沉浸式状态栏
+     */
+    private void initState() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //透明导航栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
     }
 }

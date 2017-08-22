@@ -54,20 +54,20 @@
 
     <LinearLayout
         android:id="@id/progressLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <!--进度条加载样式，动图由一帧一帧显示-->
         <ProgressBar
             android:layout_width="54.0dip"
             android:layout_height="54.0dip"
+            android:layout_gravity="center_horizontal"
             android:indeterminate="true"
-            android:indeterminateDrawable="@drawable/progressbar_foxtail_large"
-            android:layout_gravity="center_horizontal" />
+            android:indeterminateDrawable="@drawable/progressbar_foxtail_large" />
 
         <TextView
             android:id="@id/progressTitle"
@@ -78,6 +78,20 @@
             android:text="@string/loading"
             android:textColor="@color/gray1"
             android:textSize="14.0sp" />
+
+
+        <TextView
+            android:id="@+id/stopLoading"
+            android:layout_width="120.0dip"
+            android:layout_height="30.0dip"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="51.0dip"
+            android:background="@drawable/btn_refresh_bg"
+            android:gravity="center"
+            android:text="@string/mask_stop_loading"
+            android:textColor="@color/red"
+            android:textSize="14.0sp"
+            android:visibility="visible" />
     </LinearLayout>
 
 </merge>

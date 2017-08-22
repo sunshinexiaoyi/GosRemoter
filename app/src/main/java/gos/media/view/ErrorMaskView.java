@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,6 +27,7 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
     private TextView mSubTitleText;
     private LinearLayout mTextLayout;
     private TextView mTitleText;
+    private TextView stopLoading;
 
     public ErrorMaskView(Context paramContext) {
         super(paramContext);
@@ -58,8 +60,11 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
         this.mRetryTitleText = ((TextView) findViewById(R.id.retryTitle));
         this.mProgressLayout = ((LinearLayout) findViewById(R.id.progressLayout));
         this.mProgressText = ((TextView) findViewById(R.id.progressTitle));
+        this.stopLoading = (TextView)findViewById(R.id.stopLoading);
+
         hide();
         this.mRetryTitleText.setOnClickListener(this);
+        this.stopLoading.setOnClickListener(this);
     }
 
     public void show() {
@@ -69,12 +74,19 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
     }
 
     public void onClick(View paramView) {
-        if (R.id.retryTitle != paramView.getId())
-            return;
-        if ((paramView == null) || (this.mStatus != STATUS_ERROR) || (this.mRetryClickListener == null))
-            return;
-        //setLoadingStatus();
-        this.mRetryClickListener.onClick(paramView);
+        switch (paramView.getId()){
+            case R.id.retryTitle:
+                if ((paramView == null) || (this.mStatus != STATUS_ERROR) || (this.mRetryClickListener == null))
+                    return;
+                //setLoadingStatus();
+                this.mRetryClickListener.onClick(paramView);
+                break;
+            case R.id.stopLoading:
+                setStopLoading();
+                break;
+        }
+
+
     }
 
     public void setEmptyStatus() {
@@ -161,6 +173,10 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
             this.mProgressText.setText(paramString);
         }
         this.mStatus = STATUS_LOADING;
+    }
+
+    public void setStopLoading(){
+        hide();
     }
 
     public void setOnRetryClickListener(View.OnClickListener paramOnClickListener) {

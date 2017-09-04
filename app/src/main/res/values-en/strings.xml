@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Gos Media</string>
+    <string name="app_name">Gos Remoter</string>
     <string name="title_activity_init">InitActivity</string>
 
     <string name="tab_menu_remote">Remote</string>

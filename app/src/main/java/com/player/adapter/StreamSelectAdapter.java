@@ -11,7 +11,7 @@ import com.player.bean.VideoijkBean;
 
 import java.util.List;
 
-import gos.media.R;
+import gos.remoter.R;
 
 
 public class StreamSelectAdapter extends BaseAdapter {

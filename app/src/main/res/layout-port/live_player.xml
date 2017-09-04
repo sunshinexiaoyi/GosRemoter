@@ -28,7 +28,7 @@
                 android:src="@drawable/im_play"
                 android:visibility="visible" />
 
-            <gos.media.view.ExtSurfaceView
+            <gos.remoter.view.ExtSurfaceView
                 android:id="@+id/autoTxt"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"

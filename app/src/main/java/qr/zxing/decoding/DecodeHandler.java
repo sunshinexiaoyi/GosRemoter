@@ -29,7 +29,7 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
-import gos.media.R;
+import gos.remoter.R;
 import  qr.zxing.MipcaActivityCapture;
 import  qr.zxing.camera.CameraManager;
 import  qr.zxing.camera.PlanarYUVLuminanceSource;

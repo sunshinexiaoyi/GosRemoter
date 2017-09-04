@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">高斯影音</string>
+    <string name="app_name">高斯遥控</string>
     <string name="title_activity_init">InitActivity</string>
 
     <string name="tab_menu_remote">遥控器</string>

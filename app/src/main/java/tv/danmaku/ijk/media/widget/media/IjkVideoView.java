@@ -47,7 +47,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
-import gos.media.R;
+import gos.remoter.R;
 import tv.danmaku.ijk.media.application.Settings;
 import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
 import tv.danmaku.ijk.media.player.AndroidMediaPlayer;

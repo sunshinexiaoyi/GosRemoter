@@ -6,11 +6,11 @@
     android:background="@color/bg1_whole"
     android:orientation="vertical">
 
-    <gos.media.view.TitleBar
+    <gos.remoter.view.TitleBar
         android:id="@+id/titlebar"
         style="@style/Titlebar">
 
-    </gos.media.view.TitleBar>
+    </gos.remoter.view.TitleBar>
 
     <LinearLayout
         android:id="@+id/ll_connect"

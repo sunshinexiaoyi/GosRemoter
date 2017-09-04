@@ -21,7 +21,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import gos.media.R;
+import gos.remoter.R;
 
 
 public class Settings {

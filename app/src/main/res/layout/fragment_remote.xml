@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="gos.media.fragment.RemoteFragment">
-    <gos.media.view.TitleBar
+    tools:context="gos.remoter.fragment.RemoteFragment">
+    <gos.remoter.view.TitleBar
         android:id="@+id/titlebar"
         style="@style/Titlebar">
 
-    </gos.media.view.TitleBar>
+    </gos.remoter.view.TitleBar>
     <LinearLayout
         android:id="@+id/mainFrame"
         android:layout_width="match_parent"

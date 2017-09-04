@@ -4,15 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:visibility="visible"
-    tools:context="gos.media.fragment.LiveFragment">
+    tools:context="gos.remoter.fragment.LiveFragment">
 
-    <gos.media.view.TitleBar
+    <gos.remoter.view.TitleBar
         android:id="@+id/titlebar"
         style="@style/Titlebar">
 
-    </gos.media.view.TitleBar>
+    </gos.remoter.view.TitleBar>
 
-    <gos.media.view.ErrorMaskView
+    <gos.remoter.view.ErrorMaskView
         android:id="@+id/maskView"
         style="@style/ErrorMaskView"/>
 

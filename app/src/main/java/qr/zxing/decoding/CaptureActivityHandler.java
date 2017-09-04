@@ -28,7 +28,7 @@ import android.util.Log;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
-import gos.media.R;
+import gos.remoter.R;
 import qr.zxing.MipcaActivityCapture;
 import qr.zxing.camera.CameraManager;
 import qr.zxing.view.ViewfinderResultPointCallback;

@@ -28,7 +28,6 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
@@ -36,7 +35,7 @@ import com.google.zxing.ResultPoint;
 import java.util.Collection;
 import java.util.HashSet;
 
-import gos.media.R;
+import gos.remoter.R;
 import qr.zxing.camera.CameraManager;
 
 /**

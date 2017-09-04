@@ -23,7 +23,7 @@ import android.view.View;
 
 import java.lang.ref.WeakReference;
 
-import gos.media.R;
+import gos.remoter.R;
 
 
 public final class MeasureHelper {

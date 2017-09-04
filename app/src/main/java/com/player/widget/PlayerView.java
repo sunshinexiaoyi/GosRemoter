@@ -39,7 +39,7 @@ import java.util.List;
 
 
 //import gos.ott.phone.live.LivePlayer;
-import gos.media.R;
+import gos.remoter.R;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.widget.media.IjkVideoView;

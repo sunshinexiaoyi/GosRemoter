@@ -10,7 +10,6 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -22,7 +21,7 @@ import android.widget.Toast;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
-import gos.media.R;
+import gos.remoter.R;
 import qr.zxing.camera.*;
 import qr.zxing.decoding.*;
 import qr.zxing.view.*;

@@ -10,7 +10,7 @@ import android.widget.TableLayout;
 import java.util.Locale;
 
 
-import gos.media.R;
+import gos.remoter.R;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.player.MediaPlayerProxy;

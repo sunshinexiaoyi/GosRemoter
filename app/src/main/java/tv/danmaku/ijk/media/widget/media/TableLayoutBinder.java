@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import gos.media.R;
+import gos.remoter.R;
 
 
 public class TableLayoutBinder {

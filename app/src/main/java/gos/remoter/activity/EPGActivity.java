@@ -1,5 +1,6 @@
 package gos.remoter.activity;
 
+import gos.remoter.EPG_toast;
 import gos.remoter.define.CS;//静态常量
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,9 @@ public class EPGActivity extends AppCompatActivity {
         setContentView(R.layout.epg_main);
         Toolbar epg_toolbar = (Toolbar) findViewById(R.id.epg_TOOLBAR);
         setSupportActionBar(epg_toolbar);//用Toolbar代替ActionBar
+
+        //要时刻检测连接是否断开
+        //获取节目信息
     }
 
     @Override

@@ -7,15 +7,17 @@
 
     <!--返回按钮-->
     <Button
-        android:id = "@+id/EPG_toolbar_backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id = "@+id/EPG_toolbar_BackButton"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft = "true"
+        android:layout_marginTop="9dp"
         android:background="@drawable/epg_toolbar_button_back" />
     <!--标题-->
     <TextView
+        android:id = "@+id/epg_toolbar_title"
         android:text = "EPG"
-        android:textSize = "50sp"
+        android:textSize = "35sp"
         android:textColor = "@color/white"
         android:textStyle = "bold"
         android:layout_centerInParent = "true"

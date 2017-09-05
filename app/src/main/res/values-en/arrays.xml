@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="program_type"><!--节目类型-->
+        <item>teleplay</item>
+        <item>movie</item>
+        <item>variety</item>
+        <item>children</item>
+        <item>news</item>
+        <item>recreation</item>
+        <item>cartoon</item>
+        <item>documentary</item>
+        <item>finance</item>
+        <item>education</item>
+    </array>
+</resources>

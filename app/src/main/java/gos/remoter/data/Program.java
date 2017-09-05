@@ -8,6 +8,7 @@ public class Program extends IndexClass{
     private String name;
     private int lcn;
     private int serviceId;
+    private int type;   //节目类型
 
     public Program(){
         this("",-1);
@@ -16,10 +17,14 @@ public class Program extends IndexClass{
         this(name,index,-1,-1);
     }
     public Program(String name,int index,int lcn,int serviceId){
+        this(name,index,lcn,serviceId,0);
+    }
+    public Program(String name,int index, int lcn, int serviceId, int type) {
         super(index);
         this.name = name;
-        this.serviceId = serviceId;
         this.lcn = lcn;
+        this.serviceId = serviceId;
+        this.type = type;
     }
 
     public String getName() {
@@ -44,5 +49,13 @@ public class Program extends IndexClass{
 
     public void setServiceId(int serviceId) {
         this.serviceId = serviceId;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

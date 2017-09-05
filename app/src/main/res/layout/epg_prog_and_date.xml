@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id = "@+id/epg_PRGANDDATE"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <!--当前节目-->
+    <Button
+        android:id = "@+id/epg_prog_current"
+        android:text = "CCTV1"
+        android:textSize = "20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight = "1"
+        android:background="@color/white"
+        android:paddingRight = "10dp"/>
+    <!--节目折叠按钮:考虑和按钮整合到一起-->
+
+    <!--当前节目-->
+    <Button
+        android:id = "@+id/epg_date_current"
+        android:text = "1995-12-25"
+        android:textSize = "18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight = "1"
+        android:background="@color/white"
+        android:paddingRight = "20dp"/>
+    <!--节目折叠按钮:考虑和按钮整合到一起-->
+</LinearLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id = "@+id/EPG_TOOLBAR"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@color/blue_item">
+
+    <!--返回按钮-->
+    <Button
+        android:id = "@+id/EPG_toolbar_backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft = "true"
+        android:background="@drawable/epg_toolbar_button_back" />
+    <!--标题-->
+    <TextView
+        android:text = "EPG"
+        android:textSize = "50sp"
+        android:textColor = "@color/white"
+        android:textStyle = "bold"
+        android:layout_centerInParent = "true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

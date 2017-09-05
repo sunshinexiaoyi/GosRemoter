@@ -16,7 +16,7 @@
     <!--标题-->
     <TextView
         android:id = "@+id/epg_toolbar_title"
-        android:text = "EPG"
+        android:text = "@string/tab_menu_epg"
         android:textSize = "35sp"
         android:textColor = "@color/white"
         android:textStyle = "bold"

@@ -1,63 +1,115 @@
 package gos.remoter.adapter;
 
+import gos.remoter.R;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 /**
  * Created by QXTX-GOSPELL on 2017/9/5 0005.
  */
 
 public class EpgItem {
     private String progName;//节目名
-    private String time;//节目播放事件
+    private String progTime;//节目播放时间
     private String progInfo;//节目信息
-    private boolean showSimpleButton = false;//缩略图下的右侧按钮
-    private boolean showProgSetting = false;//详情下的设置模块
-    private boolean showCurrentSelectImage = false;//左上角的选中角标
+    private int simpleRecBtnOnce;//缩略图预定记录
+    private int simpleRecBtnCycle;//缩略图预定记录
+    private int simpleWatchBtnOnce;//缩略图预定记录
+    private int simpleWatchBtnCycle;//缩略图预定记录
+    private int recBtnOnce;//预定记录一次
+    private int recBtnCycle;//预定记录每天
+    private int watchBtnOnce;//预定观看一次
+    private int watchBtnCycle;//预定观看每天
 
-    public EpgItem(String progName, String time, String progInfo,
-                   boolean showSimpleButton, boolean showProgSetting,
-                   boolean showCurrentSelectImage) {
+    public EpgItem(String progName, String progTime, String progInfo,
+                   int simpleRecBtnOnce, int simpleRecBtnCycle,
+                   int simpleWatchBtnOnce, int simpleWatchBtnCycle,
+                   int recBtnOnce, int recBtnCycle,
+                   int watchBtnOnce, int watchBtnCycle) {
         this.progName = progName;
-        this.time = time;
+        this.progTime = progTime;
         this.progInfo = progInfo;
-        this.showSimpleButton = showSimpleButton;
-        this.showProgSetting = showProgSetting;
-        this.showCurrentSelectImage = showCurrentSelectImage;
+        this.simpleRecBtnOnce = simpleRecBtnOnce;
+        this.simpleRecBtnCycle = simpleRecBtnCycle;
+        this.simpleWatchBtnOnce = simpleWatchBtnOnce;
+        this.simpleWatchBtnOnce = simpleWatchBtnOnce;
+        this.simpleWatchBtnCycle = simpleWatchBtnCycle;
+        this.recBtnOnce = recBtnOnce;
+        this.recBtnCycle = recBtnCycle;
+        this.watchBtnOnce = watchBtnOnce;
+        this.watchBtnCycle = watchBtnCycle;
+
     }
 
     public String  getProgName() {
         return progName;
     }
-    public String getTime() {
-        return time;
+    public String getPorgTime() {
+        return progTime;
     }
     public String getProgInfo() {
         return progInfo;
     }
-    public boolean getShowCurrentSelectImage() {
-        return showCurrentSelectImage;
+    public int getSimpleRecBtnOnce() {
+        return simpleRecBtnOnce;
     }
-    public boolean getShowSimopleButton() {
-        return showSimpleButton;
+    public int getSimpleRecBtnCycle() {
+        return simpleRecBtnCycle;
     }
-    public boolean getShowProgSetting() {
-        return showProgSetting;
+    public int getSimpleWatchBtnOnce() {
+        return simpleWatchBtnOnce;
+    }
+    public int getSimpleWatchBtnCycle() {
+        return simpleWatchBtnCycle;
+    }
+
+    public int getRecBtnOnce() {
+        return recBtnOnce;
+    }
+    public int getRecBtnCycle() {
+        return recBtnCycle;
+    }
+    public int getWatchBtnOnce() {
+        return watchBtnOnce;
+    }
+    public int getWatchBtnCycle() {
+        return watchBtnCycle;
     }
 
     public void setProgName(String progName) {
         this.progName = progName;
     }
-    public void setTime(String time) {
-        this.time = time;
+    public void setTime(String progTime) {
+        this.progTime = progTime;
     }
     public void setProgInfo(String progInfo) {
         this.progInfo = progInfo;
     }
-    public void setShowSimpleButton(boolean showSimpleButton) {
-        this.showSimpleButton = showSimpleButton;
+    public void setSimpleRecBtnOnce(int simpleRecBtnOnce) {
+        this.simpleRecBtnOnce = simpleRecBtnOnce;
     }
-    public void setShowProgSetting(boolean showProgSetting) {
-        this.showProgSetting = showProgSetting;
+    public void setSimpleRecBtnCycle(int simpleRecBtnCycle) {
+        this.simpleRecBtnCycle = simpleRecBtnCycle;
     }
-    public void setShowCurrentSelectImage(boolean showCurrentSelectImage) {
-        this.showCurrentSelectImage = showCurrentSelectImage;
+    public void setSimpleWatchBtnOnce(int simpleWatchBtnOnce) {
+        this.simpleWatchBtnOnce = simpleWatchBtnOnce;
+    }
+    public void setSimpleWatchBtnCycle(int simpleWatchBtnCycle) {
+        this.simpleWatchBtnCycle = simpleWatchBtnCycle;
+    }
+
+    public void setRecBtnOnce(int recBtnOnce) {
+        this.recBtnOnce = recBtnOnce;
+    }
+    public void setRecBtnCycle(int recBtnCycle) {
+        this.recBtnCycle = recBtnCycle;
+    }
+    public void setWatchBtnOnce(int watchBtnOnce) {
+        this.watchBtnOnce = watchBtnOnce;
+    }
+    public void setWatchBtnCycle(int watchBtnCycle) {
+        this.watchBtnCycle = watchBtnCycle;
     }
 }

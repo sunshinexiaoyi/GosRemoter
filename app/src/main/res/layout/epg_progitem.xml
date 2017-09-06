@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id = "@+id/epg_progItem"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft = "18dp">
+
+    <!--节目名和日期-->
+    <!--！！！需要将下拉指示符号加到按钮背景中-->
+    <LinearLayout
+        android:id = "@+id/epg_progNameAndDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id = "@+id/epg_tvNameButton"
+            android:text = "CCTV 1"
+            android:textSize = "18sp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight = "1"
+            android:gravity = "left|center"
+            />
+        <Button
+            android:id = "@+id/epg_tvDateButton"
+            android:text = "1995-12-25"
+            android:textSize = "18sp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight = "1"
+            android:gravity = "left|center"/>
+    </LinearLayout>
+
+    <!--缩略信息-->
+    <RelativeLayout
+        android:id = "@+id/epg_simpleProgSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp">
+        <TextView
+            android:id = "@+id/epg_progName"
+            android:text = "TRRRRRRRC News"
+            android:textSize = "18sp"
+            android:textColor = "#323232"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id = "@+id/epg_progWatchTime"
+            android:text = "9:00-10:00"
+            android:textSize = "18dp"
+            android:textColor = "#323232"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"/>
+
+        <!--！！！这里需要设置缩略文本-->
+        <TextView
+            android:id = "@+id/epg_simpleProgInfo"
+            android:text = "here you are …"
+            android:textSize = "15dp"
+            android:textColor = "#808080"
+            android:layout_width = "133dp"
+            android:layout_height="15sp"
+            android:layout_below="@id/epg_progName"
+            android:layout_marginTop="3dp"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/epg_progWatchTime"
+            android:layout_marginTop="6dp">
+            <Button
+                android:id = "@+id/epg_simpleRecordBtnOnce"
+                android:background="@drawable/epg_watchbtn_once"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="110dp"/>
+            <Button
+                android:id = "@+id/epg_simpleRecordBtnCycle"
+                android:background="@drawable/epg_watchbtn_cycle"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="75dp"/>
+            <Button
+                android:id = "@+id/epg_simpleWatchBtnOnce"
+                android:background="@drawable/epg_recordbtn_once"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="40dp"/>
+            <Button
+                android:id = "@+id/epg_simpleWatchBtnCycle"
+                android:background="@drawable/epg_recordbtn_cycle"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--详细设置-->
+    <RelativeLayout
+        android:id = "@+id/epg_fullProgSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--预定录制-->
+        <ImageView
+            android:id = "@+id/epg_recordImg"
+            android:src = "@drawable/epg_watchimg"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+        <TextView
+            android:id = "@+id/epg_recordText"
+            android:text = "@string/epg_Reservation_record"
+            android:textSize = "18sp"
+            android:textColor = "#808080"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/epg_recordImg"/>
+        <Button
+            android:id = "@+id/epg_recordBtnOnce"
+            android:text = "@string/epg_progSettingBtnText_Once"
+            android:textSize = "12sp"
+            android:layout_width="60dp"
+            android:layout_height="34dp"
+            android:layout_below="@id/epg_recordImg"
+            android:layout_marginLeft = "25dp"/>
+        <Button
+            android:id = "@+id/epg_recordBtnCycle"
+            android:text = "@string/epg_progSettingBtnText_Days"
+            android:textSize = "12sp"
+            android:layout_width="60dp"
+            android:layout_height="34dp"
+            android:layout_below="@id/epg_recordImg"
+            android:layout_toRightOf="@id/epg_recordBtnOnce"/>
+
+        <!--预定观看-->
+        <!--需要将文字放进按钮中，不然会全部大写-->
+        <Button
+            android:id = "@+id/epg_watchImg"
+            android:background = "@drawable/epg_recordimg"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/epg_recordBtnOnce"/>
+        <TextView
+            android:id = "@+id/epg_watchText"
+            android:text = "@string/epg_Scheduled_to_watch"
+            android:textSize = "18sp"
+            android:textColor = "#808080"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_below="@id/epg_recordBtnOnce"
+            android:layout_toRightOf="@id/epg_watchImg"/>
+        <Button
+            android:id = "@+id/epg_watchBtnOnce"
+            android:text = "@string/epg_progSettingBtnText_Once"
+            android:textSize = "12sp"
+            android:layout_width="60dp"
+            android:layout_height="34dp"
+            android:layout_below="@id/epg_watchImg"
+            android:layout_marginLeft = "25dp"/>
+        <Button
+            android:id = "@+id/epg_watchBtnCycle"
+            android:text = "@string/epg_progSettingBtnText_Days"
+            android:textSize = "12sp"
+            android:layout_width="60dp"
+            android:layout_height="34dp"
+            android:layout_below="@id/epg_watchImg"
+            android:layout_toRightOf="@id/epg_recordBtnOnce"/>
+    </RelativeLayout>
+</LinearLayout>

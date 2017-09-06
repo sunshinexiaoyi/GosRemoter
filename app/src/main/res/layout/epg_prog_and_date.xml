@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp">
 
-    <!--当前节目-->
+    <!--当前频道-->
     <Button
         android:id = "@+id/epg_prog_current"
         android:text = "CCTV1"
@@ -13,11 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight = "1"
-        android:background="@color/white"
         android:paddingRight = "10dp"/>
     <!--节目折叠按钮:考虑和按钮整合到一起-->
 
-    <!--当前节目-->
+    <!--日期-->
     <Button
         android:id = "@+id/epg_date_current"
         android:text = "1995-12-25"
@@ -25,7 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight = "1"
-        android:background="@color/white"
         android:paddingRight = "20dp"/>
     <!--节目折叠按钮:考虑和按钮整合到一起-->
 </LinearLayout>

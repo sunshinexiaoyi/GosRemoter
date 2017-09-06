@@ -4,11 +4,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <!--工具条-->
     <include layout = "@layout/epg_toolbar"/>
     <!--当前节目和日期-->
     <include layout = "@layout/epg_prog_and_date"/>
+
     <!--节目列表。可修改条目之间的分割线样式-->
     <ListView
         android:id = "@+id/epg_mainProgList"

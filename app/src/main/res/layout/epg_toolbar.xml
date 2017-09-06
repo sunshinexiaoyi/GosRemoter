@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id = "@+id/epg_TOOLBAR"
     android:layout_width="match_parent"
     android:layout_height="70dp"
@@ -8,9 +9,8 @@
     <!--返回按钮-->
     <Button
         android:id = "@+id/EPG_toolbar_BackButton"
-        android:layout_width="60dp"
+        android:layout_width="32dp"
         android:layout_height="50dp"
-        android:layout_alignParentLeft = "true"
         android:layout_marginTop="9dp"
         android:background="@drawable/epg_toolbar_button_back" />
     <!--标题-->
@@ -20,7 +20,7 @@
         android:textSize = "35sp"
         android:textColor = "@color/white"
         android:textStyle = "bold"
-        android:layout_centerInParent = "true"
+        android:layout_gravity = "center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-</RelativeLayout>
+</android.support.v7.widget.Toolbar>

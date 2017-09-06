@@ -173,7 +173,6 @@ public class EpgTimeAdapter extends BaseAdapter{
             }
 
         }
-
     }
 
     static class ViewHolder{

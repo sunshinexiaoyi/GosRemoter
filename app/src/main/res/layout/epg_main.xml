@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id = "@+id/epg_MAIN"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!--工具条-->
-    <include layout = "@layout/epg_toolbar"/>
+    <include layout = "@layout/epg_toolbar"
+        android:id = "@+id/epg_mainToolbar"/>
     <!--当前节目和日期-->
-    <include layout = "@layout/epg_prog_and_date"/>
+    <Spinner
+        android:id = "@+id/epg_mainTVName"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@id/epg_mainToolbar"/>
+    <Spinner
+        android:id = "@+id/epg_mainTVDate"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@id/epg_mainToolbar"
+        android:layout_toRightOf="@id/epg_mainTVName"/>
 
     <!--节目列表。可修改条目之间的分割线样式-->
     <ListView
         android:id = "@+id/epg_mainProgList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:divider="@color/epg_colorText"
+        android:layout_below="@id/epg_mainTVName">
     </ListView>
 
-</LinearLayout>
+</RelativeLayout>

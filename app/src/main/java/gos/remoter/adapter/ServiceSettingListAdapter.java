@@ -1,6 +1,7 @@
 package gos.remoter.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,6 @@ public class ServiceSettingListAdapter extends BaseAdapter{
         this.mcontext = context;
         this.address = address;
     }
-
     public int getCount(){
         if(address == null)
             return 0;
@@ -67,6 +67,4 @@ public class ServiceSettingListAdapter extends BaseAdapter{
             this.address = myAddress;
         }
     }
-
-
 }

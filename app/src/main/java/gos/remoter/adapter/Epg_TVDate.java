@@ -4,10 +4,10 @@ package gos.remoter.adapter;
  * Created by QXTX-GOSPELL on 2017/9/6 0006.
  */
 
-public class EpgDateList {
+public class Epg_TVDate {
     private String TVDate;
 
-    public EpgDateList(String TVDate) {
+    public Epg_TVDate(String TVDate) {
         this.TVDate = TVDate;
     }
 

@@ -24,10 +24,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
@@ -56,15 +58,19 @@ public final class ViewfinderView extends View {
 	 * 四个绿色边角对应的长度
 	 */
 	private int ScreenRate;
-	
+
+	/**
+	 * 四条边框宽度
+	 */
+	private static final int SIDE_WIDTH = 5;
 	/**
 	 * 四个绿色边角对应的宽度
 	 */
-	private static final int CORNER_WIDTH = 10;
+	private static final int CORNER_WIDTH = 14;
 	/**
 	 * 扫描框中的中间线的宽度
 	 */
-	private static final int MIDDLE_LINE_WIDTH = 6;
+	private static final int MIDDLE_LINE_WIDTH = 7;
 	
 	/**
 	 * 扫描框中的中间线的与扫描框左右的间隙
@@ -83,7 +89,7 @@ public final class ViewfinderView extends View {
 	/**
 	 * 字体大小
 	 */
-	private static final int TEXT_SIZE = 16;
+	private static final int TEXT_SIZE = 17;
 	/**
 	 * 字体距离扫描框下面的距离
 	 */
@@ -163,7 +169,6 @@ public final class ViewfinderView extends View {
 				paint);
 		canvas.drawRect(0, frame.bottom + 1, width, height, paint);
 		
-		
 
 		if (resultBitmap != null) {
 			// Draw the opaque result bitmap over the scanning rectangle
@@ -172,7 +177,7 @@ public final class ViewfinderView extends View {
 		} else {
 
 			//画扫描框边上的角，总共8个部分
-			paint.setColor(Color.GREEN);
+			paint.setColor(getResources().getColor(R.color.dark_blue));
 			canvas.drawRect(frame.left, frame.top, frame.left + ScreenRate,
 					frame.top + CORNER_WIDTH, paint);
 			canvas.drawRect(frame.left, frame.top, frame.left + CORNER_WIDTH, frame.top
@@ -189,16 +194,26 @@ public final class ViewfinderView extends View {
 					frame.right, frame.bottom, paint);
 			canvas.drawRect(frame.right - CORNER_WIDTH, frame.bottom - ScreenRate,
 					frame.right, frame.bottom, paint);
+			// 四条边线
+			canvas.drawRect(frame.left, frame.top, frame.right, frame.top + SIDE_WIDTH, paint);
+			canvas.drawRect(frame.left, frame.top, frame.left + SIDE_WIDTH, frame.bottom, paint);
+			canvas.drawRect(frame.left, frame.bottom - SIDE_WIDTH, frame.right, frame.bottom, paint);
+			canvas.drawRect(frame.right - SIDE_WIDTH, frame.top, frame.right, frame.bottom, paint);
 
-			
 			//绘制中间的线,每次刷新界面，中间的线往下移动SPEEN_DISTANCE
 			slideTop += SPEEN_DISTANCE;
 			if(slideTop >= frame.bottom){
 				slideTop = frame.top;
 			}
-			canvas.drawRect(frame.left + MIDDLE_LINE_PADDING, slideTop - MIDDLE_LINE_WIDTH/2, frame.right - MIDDLE_LINE_PADDING,slideTop + MIDDLE_LINE_WIDTH/2, paint);
-			
-			/*
+			//canvas.drawRect(frame.left + MIDDLE_LINE_PADDING, slideTop - MIDDLE_LINE_WIDTH/2, frame.right - MIDDLE_LINE_PADDING,slideTop + MIDDLE_LINE_WIDTH/2, paint);
+			//自定义图片
+			Rect lineRect = new Rect();
+			lineRect.left = frame.left;
+			lineRect.right = frame.right;
+			lineRect.top = slideTop;
+			lineRect.bottom = slideTop + 18;
+			canvas.drawBitmap(((BitmapDrawable)(getResources().getDrawable(R.drawable.scan_line))).getBitmap(), null, lineRect, paint);
+/*
 			//画扫描框下面的字
 			paint.setColor(Color.WHITE);
 			paint.setTextSize(TEXT_SIZE * density);
@@ -206,24 +221,29 @@ public final class ViewfinderView extends View {
 			paint.setAlpha(100);
 			paint.setTextAlign(Paint.Align.CENTER);//排列，对齐
 			paint.setTypeface(Typeface.create("System", Typeface.BOLD));
-
 			canvas.drawText(getResources().getString(R.string.scan_text), frame.left, (float) (frame.bottom + (float)TEXT_PADDING_TOP *density), paint);
+			*/
 
-*/
-
-            //画扫描框下面的字
+			//画扫描框下面的字
 			mCurrentPaint = new TextPaint();
 			mCurrentPaint.setColor(Color.WHITE);
 			mCurrentPaint.setAlpha(100);
-			mCurrentPaint.setTextAlign(Paint.Align.CENTER);
+			//mCurrentPaint.setTextAlign(Paint.Align.CENTER); //在下面有设置居中，偏移量
+			mCurrentPaint.setAntiAlias(true);  //设置抗锯齿，否则字迹会很模糊
 			mCurrentPaint.setTextSize(TEXT_SIZE * density);
 			mCurrentPaint.setTypeface(Typeface.create("System", Typeface.BOLD));
-			StaticLayout currentLayout = new StaticLayout(getResources().getString(R.string.scan_text), mCurrentPaint, (width - frame.left),
-					Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
-			canvas.translate( (float)(frame.left * 2 - CORNER_WIDTH), (frame.bottom + (float)TEXT_PADDING_TOP * density));//画布的原点,默认原点为(0,0)
+
+			String text = getResources().getString(R.string.scan_text);
+			float textWidth = mCurrentPaint.measureText(text);
+			StaticLayout currentLayout = new StaticLayout(text, mCurrentPaint, frame.width(), Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
+			//在draw之前调整Canvas的起始坐标，字长宽——限定宽度
+			if(textWidth > frame.width()) {
+				canvas.translate( frame.left, (frame.bottom + (float)TEXT_PADDING_TOP * density)); //画布的原点,默认原点为(0,0)
+			}else {
+				canvas.translate((width - textWidth)/2, (frame.bottom + (float)TEXT_PADDING_TOP * density));
+			}
+			Log.d("文字宽度",textWidth + "");
 			currentLayout.draw(canvas);
-			//Log.i(TAG,"frame-----");
-			
 
 			Collection<ResultPoint> currentPossible = possibleResultPoints;
 			Collection<ResultPoint> currentLast = lastPossibleResultPoints;

@@ -29,13 +29,15 @@
     <string name = "connect_detach_hint">detach the device</string>
     <string name = "connect_try_connect">Try to connect device...</string>
 
+    <!--主页-->
+    <string name="homeTitle">GOSPELL</string>
+    <string name="homeExit">exit</string>
 
     <!--扫码-->
-
     <string name="ret">back</string>
-    <string name="scan_title">Scan Connect Device</string>
+    <string name="scan_title">Scanning</string>
     <string name="menu_settings">Settings</string>
-    <string name="scan_text">Please put the qr code/bar code in the box</string>
+    <string name="scan_text">Insert the qr code into the box and scan automatically</string>
     <string name="scan_data_parse_error">Data analytical data parsing anomaly</string>
     <string name="allow_camera_permission">Please allow camera permissions</string>
 

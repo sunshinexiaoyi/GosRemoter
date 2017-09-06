@@ -40,8 +40,8 @@ public final class CameraManager {
   /*调节扫码框最大与最小高宽*/
   private static final int MIN_FRAME_WIDTH = 240;
   private static final int MIN_FRAME_HEIGHT = 240;
-  private static final int MAX_FRAME_WIDTH = 520;
-  private static final int MAX_FRAME_HEIGHT = 470;
+  private static final int MAX_FRAME_WIDTH = 730;//520
+  private static final int MAX_FRAME_HEIGHT = 730;//470
 
   private static CameraManager cameraManager;
 

@@ -11,8 +11,8 @@
     <!-- 扫码必备权限 -->
     <uses-permission android:name="android.permission.VIBRATE" /><!-- 允许访问振动设备-->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera" />  <!-- 使用照相机权限 -->
+    <uses-feature android:name="android.hardware.camera.autofocus" />   <!-- 自动聚焦权限 -->
 
     <application
         android:name="gos.remoter.define.SystemInfo"
@@ -47,6 +47,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"><!--非重启Activity的横竖屏切换-->
         </activity>
 
+        <!-- 隐藏键盘 --><!-- 全屏 -->
         <activity
             android:name="qr.zxing.MipcaActivityCapture"
             android:configChanges="orientation|keyboardHidden"

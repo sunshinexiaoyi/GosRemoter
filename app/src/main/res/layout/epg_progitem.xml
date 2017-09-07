@@ -17,14 +17,14 @@
             android:id = "@+id/epg_progName"
             android:text = "TRRRRRRRC News"
             android:textSize = "18sp"
-            android:textColor = "@color/epg_colorTitle"
+            android:textColor = "@color/epg_blackTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id = "@+id/epg_progTime"
             android:text = "9:00-10:00"
             android:textSize = "18dp"
-            android:textColor = "@color/epg_colorTitle"
+            android:textColor = "@color/epg_littleBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -35,16 +35,16 @@
             android:id = "@+id/epg_simpleProgInfo"
             android:text = "here you are …"
             android:textSize = "15dp"
-            android:textColor = "@color/epg_colorText"
+            android:textColor = "@color/epg_littleBlack"
             android:layout_width = "133dp"
-            android:layout_height="15sp"
+            android:layout_height="19dp"
             android:layout_below="@id/epg_progName"
-            android:layout_marginTop="3dp"/>
+            android:layout_marginTop="10dp"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/epg_progWatchTime"
+            android:layout_below="@id/epg_progTime"
             android:layout_marginTop="6dp">
             <Button
                 android:id = "@+id/epg_simpleRecordBtnOnce"
@@ -82,7 +82,7 @@
         android:id = "@+id/epg_fullProgSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp">
+        android:paddingBottom="12dp">
         <!--预定录制-->
         <ImageView
             android:id = "@+id/epg_recordImg"
@@ -93,7 +93,7 @@
             android:id = "@+id/epg_recordText"
             android:text = "@string/epg_Reservation_record"
             android:textSize = "18sp"
-            android:textColor = "@color/epg_colorText"
+            android:textColor = "@color/epg_littleBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
@@ -104,17 +104,20 @@
             android:text = "@string/epg_progSettingBtnText_Once"
             android:textSize = "12sp"
             android:layout_width="60dp"
-            android:layout_height="34dp"
+            android:layout_height="37dp"
             android:layout_below="@id/epg_recordImg"
-            android:layout_marginLeft = "25dp"/>
+            android:layout_marginLeft = "29dp"
+            android:layout_marginTop = "4dp" />
         <Button
             android:id = "@+id/epg_recBtnCycle"
             android:text = "@string/epg_progSettingBtnText_Days"
             android:textSize = "12sp"
             android:layout_width="60dp"
-            android:layout_height="34dp"
+            android:layout_height="37dp"
             android:layout_below="@id/epg_recordImg"
-            android:layout_toRightOf="@id/epg_recBtnOnce"/>
+            android:layout_toRightOf="@id/epg_recBtnOnce"
+            android:layout_marginLeft = "8dp"
+            android:layout_marginTop = "4dp" />
 
         <!--预定观看-->
         <!--需要将文字放进按钮中，不然会全部大写-->
@@ -128,7 +131,7 @@
             android:id = "@+id/epg_watchText"
             android:text = "@string/epg_Scheduled_to_watch"
             android:textSize = "18sp"
-            android:textColor = "@color/epg_colorText"
+            android:textColor = "@color/epg_littleBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
@@ -140,16 +143,19 @@
             android:text = "@string/epg_progSettingBtnText_Once"
             android:textSize = "12sp"
             android:layout_width="60dp"
-            android:layout_height="34dp"
+            android:layout_height="37dp"
             android:layout_below="@id/epg_watchImg"
-            android:layout_marginLeft = "25dp"/>
+            android:layout_marginLeft = "29dp"
+            android:layout_marginTop = "4dp" />
         <Button
             android:id = "@+id/epg_watchBtnCycle"
             android:text = "@string/epg_progSettingBtnText_Days"
             android:textSize = "12sp"
             android:layout_width="60dp"
-            android:layout_height="34dp"
+            android:layout_height="37dp"
             android:layout_below="@id/epg_watchImg"
-            android:layout_toRightOf="@id/epg_recBtnOnce"/>
+            android:layout_toRightOf="@id/epg_recBtnOnce"
+            android:layout_marginLeft = "8dp"
+            android:layout_marginTop = "4dp" />
     </RelativeLayout>
 </LinearLayout>

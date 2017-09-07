@@ -26,7 +26,7 @@
                 android:id="@+id/images_back"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/backbutton" />
+                android:src="@drawable/back_button" />
 
         </LinearLayout>
 

@@ -22,7 +22,6 @@
     <!--底部菜单高度-->
     <dimen name="tab_menu_height">60dp</dimen>
 
-
     <integer name="switch_pro_interval">500</integer>
 
     <integer name="headbeat_interval">30000</integer>

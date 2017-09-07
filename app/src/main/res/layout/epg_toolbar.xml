@@ -3,21 +3,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id = "@+id/epg_TOOLBAR"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="50dp"
     android:background="@color/blue_item">
 
     <!--返回按钮-->
     <Button
         android:id = "@+id/EPG_toolbar_BackButton"
-        android:layout_width="30dp"
-        android:layout_height="45dp"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
         android:layout_marginTop="9dp"
         android:background="@drawable/epg_toolbar_button_back" />
     <!--标题-->
     <TextView
         android:id = "@+id/epg_toolbar_title"
         android:text = "@string/tab_menu_epg"
-        android:textSize = "30sp"
+        android:textSize = "24sp"
         android:textColor = "@color/white"
         android:textStyle = "bold"
         android:layout_gravity = "center"

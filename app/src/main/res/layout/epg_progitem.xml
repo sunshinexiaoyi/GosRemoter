@@ -48,28 +48,28 @@
             android:layout_marginTop="6dp">
             <Button
                 android:id = "@+id/epg_simpleRecordBtnOnce"
-                android:background="@drawable/epg_watchbtn_once"
+                android:background="@drawable/epg_simple_watchbtn_once_false"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="110dp"/>
             <Button
                 android:id = "@+id/epg_simpleRecordBtnCycle"
-                android:background="@drawable/epg_watchbtn_cycle"
+                android:background="@drawable/epg_simple_watchbtn_cycle_false"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="75dp"/>
             <Button
                 android:id = "@+id/epg_simpleWatchBtnOnce"
-                android:background="@drawable/epg_recordbtn_once"
+                android:background="@drawable/epg_simple_recordbtn_once_false"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="40dp"/>
             <Button
                 android:id = "@+id/epg_simpleWatchBtnCycle"
-                android:background="@drawable/epg_recordbtn_cycle"
+                android:background="@drawable/epg_simple_recordbtn_cycle_false"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
@@ -105,15 +105,18 @@
             android:textSize = "12sp"
             android:layout_width="60dp"
             android:layout_height="37dp"
+            android:background="@drawable/epg_full_btn_false"
             android:layout_below="@id/epg_recordImg"
             android:layout_marginLeft = "29dp"
-            android:layout_marginTop = "4dp" />
+            android:layout_marginTop = "4dp"
+            />
         <Button
             android:id = "@+id/epg_recBtnCycle"
             android:text = "@string/epg_progSettingBtnText_Days"
             android:textSize = "12sp"
             android:layout_width="60dp"
             android:layout_height="37dp"
+            android:background="@drawable/epg_full_btn_false"
             android:layout_below="@id/epg_recordImg"
             android:layout_toRightOf="@id/epg_recBtnOnce"
             android:layout_marginLeft = "8dp"
@@ -144,6 +147,7 @@
             android:textSize = "12sp"
             android:layout_width="60dp"
             android:layout_height="37dp"
+            android:background="@drawable/epg_full_btn_false"
             android:layout_below="@id/epg_watchImg"
             android:layout_marginLeft = "29dp"
             android:layout_marginTop = "4dp" />
@@ -153,6 +157,7 @@
             android:textSize = "12sp"
             android:layout_width="60dp"
             android:layout_height="37dp"
+            android:background="@drawable/epg_full_btn_false"
             android:layout_below="@id/epg_watchImg"
             android:layout_toRightOf="@id/epg_recBtnOnce"
             android:layout_marginLeft = "8dp"

@@ -8,12 +8,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.SimpleAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import java.util.ArrayList;
 
 public class Epg_progItemAdapter extends BaseAdapter {
+    Button simpleRecBtnOnce;
+    Button simpleRecBtnCycle;
+    Button simpleWatchBtnOnce;
+    Button simpleWatchBtnCycle;
+    Button recBtnOnce;
+    Button recBtnCycle;
+    Button watchBtnOnce;
+    Button watchBtnCycle;
+
     private Context context;//布局的id
     private ArrayList<Epg_progItem> listData;//泛型的列表条目;
     public Epg_progItemAdapter(Context context, ArrayList<Epg_progItem> listData) {
@@ -46,6 +57,15 @@ public class Epg_progItemAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.epg_progitem, parent, false);
             tvItemHolder = new TVItemHolder(convertView);
         }
+        //设置控件ID和属性
+        setDataId(position, tvItemHolder);
+        //设置选中列表事件
+        setOnclickListen(convertView);
+
+        return convertView;
+    }
+    //getView里设置相关控件的ID和属性
+    public void setDataId(int position, TVItemHolder tvItemHolder) {
         Epg_progItem epg_progItem = listData.get(position);
         //设置里面的属性id
         tvItemHolder.progName.setText(epg_progItem.getProgName());
@@ -60,9 +80,108 @@ public class Epg_progItemAdapter extends BaseAdapter {
         tvItemHolder.recBtnCycle.setBackgroundResource(epg_progItem.getRecBtnCycle());
         tvItemHolder.watchBtnOnce.setBackgroundResource(epg_progItem.getWatchBtnOnce());
         tvItemHolder.watchBtnCycle.setBackgroundResource(epg_progItem.getWatchBtnCycle());
-        return convertView;
     }
+    //设置全部按钮的监听
+    public void setOnclickListen(View convertView) {
+        simpleRecBtnOnce = (Button)convertView.findViewById(R.id.epg_simpleRecordBtnOnce);
+        simpleRecBtnCycle = (Button)convertView.findViewById(R.id.epg_simpleRecordBtnCycle);
+        simpleWatchBtnOnce = (Button)convertView.findViewById(R.id.epg_simpleWatchBtnOnce);
+        simpleWatchBtnCycle = (Button)convertView.findViewById(R.id.epg_simpleWatchBtnCycle);
 
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            boolean isRecOnce = false;
+            boolean isRecCycle = false;
+            boolean isWatchOnce = false;
+            boolean isWatchCycle = false;
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.epg_simpleRecordBtnOnce: {
+                        Log.e(CS.ADAPTER_TAG, "点中了预定录制一次按钮");
+                        //更改按钮样式
+                        if (!isRecOnce) {
+                            simpleRecBtnOnce.setBackgroundResource(R.drawable.epg_recordbtn_once);
+                            simpleRecBtnCycle.setBackgroundResource(R.drawable.epg_recordbtn_cycle_false);
+                            simpleWatchBtnOnce.setBackgroundResource(R.drawable.epg_watchbtn_once_false);
+                            simpleWatchBtnCycle.setBackgroundResource(R.drawable.epg_watchbtn_cycle_false);
+                            isRecCycle = false;
+                            isWatchOnce = false;
+                            isWatchCycle = false;
+                        } else {
+                            simpleRecBtnOnce.setBackgroundResource(R.drawable.epg_recordbtn_once_false);
+                        }
+                        isRecOnce = !isRecOnce;
+                        break;
+                    }
+                    case R.id.epg_simpleRecordBtnCycle: {
+                        Log.e(CS.ADAPTER_TAG, "点中了预定循环录制按钮");
+                        //更改按钮样式
+                        if (!isRecCycle) {
+                            simpleRecBtnOnce.setBackgroundResource(R.drawable.epg_recordbtn_once_false);
+                            simpleRecBtnCycle.setBackgroundResource(R.drawable.epg_recordbtn_cycle);
+                            simpleWatchBtnOnce.setBackgroundResource(R.drawable.epg_watchbtn_once_false);
+                            simpleWatchBtnCycle.setBackgroundResource(R.drawable.epg_watchbtn_cycle_false);
+                            isRecOnce = false;
+                            isWatchOnce = false;
+                            isWatchCycle = false;
+                        } else {
+                            simpleRecBtnCycle.setBackgroundResource(R.drawable.epg_recordbtn_cycle_false);
+                        }
+                        isRecCycle = !isRecCycle;
+                        break;
+                    }
+                    case R.id.epg_simpleWatchBtnOnce: {
+                        Log.e(CS.ADAPTER_TAG, "点中了预定观看一天按钮");
+                        //更改按钮样式
+                        if (!isWatchCycle) {
+                            simpleRecBtnOnce.setBackgroundResource(R.drawable.epg_recordbtn_once_false);
+                            simpleRecBtnCycle.setBackgroundResource(R.drawable.epg_recordbtn_cycle_false);
+                            simpleWatchBtnOnce.setBackgroundResource(R.drawable.epg_watchbtn_once);
+                            simpleWatchBtnCycle.setBackgroundResource(R.drawable.epg_watchbtn_cycle_false);
+                            isRecOnce = false;
+                            isRecCycle = false;
+                            isWatchCycle = false;
+                        } else {
+                            simpleWatchBtnOnce.setBackgroundResource(R.drawable.epg_watchbtn_once_false);
+                        }
+                        isWatchOnce = !isWatchOnce;
+                        break;
+                    }
+                    case R.id.epg_simpleWatchBtnCycle: {
+                        Log.e(CS.ADAPTER_TAG, "点中了预定循环观看按钮");
+                        //更改按钮样式
+                        if (!isWatchCycle) {
+                            simpleRecBtnOnce.setBackgroundResource(R.drawable.epg_recordbtn_once_false);
+                            simpleRecBtnCycle.setBackgroundResource(R.drawable.epg_recordbtn_cycle_false);
+                            simpleWatchBtnOnce.setBackgroundResource(R.drawable.epg_watchbtn_once_false);
+                            simpleWatchBtnCycle.setBackgroundResource(R.drawable.epg_watchbtn_cycle);
+                            isRecOnce = false;
+                            isRecCycle = false;
+                            isWatchOnce = false;
+                        } else {
+                            simpleWatchBtnCycle.setBackgroundResource(R.drawable.epg_watchbtn_cycle_false);
+                        }
+                        isWatchCycle = !isWatchCycle;
+                        break;
+                    }
+
+                    default: {
+                        Log.e(CS.ADAPTER_TAG, "点中了其他按钮");
+                        break;
+                    }
+                }
+            }
+        };
+        //设置全部按钮的监听
+        simpleRecBtnOnce.setOnClickListener(onClickListener);
+        simpleRecBtnCycle.setOnClickListener(onClickListener);
+        simpleWatchBtnOnce.setOnClickListener(onClickListener);
+        simpleWatchBtnCycle.setOnClickListener(onClickListener);
+        recBtnOnce.setOnClickListener(onClickListener);
+        recBtnCycle.setOnClickListener(onClickListener);
+        watchBtnOnce.setOnClickListener(onClickListener);
+        watchBtnCycle.setOnClickListener(onClickListener);
+    }
     public static class TVItemHolder {
         private TextView progName;//节目名
         private TextView progTime;//节目播放时间

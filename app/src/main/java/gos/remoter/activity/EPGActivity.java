@@ -1,9 +1,14 @@
 package gos.remoter.activity;
 
+import gos.remoter.adapter.Epg_progItem;
+import gos.remoter.adapter.Epg_TVDate;
+import gos.remoter.adapter.Epg_TVName;
 import gos.remoter.define.CS;//静态常量
 import gos.remoter.R;
 import gos.remoter.event.EventManager;
-import gos.remoter.adapter.EpgAdapter;
+import gos.remoter.adapter.Epg_progItemAdapter;
+import gos.remoter.adapter.Epg_TVDateAdapter;
+import gos.remoter.adapter.Epg_TVNameAdapter;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
@@ -15,16 +20,26 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.alibaba.fastjson.support.odps.udf.CodecCheck;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import gos.remoter.event.EventMode;
+import gos.remoter.event.EventMsg;
 
+import com.alibaba.fastjson.support.odps.udf.CodecCheck;
 import java.util.ArrayList;
 
 public class EPGActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private EpgAdapter epgAdapter = null;//自己消息适配器
-    private ArrayList<Object> data = null;//聊天列表属性集合
+    private Epg_progItemAdapter epg_progItemAdapter = null;//节目内容适配器
+    private Epg_TVNameAdapter epg_tvNameAdapter = null;//频道号和日期适配器
+    private Epg_TVDateAdapter epg_tvDateAdapter = null;//频道号和日期适配器
+    private ArrayList<Epg_progItem> ItemData = null;//节目内容列表属性集合
+    private ArrayList<Epg_TVName> tvNameData = null;//频道号下拉列表属性集合
+    private ArrayList<Epg_TVDate> tvDateData = null;//频道号下拉列表属性集合
+
     private ListView progListView = null;//节目内容列表
-    private Spinner spin_tvName;//频道列表
-    private Spinner spin_tvDate;//频道日期列表
+    private Spinner spin_tvName;//频道号下拉列表
+    private Spinner spin_tvDate;//频道日期下拉列表
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +49,14 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
         EventManager.register(this);//注册EventManager
 
         init_adapter();//完成初始化EpgAdapter
+        epg_tvNameAdapter.add(new Epg_TVName("CCTV 2"));
+        epg_tvDateAdapter.add(new Epg_TVDate("2017-09-08"));
+        epg_progItemAdapter.add(new Epg_progItem("BBC News", "9:00-10:00", "this is BBC News!",
+                R.drawable.epg_recordbtn_once, R.drawable.epg_recordbtn_cycle,
+                R.drawable.epg_watchbtn_once, R.drawable.epg_watchbtn_cycle,
+                R.drawable.epg_recbtn_once_pressed, R.drawable.epg_recbtn_cycle_pressed,
+                R.drawable.epg_watchbtn_once_pressed, R.drawable.epg_watchbtn_cycle_pressed));
+        Log.e("来自MainAcitity的消息", "添加属列表属性成功");
     }
     @Override
     public void onDestroy() {
@@ -44,16 +67,22 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
     //初始化EpgAdapter
     public void init_adapter() {
         Context context = EPGActivity.this;
-        data = new ArrayList<>();
+        ItemData = new ArrayList<Epg_progItem>();
+        tvNameData = new ArrayList<Epg_TVName>();
+        tvDateData = new ArrayList<Epg_TVDate>();
+
         spin_tvName = (Spinner)findViewById(R.id.epg_mainTVName);
         spin_tvDate = (Spinner)findViewById(R.id.epg_mainTVDate);
         progListView = (ListView)findViewById(R.id.epg_mainProgList);//频道中的全部节目
         //初始化适配器
-        epgAdapter = new EpgAdapter(context, data);
+        epg_progItemAdapter = new Epg_progItemAdapter(context, ItemData);
+        epg_tvNameAdapter = new Epg_TVNameAdapter(context, tvNameData);
+        epg_tvDateAdapter = new Epg_TVDateAdapter(context, tvDateData);
+
         //使用适配器
-        progListView.setAdapter(epgAdapter);
-        spin_tvName.setAdapter(epgAdapter);
-        spin_tvDate.setAdapter(epgAdapter);
+        progListView.setAdapter(epg_progItemAdapter);
+        spin_tvName.setAdapter(epg_tvNameAdapter);
+        spin_tvDate.setAdapter(epg_tvDateAdapter);
         Log.e(CS.EPGACT_TAG, CS.EPGACT_INITADA_SUCEESS);//初始化适配器成功
         spin_tvName.setOnItemSelectedListener(this);
         spin_tvDate.setOnItemSelectedListener(this);
@@ -62,19 +91,7 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
     //选中后触发动作
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()) {
-            //选中频道名列表
-            case R.id.epg_spinner_TVName: {
-                break;
-            }
-            //选中日期列表
-            case R.id.epg_spinner_TVDate: {
-                break;
-            }
-            default: {
-                break;
-            }
-        }
+        //选中列表
     }
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
@@ -82,63 +99,8 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
     }
 
     //事件接收器
-//    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-//    public void onReceiveEvent(EventMsg msg){
-//        if(msg.getEventMode() == EventMode.OUT) {
-//            //发送给服务器
-//            return ;
-//        }
-//
-//        //接收消息
-//        switch (msg.getCommand()){
-//            //设置节目列表
-//            case COM_LIVE_SET_PROGRAM_LIST: {
-//                setProgramList(parseProgramData(msg.getData()));
-//                aotuSet = false;
-//                if (-1 == curProPosition) {
-//                    proItemClick(0);
-//                }
-//                break;
-//            }
-//            //设置选择的节目EPG信息
-//            case COM_EPG_SET_SELECT_PROGRAM: {
-//                setDateList(parseDateData(msg.getData()));
-//                if (aotuSet) {
-//                    Log.i(TAG, "自动设置date");
-//                    dateItemClick(curDatePosition);
-//                } else if (-1 == curDatePosition) {
-//                    dateItemClick(0);
-//                }
-//                break;
-//            }
-//            //系统回应
-//            case COM_SYSTEM_RESPOND: {
-//                Respond respond = DataParse.getRespond(msg.getData());
-//                switch (respond.getCommand()) {
-//                    case COM_CONNECT_DETACH:
-//                        if (respond.getFlag()) {
-//                            detach();
-//                        }
-//                        break;
-//                    case COM_CONNECT_ATTACH:
-//                        if (respond.getFlag()) {
-//                            attach();
-//                        }
-//                        break;
-//                    case COM_EPG_SET_RESERVE:
-//                        if (respond.getFlag()) {
-//                            aotuSet = true;
-//                            getSelectEpgInfo(curProgram.getIndex());
-//                        }
-//                    default:
-//                        break;
-//                }
-//                break;
-//            }
-//            //epg预定事件撞车冲突
-//            case COM_EPG_CLASH_RESERVE: {break;}
-//            //其他保留情况
-//            default: {break;}
-//        }
-//    }
+    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
+    public void onReceiveEvent(EventMsg msg) {
+        //接收消息
+    }
 }

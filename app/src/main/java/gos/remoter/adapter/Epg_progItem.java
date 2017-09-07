@@ -10,7 +10,7 @@ import android.view.ViewGroup;
  * Created by QXTX-GOSPELL on 2017/9/5 0005.
  */
 
-public class EpgItem {
+public class Epg_progItem {
     private String progName;//节目名
     private String progTime;//节目播放时间
     private String progInfo;//节目信息
@@ -23,7 +23,7 @@ public class EpgItem {
     private int watchBtnOnce;//预定观看一次
     private int watchBtnCycle;//预定观看每天
 
-    public EpgItem(String progName, String progTime, String progInfo,
+    public Epg_progItem(String progName, String progTime, String progInfo,
                    int simpleRecBtnOnce, int simpleRecBtnCycle,
                    int simpleWatchBtnOnce, int simpleWatchBtnCycle,
                    int recBtnOnce, int recBtnCycle,

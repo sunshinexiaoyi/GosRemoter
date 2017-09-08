@@ -269,6 +269,7 @@ public class ConnectActivity extends Activity {
     void startHomeActivity(){
         Intent intent = new Intent(this,HomeActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }

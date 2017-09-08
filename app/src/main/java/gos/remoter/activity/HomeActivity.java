@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -22,6 +23,7 @@ import gos.remoter.view.TitleBarNew;
 
 public class HomeActivity extends Activity {
     AlertDialog logoutAlert;
+    long firstTime;//保存第一次按退出键的时间
 
     ReuseAdapter<GridActivity> gridAdapter = new ReuseAdapter<GridActivity>(R.layout.item_grid_icon) {
         @Override
@@ -38,6 +40,22 @@ public class HomeActivity extends Activity {
         setContentView(R.layout.activity_home);
         initView();
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            if(System.currentTimeMillis() - firstTime > 2000) {
+                Toast.makeText(this, R.string.exit2, Toast.LENGTH_SHORT).show();
+                firstTime = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true; //不返回，一次就立马退出，
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     void initView(){
         new ImmersionLayout(this).setImmersion();

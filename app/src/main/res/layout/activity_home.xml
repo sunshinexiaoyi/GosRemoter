@@ -23,18 +23,15 @@
         android:layout_width="0dp"
         android:layout_height="420dp"
         android:layout_marginTop="8dp"
-        android:background="@color/home_grid_bg"
         android:gravity="center"
-        android:horizontalSpacing="1dp"
         android:numColumns="3"
-        android:verticalSpacing="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-
         app:layout_constraintTop_toBottomOf="@+id/titleBar"
         app:layout_constraintVertical_bias="1.0"
+        android:background="@color/white"
 
         />
 

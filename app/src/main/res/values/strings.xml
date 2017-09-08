@@ -1,5 +1,43 @@
 <resources>
     <string name="app_name">高斯遥控</string>
+
+    <!--主页-->
+    <string name="home_remoter">遥控器</string>
+    <string name="home_live">直播</string>
+    <string name="home_program_list">节目列表</string>
+    <string name="home_epg">EPG</string>
+    <string name="home_more">更多</string>
+    <string name="home_info">该功能尚未开放,敬请期待!</string>
+
+    <string name="home_alert_title">提示</string>
+    <string name="home_alert_msg">你确定退出连接吗？</string>
+    <string name="home_alert_negative">取消</string>
+    <string name="home_alert_positive">确认</string>
+
+    <!--节目列表-->
+    <string name="program_lcn">LCN</string>
+    <string name="program_name">Name</string>
+    <string name="program_title">节目列表</string>
+
+
+    <!--遥控器-->
+    <string name="remoter_title">Remoter</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <string name="title_activity_init">InitActivity</string>
 
     <string name="tab_menu_remote">遥控器</string>
@@ -26,6 +64,8 @@
     <string name="connect_detach">设备已断开</string>
     <string name="connect_detach_hint">断开连接</string>
     <string name="connect_try_connect">尝试连接设备...</string>
+    <string name="connect_title">高斯贝尔</string>
+
 
     <!--主页-->
     <string name="homeTitle">高斯贝尔</string>

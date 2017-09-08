@@ -2,15 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/init_default"
 
-    <ImageView
-        android:id="@+id/startImageView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="fitXY"
-        tools:ignore="ContentDescription"
-        android:src="@drawable/init_default"
-        />
+    >
+    <gos.remoter.view.TitleBarNew
+        android:id="@+id/titleBar"
+        style="@style/TitleBar">
+    </gos.remoter.view.TitleBarNew>
 
 </LinearLayout>

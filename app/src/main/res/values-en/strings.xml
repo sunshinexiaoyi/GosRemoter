@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Gos Remoter</string>
+
+    <!--主页-->
+    <string name="home_remoter">Remoter</string>
+    <string name="home_live">Live</string>
+    <string name="home_program_list">ProgramList</string>
+    <string name="home_epg">EPG</string>
+    <string name="home_more">More</string>
+    <string name="home_info">This feature is not yet open, please look!</string>
+
+    <string name="home_alert_title">Info</string>
+    <string name="home_alert_msg">Are you sure quit the connection？</string>
+    <string name="home_alert_negative">cancel</string>
+    <string name="home_alert_positive">confirm</string>
+
+    <!--节目列表-->
+    <string name="program_lcn">LCN</string>
+    <string name="program_name">Name</string>
+    <string name="program_title">ProgramList</string>
+
+
     <string name="title_activity_init">InitActivity</string>
 
     <string name="tab_menu_remote">Remote</string>
     <string name="tab_menu_live">Live</string>
     <string name="tab_menu_connect">Connect</string>
     <string name="tab_menu_epg">EPG</string>
+
+
 
     <string name="mask_stop_loading">stop loading</string>
 

@@ -1,65 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:background="@drawable/home_bg"
-    >
+    tools:context="gos.remoter.activity.ConnectActivity">
 
-    <RelativeLayout
-        android:id="@+id/homeTop"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_marginTop="10dp">
+    <gos.remoter.view.TitleBarNew
+        android:id="@+id/titleBar"
+        style="@style/TitleBar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+      >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    </gos.remoter.view.TitleBarNew>
 
-            <TextView
-                android:id="@+id/homeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/homeTitle"
-                android:textSize="27sp"
-                android:textColor="@color/white"
-                />
-            <Button
-                android:id="@+id/homeExit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_alignParentRight="true"
-                android:layout_alignBottom="@+id/homeTitle"
-                android:layout_marginRight="15dp"
-                android:text= "@string/homeExit"
-                android:textColor="@color/white"
-                android:textSize="17sp"/>
+    <GridView
+        android:id="@+id/gridActivity"
+        android:layout_width="0dp"
+        android:layout_height="420dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/home_grid_bg"
+        android:gravity="center"
+        android:horizontalSpacing="1dp"
+        android:numColumns="3"
+        android:verticalSpacing="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
 
-        </RelativeLayout>
+        app:layout_constraintTop_toBottomOf="@+id/titleBar"
+        app:layout_constraintVertical_bias="1.0"
 
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/homeContain"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/homeTop"
-        android:padding="5dp"
-        android:background="#f6f7fb">
-
-        <GridView
-            android:id="@+id/homeGird"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:stretchMode="columnWidth"
-            android:transcriptMode="alwaysScroll"
-            android:numColumns="3">
-
-        </GridView>
+        />
 
 
-    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
 
-
-</RelativeLayout>

@@ -79,9 +79,9 @@ public class ExampleUnitTest {
                     InetAddress address = packet.getAddress();
 
                     DatagramPacket packet2 = new DatagramPacket(sendData, sendData.length, address, NetProtocol.receivePort);
-                    System.out.println("服务器配置");
+                   /* System.out.println("客户端配置");
                     System.out.println("ip:"+address.getHostAddress());
-                    System.out.println("port:"+packet2.getPort());
+                    System.out.println("port:"+packet2.getPort());*/
                     socket.send(packet2);
                 }
 

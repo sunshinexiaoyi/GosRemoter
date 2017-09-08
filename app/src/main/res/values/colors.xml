@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="title_bar_text">#FFFFFFFF</color>
+
+    <color name="connect_btn_text">#22A7FF</color>
+    <color name="home_grid_bg">#eaeaea</color>
+
     <color name="colorPrimary">#22A7FF</color>
     <color name="colorPrimaryDark">#22A7FF</color>
     <color name="colorAccent">#FF4081</color>

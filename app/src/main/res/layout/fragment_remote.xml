@@ -9,7 +9,7 @@
     tools:context="gos.remoter.fragment.RemoteFragment">
     <gos.remoter.view.TitleBar
         android:id="@+id/titlebar"
-        style="@style/Titlebar">
+        style="@style/TitleBar">
 
     </gos.remoter.view.TitleBar>
     <LinearLayout

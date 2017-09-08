@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="@dimen/title_bar_height"
+tools:context="gos.remoter.activity.ConnectActivity"
+tools:layout_editor_absoluteY="81dp"
+tools:layout_editor_absoluteX="0dp"
+android:background="@drawable/title_bar_bg"
+    android:id="@+id/titleLayout"
+    >
+
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@color/title_bar_text"
+        android:textSize="@dimen/title_bar_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageLeft"
+        android:layout_width="@dimen/title_bar_image_size"
+        android:layout_height="@dimen/title_bar_image_size"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:ignore="MissingConstraints,VectorDrawableCompat" />
+
+    <ImageView
+        android:id="@+id/imageRight"
+        android:layout_width="@dimen/title_bar_image_size"
+        android:layout_height="@dimen/title_bar_image_size"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints,VectorDrawableCompat" />
+
+</android.support.constraint.ConstraintLayout>
+

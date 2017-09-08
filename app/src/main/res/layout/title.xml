@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height">
+        android:layout_height="@dimen/title_bar_height">
 
         <RelativeLayout
             android:id="@+id/RE_Wrap"

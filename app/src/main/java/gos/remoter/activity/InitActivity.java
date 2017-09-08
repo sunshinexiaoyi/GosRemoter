@@ -1,14 +1,21 @@
 package gos.remoter.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import gos.remoter.R;
 import gos.remoter.service.NetService;
+import gos.remoter.tool.ImmersionLayout;
+import gos.remoter.view.TitleBarNew;
 
 public class InitActivity extends Activity {
     private  final String TAG = this.getClass().getSimpleName();
@@ -17,30 +24,38 @@ public class InitActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
-        immersionLayout();
 
-        //start main
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
-
-        //start NetService
-        intent = new Intent(this, NetService.class);
-        startService(intent);
-
-        Log.i(TAG,"start netService");
-        //finish();
-
+        initView();
+        startService();
+        startConnectActivity();
     }
 
+    void initView(){
+        new ImmersionLayout(this).setImmersion();
 
-    void immersionLayout(){
-        //当系统版本为4.4或者4.4以上时可以使用沉浸式状态栏
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
+        TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
+        titleBar.setAlpha(0);
+        titleBar.setTextTitle(R.string.connect_title);
+    }
 
+    void startService(){
+        //start NetService
+        Intent intent = new Intent(this, NetService.class);
+        startService(intent);
+    }
+
+    void startConnectActivity(){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //start main
+                Intent intent = new Intent(InitActivity.this,ConnectActivity.class);
+                startActivity(intent);
+
+                Log.i(TAG,"start netService");
+                finish();
+            }
+        },1000);
     }
 }

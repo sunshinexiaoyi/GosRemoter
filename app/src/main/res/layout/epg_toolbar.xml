@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id = "@+id/epg_TOOLBAR"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/colorPrimary">
+
+    <!--返回按钮-->
+    <Button
+        android:id = "@+id/EPG_toolbar_BackButton"
+        android:layout_width="25dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="9dp"
+        android:background="@drawable/epg_toolbar_button_back" />
+    <!--标题-->
+    <TextView
+        android:id = "@+id/epg_toolbar_title"
+        android:text = "@string/tab_menu_epg"
+        android:textSize = "25sp"
+        android:textColor = "@color/white"
+        android:textStyle = "bold"
+        android:layout_gravity = "center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</android.support.v7.widget.Toolbar>

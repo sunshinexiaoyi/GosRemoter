@@ -97,7 +97,8 @@ public class ProgramActivity extends Activity {
 
         /*标题栏*/
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-        titleBar.setAlpha(255);
+
+
         titleBar.setTextTitle(R.string.program_title);
         titleBar.setImageRight(R.drawable.program_list_more, new View.OnClickListener() {
             @Override

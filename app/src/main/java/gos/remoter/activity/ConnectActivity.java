@@ -118,6 +118,7 @@ public class ConnectActivity extends Activity {
         new ImmersionLayout(this).setImmersion();
 
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
+        titleBar.setNullBackground();
         titleBar.setTextTitle(R.string.connect_title);
         titleBar.setImageRight(R.drawable.connect_scan, new View.OnClickListener() {
             @Override

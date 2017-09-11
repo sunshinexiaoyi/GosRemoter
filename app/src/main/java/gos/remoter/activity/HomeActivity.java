@@ -62,7 +62,7 @@ public class HomeActivity extends Activity {
 
         /*标题栏*/
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-        titleBar.setAlpha(0);
+        titleBar.setNullBackground();
 
         titleBar.setTextTitle(R.string.connect_title);
         titleBar.setImageRight(R.drawable.home_logout, new View.OnClickListener() {

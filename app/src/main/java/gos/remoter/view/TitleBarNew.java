@@ -92,6 +92,12 @@ public class TitleBarNew  extends android.support.constraint.ConstraintLayout{
         titleLayout.setBackgroundResource(resId);
     }
 
+    public void setNullBackground(){
+        titleLayout.setBackground(null);
+    }
+
+
+
     public void setAlpha(@IntRange(from=0,to=255) int alpha){
 
         titleLayout.getBackground().setAlpha(alpha);

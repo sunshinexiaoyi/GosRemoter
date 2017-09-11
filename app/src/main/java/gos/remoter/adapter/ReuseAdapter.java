@@ -213,6 +213,14 @@ public abstract class ReuseAdapter<T> extends BaseAdapter {
             return this;
         }
 
+
+        /**
+         * 设置标签
+         */
+        public ViewHolder setSelect(int id,boolean flag) {
+            getView(id).setSelected(flag);
+            return this;
+        }
         //其他方法可自行扩展
 
     }

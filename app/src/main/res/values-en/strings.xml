@@ -21,6 +21,21 @@
     <string name="program_title">ProgramList</string>
 
 
+
+
+    <!--EPG-->
+    <string name="epg_title">EPG</string>
+    <string name="epg_Reservation_record">Reservation record</string>
+    <string name="epg_Scheduled_to_watch">Scheduled to watch</string>
+    <string name="epg_progSettingBtnText_Once">Once</string>
+    <string name="epg_progSettingBtnText_Days">Days</string>
+
+
+
+
+
+
+
     <string name="title_activity_init">InitActivity</string>
 
     <string name="tab_menu_remote">Remote</string>

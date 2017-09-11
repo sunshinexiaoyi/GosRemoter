@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id = "@+id/epg_progItem"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft = "18dp"
+    android:descendantFocusability="blocksDescendants"
+    >
+
+    <!--缩略信息-->
+
+    <!--详细设置-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <TextView
+                android:id="@+id/event"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="TRRRRRRRC News"
+                android:textColor="@color/epg_blackTitle"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:text="9:00-10:00"
+                android:textColor="@color/epg_littleBlack"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <TextView
+                android:id="@+id/shortDes"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_below="@id/event"
+                android:layout_weight="3"
+                android:text="here you are …here you are …here you are …here you are …here you are …here you are …here you are …here you are …here you are …here you are …"
+                android:textColor="@color/epg_littleBlack"
+                android:textSize="15dp" />
+
+            <RelativeLayout
+                android:id="@+id/showLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/epgShowIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="43dp"
+                    android:background="@drawable/epg_simple_recbtn_cycle_false"
+                    android:focusable="false"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/detialInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="12dp"
+        android:visibility="gone">
+        <!--预定录制-->
+        <ImageView
+            android:id="@+id/epg_recordImg"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/epg_watchimg" />
+
+        <TextView
+            android:id="@+id/epg_recordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/epg_recordImg"
+            android:text="@string/epg_Reservation_record"
+            android:textColor="@color/epg_littleBlack"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/recordBtnOnce"
+            android:layout_width="60dp"
+            android:layout_height="37dp"
+            android:layout_below="@id/epg_recordImg"
+            android:layout_marginLeft="29dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/epg_btn"
+            android:focusable="false"
+            android:text="@string/epg_progSettingBtnText_Once"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/recordBtnCycle"
+            android:layout_width="60dp"
+            android:layout_height="37dp"
+            android:layout_below="@id/epg_recordImg"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/recordBtnOnce"
+            android:background="@drawable/epg_btn"
+            android:focusable="false"
+            android:text="@string/epg_progSettingBtnText_Days"
+            android:textSize="12sp" />
+        <!--预定观看-->
+        <!--需要将文字放进按钮中，不然会全部大写-->
+        <Button
+            android:id="@+id/epg_watchImg"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/recordBtnOnce"
+            android:background="@drawable/epg_recordimg" />
+
+        <TextView
+            android:id="@+id/epg_watchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recordBtnOnce"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/epg_watchImg"
+            android:text="@string/epg_Scheduled_to_watch"
+            android:textColor="@color/epg_littleBlack"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/watchBtnOnce"
+            android:layout_width="60dp"
+            android:layout_height="37dp"
+            android:layout_below="@id/epg_watchImg"
+            android:layout_marginLeft="29dp"
+            android:layout_marginTop="4dp"
+
+            android:background="@drawable/epg_btn"
+            android:focusable="false"
+            android:text="@string/epg_progSettingBtnText_Once"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/watchBtnCycle"
+            android:layout_width="60dp"
+            android:layout_height="37dp"
+            android:layout_below="@id/epg_watchImg"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/recordBtnOnce"
+            android:background="@drawable/epg_btn"
+            android:focusable="false"
+            android:text="@string/epg_progSettingBtnText_Days"
+            android:textSize="12sp" />
+    </RelativeLayout>
+</LinearLayout>

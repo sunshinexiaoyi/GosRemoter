@@ -24,14 +24,14 @@
     <string name="remoter_title">Remoter</string>
 
 
+    <!--EPG-->
+    <string name="epg_title">EPG</string>
+    <string name="epg_Reservation_record">预订录制</string>
+    <string name="epg_Scheduled_to_watch">预订观看</string>
+    <string name="epg_progSettingBtnText_Once">一天</string>
+    <string name="epg_progSettingBtnText_Days">每天</string>
 
-
-
-
-
-
-
-
+    <string name="epg_test">核心是重写BaseExpandableListAdpter，其实和之前写的普通的BaseAdapter是类似的， 但是BaseExpandableListAdpter则分成了两部分：组和子列表，具体看代码你就知道了！</string>
 
 
 

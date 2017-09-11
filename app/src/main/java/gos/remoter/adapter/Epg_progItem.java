@@ -1,6 +1,8 @@
 package gos.remoter.adapter;
 
 import gos.remoter.R;
+import gos.remoter.activity.EPGActivity;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

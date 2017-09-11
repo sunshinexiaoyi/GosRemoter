@@ -149,6 +149,7 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
             return position;
         }
 
+        //提供itemView
 
 /*******************实例化item中的各种属性************************/
         /**上文获取了一堆id，这里将要set一堆数据

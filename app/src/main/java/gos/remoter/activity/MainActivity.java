@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(new Intent(this, EPGActivity.class));
         Log.e("EPG的消息", "启动成功");
+        finish();//结束主程序
     }
 }
 

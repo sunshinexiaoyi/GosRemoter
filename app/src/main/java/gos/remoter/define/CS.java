@@ -17,12 +17,10 @@ public class CS {
     public static final String ADAPTER_GETITEMID = "执行getItemId()方法";
     public static final String ADAPTER_GETVIEW = "执行getView()方法";
     public static final String ADAPTER_INIT = "进入构造方法, 传入上下文、一个泛型列表";
-    public static final int ADAPTER_TVITEM = 0;
-    public static final int ADAPTER_TVNAME = 1;
-    public static final int ADAPTER_TVDATE = 2;
-    public static final int ADAPTER_VIEWTYPE = 3;
 
     //EPGActivity的常量
     public static final String EPGACT_TAG = "来自EPGACT的消息";
     public static final String EPGACT_INITADA_SUCEESS = "初始化适配器成功";
+    public static final String EPGACT_UNREGISTER_EVENTMANAGER = "取消注册EventManager";
+    public static final String EPGACT_DEATH = "EPGACT被杀死了";
 }

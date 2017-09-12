@@ -3,7 +3,9 @@ package gos.remoter.activity;
 import gos.remoter.adapter.Epg_progItem;
 import gos.remoter.adapter.Epg_TVDate;
 import gos.remoter.adapter.Epg_TVName;
+import gos.remoter.data.IndexClass;
 import gos.remoter.data.Program;
+import gos.remoter.data.ReserveEventSend;
 import gos.remoter.define.CS;//静态常量
 import gos.remoter.R;
 import gos.remoter.define.DataParse;
@@ -23,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.odps.udf.CodecCheck;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -34,7 +37,7 @@ import static gos.remoter.define.CommandType.*;   //导入静态命令集
 
 import java.util.ArrayList;
 
-public class EPGActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class EPGActivity extends AppCompatActivity {
     private Epg_myAdapter epg_progItemAdapter = null;//节目内容适配器
     private Epg_myAdapter epg_tvNameAdapter = null;//频道号和日期适配器
     private Epg_myAdapter epg_tvDateAdapter = null;//频道号和日期适配器
@@ -43,6 +46,8 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
     private ArrayList<Epg_progItem> itemData;//节目中的数据
     private ArrayList<Epg_TVName> tvNameData;//频道名字
     private ArrayList<Epg_TVDate> tvDateData;//频道日期
+
+    private ArrayList<Program> programInfo;//得到的节目总信息
 
 
 /*******************重写方法***********************/
@@ -56,27 +61,25 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
 
         init_adapter();//完成初始化EpgAdapter
 
+        Log.e(CS.EPGACT_TAG, "向服务器获取节目数据");
+        getProgramList();//获取第一个节目的所有信息，装载到列表中
+
 /*****************测试列表**********************/
-        epg_tvNameAdapter.add(new Epg_TVName("CCTV 1"));
-        epg_tvNameAdapter.add(new Epg_TVName("CCTV 2"));
-        epg_tvDateAdapter.add(new Epg_TVDate("1995-12-25"));
-        epg_tvDateAdapter.add(new Epg_TVDate("1995-12-26"));
-        epg_progItemAdapter.add(new Epg_progItem("ABC NEWS", "10:00-11:00", "sdalsdlkgjsdhgosdghnjsdkghsdrjkgnasjdkloiasldkghnwaksjdlhhnsdfklgjvnadslk;ho;dsl",
-                R.drawable.epg_simple_recbtn_once_false, R.drawable.epg_simple_recbtn_cycle_false,
-                R.drawable.epg_simple_watchbtn_once_false, R.drawable.epg_simple_watchbtn_cycle_false,
-                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
-                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false));
-        epg_progItemAdapter.add(new Epg_progItem("BBC NEWS", "11:00-12:00", "errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
-                R.drawable.epg_simple_recbtn_once_false, R.drawable.epg_simple_recbtn_cycle_false,
-                R.drawable.epg_simple_watchbtn_once_false, R.drawable.epg_simple_watchbtn_cycle_false,
-                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
-                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false));
-        epg_progItemAdapter.add(new Epg_progItem("TRRRRRRC NEWS", "12:00-13:00", "Hhhhhhhhhhhhhhhhhhhhhhsdlkghljsdgfsdhhhhhhhhhhhhhhhhhhhhsdjhfgjksjghklhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhsdgjhsdklhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
-                R.drawable.epg_simple_recbtn_once_false, R.drawable.epg_simple_recbtn_cycle_false,
-                R.drawable.epg_simple_watchbtn_once_false, R.drawable.epg_simple_watchbtn_cycle_false,
-                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
-                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false));
-                Log.e("来自MainAcitity的消息", "添加属列表属性成功");
+//        epg_tvNameAdapter.add(new Epg_TVName("CCTV 1"));
+//        epg_tvNameAdapter.add(new Epg_TVName("CCTV 2"));
+//        epg_tvDateAdapter.add(new Epg_TVDate("1995-12-25"));
+//        epg_tvDateAdapter.add(new Epg_TVDate("1995-12-26"));
+//        epg_progItemAdapter.add(new Epg_progItem("ABC NEWS", "10:00-11:00", "sdalsdlkgjsdhgosdghnjsdkghsdrjkgnasjdkloiasldkghnwaksjdlhhnsdfklgjvnadslk;ho;dsl",
+//                R.drawable.epg_simple_recbtn_once_false, R.drawable.epg_simple_recbtn_cycle_false,
+//                R.drawable.epg_simple_watchbtn_once_false, R.drawable.epg_simple_watchbtn_cycle_false,
+//                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
+//                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false));
+//        epg_progItemAdapter.add(new Epg_progItem("BBC NEWS", "11:00-12:00", "errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+//                R.drawable.epg_simple_recbtn_once_false, R.drawable.epg_simple_recbtn_cycle_false,
+//                R.drawable.epg_simple_watchbtn_once_false, R.drawable.epg_simple_watchbtn_cycle_false,
+//                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
+//                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false));
+//                Log.e("来自MainAcitity的消息", "添加属列表属性成功");
 /***********************************************/
     }
     @Override
@@ -88,17 +91,6 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
         Log.e(CS.EPGACT_TAG, CS.EPGACT_DEATH);//告知EPGACT被杀死
     }
 
-    //选中后的触发动作
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //选中列表
-    }
-    //没选中时的触发动作
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        //没选中时的动作
-    }
-
     //事件接收器
     @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
     public void onReceiveEvent(EventMsg msg) {
@@ -108,81 +100,47 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
         }
 
         //接收Event
-//        switch (msg.getCommand()){
-//            //设置节目列表event
-//            case COM_LIVE_SET_PROGRAM_LIST: {
-//                setProgramList(parseProgramData(msg.getData()));
-//                aotuSet = false;//自动设置？？？？？？？
-//                if (-1 == curProPosition) {
-//                    proItemClick(0);
-//                }
-//                break;
-//            }
-//
-//            //设置选择的节目epg信息
-//            case COM_EPG_SET_SELECT_PROGRAM: {
-//                setDateList(parseDateData(msg.getData()));
-//                if (aotuSet) {
-//                    Log.i(TAG, "自动设置date");
-//                    dateItemClick(curDatePosition);
-//                } else if (-1 == curDatePosition) {
-//                    dateItemClick(0);
-//                }
-//                break;
-//            }
-//
-//            //系统回应
-//            case COM_SYSTEM_RESPOND: {
-//                Respond respond = DataParse.getRespond(msg.getData());
-//                switch (respond.getCommand()) {
-//                    case COM_CONNECT_DETACH:
-//                        if (respond.getFlag()) {
-//                            detach();
-//                        }
-//                        break;
-//                    case COM_CONNECT_ATTACH:
-//                        if (respond.getFlag()) {
-//                            attach();
-//                        }
-//                        break;
-//                    case COM_EPG_SET_RESERVE:
-//                        if (respond.getFlag()) {
-//                            aotuSet = true;
-//                            getSelectEpgInfo(curProgram.getIndex());
-//                        }
-//                    default:
-//                        break;
-//                }
-//
-//                break;
-//            }
-//            default:
-//                break;
-//        }
+        switch (msg.getCommand()){
+            //设置节目列表event
+            case COM_LIVE_SET_PROGRAM_LIST: {
+                makeProgramList(msg.getData()); //拆分数据成类属性，将列表信息添加到节目号列表中
+                break;
+            }
+            //设置选择的节目epg信息
+            case COM_EPG_SET_SELECT_PROGRAM: {
+                break;
+            }
+            //系统回应
+            case COM_SYSTEM_RESPOND: {
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }
 
-//    private void setProgramList(String[] programs)
-//    {
-//        errorMaskView.setVisibleGone();
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>
-//                (context,android.R.layout.simple_expandable_list_item_1,programs);
-//        programListView.setAdapter(adapter);
-//    }
-//
-//    //数据转换
-//    private String[] parseProgramData(String data){
-//        programList = DataParse.getProgramList(data);
-//        String[] programs = new String[programList.size()];
-//        int i = 0;
-//        for (Program p : programList) {
-//            programs[i++] = p.getName();
-//        }
-//
-//        return programs;
-//    }
+    /**节目号处理
+     *
+     *包括：
+     * 1、获取所有节目号
+     * 2、将所有节目号装载到节目号下拉列表中
+     */
+    private void makeProgramList(String data){
+        programInfo = DataParse.getProgramList(data);//得到节目总信息
+        String[] programList = new String[programInfo.size()];//得到一个合适的长度数组
+        //将节目号提取出来
+        for (int i = 0; i < programInfo.size(); i++) {
+            programList[i] = programInfo.get(i).getName();
+        }
+
+        for (String program : programList) {
+            epg_tvNameAdapter.add(new Epg_TVName(program));
+        }
+    }
 
 
-/*****************自定义方法***********************/
+/*****************初始化列表相关部分***********************/
     //初始化适配器
     public void init_adapter() {
         Context context = EPGActivity.this;
@@ -249,6 +207,7 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
         Log.e(CS.EPGACT_TAG, CS.EPGACT_INITADA_SUCEESS);//初始化适配器成功
     }
 
+/*******************自定义点击事件***************************/
     //Item的点击事件
     private class ItemClick implements AdapterView.OnItemClickListener {
         private boolean[] isSpread;
@@ -419,5 +378,25 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
             }
             isWatchCycle = !isWatchCycle;
         }
+    }
+
+
+/*****************向服务器要求获取数据***********************/
+    //获取节目列表
+    private void getProgramList() {
+        Log.i(CS.EPGACT_TAG, "获取节目列表:");
+        EventManager.send(COM_LIVE_GET_PROGRAM_LIST,"", EventMode.OUT);
+    }
+
+    //获取选中的节目epg信息
+    private void getSelectEpgInfo(int index){
+        IndexClass indexClass = new IndexClass(index);
+        EventManager.send(COM_EPG_GET_SELECT_PROGRAM, JSON.toJSONString(indexClass), EventMode.OUT);
+    }
+
+    //发送预定事件设置
+    private void sendReserveSet(ReserveEventSend reserveSet){
+        EventManager.send(COM_EPG_SET_RESERVE,JSON.toJSONString(reserveSet), EventMode.OUT);
+
     }
 }

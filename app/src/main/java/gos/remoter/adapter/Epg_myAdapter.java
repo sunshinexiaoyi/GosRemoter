@@ -26,7 +26,6 @@ import gos.remoter.R;
  *
  * 备注：ViewGroup:上层layout， 利用它可以对上层layout进行操作
  */
-
 public abstract class Epg_myAdapter<T> extends BaseAdapter {
     private Context context;//这里保存是为了给内部类也能使用上下文
     private ArrayList<T> list;//一个通用item列表，将获取到的item全部保存到这里，组成一个listview

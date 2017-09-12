@@ -1,12 +1,21 @@
 package gos.remoter.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import gos.remoter.R;
 import gos.remoter.service.NetService;
+import gos.remoter.tool.ImmersionLayout;
+import gos.remoter.view.TitleBarNew;
 
 public class InitActivity extends Activity {
     private  final String TAG = this.getClass().getSimpleName();
@@ -16,15 +25,37 @@ public class InitActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
 
-        //start main
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
+        initView();
+        startService();
+        startConnectActivity();
+    }
 
+    void initView(){
+        new ImmersionLayout(this).setImmersion();
+
+        TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
+        titleBar.setNullBackground();
+        titleBar.setTextTitle(R.string.connect_title);
+    }
+
+    void startService(){
         //start NetService
-        intent = new Intent(this, NetService.class);
+        Intent intent = new Intent(this, NetService.class);
         startService(intent);
+    }
 
-        Log.i(TAG,"start netService");
-        finish();
+    void startConnectActivity(){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //start main
+                Intent intent = new Intent(InitActivity.this,ConnectActivity.class);
+                startActivity(intent);
+
+                Log.i(TAG,"start netService");
+                finish();
+            }
+        },1000);
     }
 }

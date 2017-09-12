@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    >
+
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/epg_reserve_event"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/shortDes"
+        android:layout_width="234dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:paddingRight="5dp"
+        android:text="TextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextView"
+        android:textSize="15sp"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event" />
+
+    <ImageView
+        android:id="@+id/epgShowIcon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:visibility="visible"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@drawable/epg_simple_watchbtn_once_true"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/detialInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:visibility="visible"
+        app:layout_constraintHorizontal_bias="0.277"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shortDes"
+        android:layout_marginEnd="8dp">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/epg_recordimg"
+            android:layout_marginStart="8dp" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:src="@drawable/epg_watchimg"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/recordBtnOnce" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/epg_recordImg"
+            android:text="@string/epg_Reservation_record"
+            android:textColor="@color/epg_littleBlack"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="40dp" />
+
+        <Button
+            android:id="@+id/recordBtnOnce"
+            android:layout_width="88dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/epg_recordImg"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/epg_btn"
+            android:focusable="false"
+            android:text="@string/epg_progSettingBtnText_Once"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+        <Button
+            android:id="@+id/recordBtnCycle"
+            android:layout_width="88dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/epg_recordImg"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/recordBtnOnce"
+            android:background="@drawable/epg_btn"
+            android:focusable="false"
+            android:text="@string/epg_progSettingBtnText_Days"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toRightOf="@+id/recordBtnOnce"
+            app:layout_constraintTop_toBottomOf="@+id/textView8"
+            android:layout_marginStart="16dp" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recordBtnOnce"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/epg_watchImg"
+            android:text="@string/epg_Scheduled_to_watch"
+            android:textColor="@color/epg_littleBlack"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recordBtnCycle"
+            android:layout_marginStart="40dp" />
+
+        <Button
+            android:id="@+id/watchBtnCycle"
+            android:layout_width="88dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/epg_watchImg"
+
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/epg_btn"
+            android:focusable="false"
+            android:text="@string/epg_progSettingBtnText_Days"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toRightOf="@+id/watchBtnOnce"
+            app:layout_constraintTop_toBottomOf="@+id/textView9"
+            android:layout_marginStart="16dp" />
+
+        <Button
+            android:id="@+id/watchBtnOnce"
+            android:layout_width="88dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/epg_watchImg"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/recordBtnOnce"
+            android:background="@drawable/epg_btn"
+            android:focusable="false"
+            android:text="@string/epg_progSettingBtnText_Once"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

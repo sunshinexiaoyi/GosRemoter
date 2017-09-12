@@ -468,7 +468,7 @@ public class ConnectFragment extends Fragment implements OnClickListener,OnItemC
     }
 
     /**
-     * 跳转到连接界面
+     * 跳转
      * @param delay    延时毫秒
      */
     private void jumpToLiveDelay(int delay){

@@ -79,9 +79,9 @@ public class ExampleUnitTest {
                     InetAddress address = packet.getAddress();
 
                     DatagramPacket packet2 = new DatagramPacket(sendData, sendData.length, address, NetProtocol.receivePort);
-                    System.out.println("服务器配置");
+                   /* System.out.println("客户端配置");
                     System.out.println("ip:"+address.getHostAddress());
-                    System.out.println("port:"+packet2.getPort());
+                    System.out.println("port:"+packet2.getPort());*/
                     socket.send(packet2);
                 }
 
@@ -227,13 +227,13 @@ public class ExampleUnitTest {
             Date date = new Date();
             date.setDate(String.format("2017-08-%d",i+15));
             ArrayList<Time> timeArrayList = date.getTimeArray();
-            for(int j=0;i<5;i++){
+            for(int j=0;j<5;j++){
                 Time time = new Time();
-                time.setEventType("1");
-                time.setStartTime(String.format("%d:00",i));
-                time.setEndTime(String.format("%d:00",i+1));
-                time.setShortDes("short des");
-                time.setEvent(String.format("bbc-%d",i+1));
+                time.setEventType(String.valueOf(j%5));
+                time.setStartTime(String.format("%d:00",j));
+                time.setEndTime(String.format("%d:00",j+1));
+                time.setShortDes("short des"+String.format(" %d:%d",i,j));
+                time.setEvent(String.format("bbc-%d",j+1));
                 time.setEventID(String.valueOf(position++));
 
                 timeArrayList.add(time);

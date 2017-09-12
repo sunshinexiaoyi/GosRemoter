@@ -12,7 +12,7 @@ public class Time {
     private String event;
     private String shortDes;
 
-    private String eventType;
+    private String eventType;//（0：delete， 1：View， 2：View Series， 3： Record，4： Record Series）
     private String eventID;
 
     public Time() {

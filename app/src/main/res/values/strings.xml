@@ -33,9 +33,8 @@
 
     <string name="epg_test">核心是重写BaseExpandableListAdpter，其实和之前写的普通的BaseAdapter是类似的， 但是BaseExpandableListAdpter则分成了两部分：组和子列表，具体看代码你就知道了！</string>
 
-
-
-
+    <!--直播-->
+    <string name="live_title">直播</string>
 
 
     <string name="title_activity_init">InitActivity</string>

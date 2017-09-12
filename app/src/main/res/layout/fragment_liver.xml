@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingRight="20dp"
+    android:paddingLeft="20dp"
+    android:paddingTop="10dp"
+    android:orientation="vertical"
+    tools:context="gos.remoter.fragment.LiverFragment">
+
+    <ImageView
+        android:id="@+id/liver_fragment_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:src="@drawable/liver_movies_image"
+        android:contentDescription="@string/app_name"/>
+
+    <TextView
+        android:id="@+id/liver_fragment_textview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:gravity="center"
+        android:textColor="#808080"
+        android:textSize="24sp" />
+
+    <GridView
+        android:id="@+id/liver_fragment_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5.0"
+        android:numColumns="3"
+        android:listSelector="@android:color/transparent"
+        android:verticalSpacing="2dp"
+        android:horizontalSpacing="2dp"
+        android:stretchMode="columnWidth">
+    </GridView>
+
+</LinearLayout>

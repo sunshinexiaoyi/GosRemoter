@@ -3,8 +3,10 @@ package gos.remoter.activity;
 import gos.remoter.adapter.Epg_progItem;
 import gos.remoter.adapter.Epg_TVDate;
 import gos.remoter.adapter.Epg_TVName;
+import gos.remoter.data.Program;
 import gos.remoter.define.CS;//静态常量
 import gos.remoter.R;
+import gos.remoter.define.DataParse;
 import gos.remoter.event.EventManager;
 import gos.remoter.adapter.Epg_myAdapter;
 
@@ -14,13 +16,21 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.alibaba.fastjson.support.odps.udf.CodecCheck;
+
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
+import static gos.remoter.define.CommandType.*;   //导入静态命令集
 
 import java.util.ArrayList;
 
@@ -29,6 +39,10 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
     private Epg_myAdapter epg_tvNameAdapter = null;//频道号和日期适配器
     private Epg_myAdapter epg_tvDateAdapter = null;//频道号和日期适配器
     private ListView progListView;//列表view
+
+    private ArrayList<Epg_progItem> itemData;//节目中的数据
+    private ArrayList<Epg_TVName> tvNameData;//频道名字
+    private ArrayList<Epg_TVDate> tvDateData;//频道日期
 
 
 /*******************重写方法***********************/
@@ -43,22 +57,26 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
         init_adapter();//完成初始化EpgAdapter
 
 /*****************测试列表**********************/
-//        epg_tvNameAdapter.add(new Epg_TVName("CCTV 1"));
-//        epg_tvNameAdapter.add(new Epg_TVName("CCTV 2"));
-//        epg_tvDateAdapter.add(new Epg_TVDate("2017-09-08"));
-//        epg_tvDateAdapter.add(new Epg_TVDate("2017-09-09"));
-//        epg_progItemAdapter.add(new Epg_progItem("ABC News", "9:00-10:00", "this is ABC News!",
-//                R.drawable.epg_simple_recbtn_once_false, R.drawable.epg_simple_recbtn_cycle_false,
-//                R.drawable.epg_simple_watchbtn_once_false, R.drawable.epg_simple_watchbtn_cycle_false,
-//                R.drawable.epg_full_btn_false, R.drawable.epg_full_btn_false,
-//                R.drawable.epg_full_btn_false, R.drawable.epg_full_btn_false));
-//
-//        epg_progItemAdapter.add(new Epg_progItem("ABC News", "9:00-10:00", "this is ABC News!",
-//                R.drawable.epg_simple_recbtn_once_false, R.drawable.epg_simple_recbtn_cycle_false,
-//                R.drawable.epg_simple_watchbtn_once_false, R.drawable.epg_simple_watchbtn_cycle_false,
-//                R.drawable.epg_full_btn_false, R.drawable.epg_full_btn_false,
-//                R.drawable.epg_full_btn_false, R.drawable.epg_full_btn_false));
-//        Log.e("来自MainAcitity的消息", "添加属列表属性成功");
+        epg_tvNameAdapter.add(new Epg_TVName("CCTV 1"));
+        epg_tvNameAdapter.add(new Epg_TVName("CCTV 2"));
+        epg_tvDateAdapter.add(new Epg_TVDate("1995-12-25"));
+        epg_tvDateAdapter.add(new Epg_TVDate("1995-12-26"));
+        epg_progItemAdapter.add(new Epg_progItem("ABC NEWS", "10:00-11:00", "sdalsdlkgjsdhgosdghnjsdkghsdrjkgnasjdkloiasldkghnwaksjdlhhnsdfklgjvnadslk;ho;dsl",
+                R.drawable.epg_simple_recbtn_once_false, R.drawable.epg_simple_recbtn_cycle_false,
+                R.drawable.epg_simple_watchbtn_once_false, R.drawable.epg_simple_watchbtn_cycle_false,
+                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
+                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false));
+        epg_progItemAdapter.add(new Epg_progItem("BBC NEWS", "11:00-12:00", "errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+                R.drawable.epg_simple_recbtn_once_false, R.drawable.epg_simple_recbtn_cycle_false,
+                R.drawable.epg_simple_watchbtn_once_false, R.drawable.epg_simple_watchbtn_cycle_false,
+                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
+                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false));
+        epg_progItemAdapter.add(new Epg_progItem("TRRRRRRC NEWS", "12:00-13:00", "Hhhhhhhhhhhhhhhhhhhhhhsdlkghljsdgfsdhhhhhhhhhhhhhhhhhhhhsdjhfgjksjghklhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhsdgjhsdklhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+                R.drawable.epg_simple_recbtn_once_false, R.drawable.epg_simple_recbtn_cycle_false,
+                R.drawable.epg_simple_watchbtn_once_false, R.drawable.epg_simple_watchbtn_cycle_false,
+                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
+                R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false));
+                Log.e("来自MainAcitity的消息", "添加属列表属性成功");
 /***********************************************/
     }
     @Override
@@ -84,8 +102,84 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
     //事件接收器
     @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
     public void onReceiveEvent(EventMsg msg) {
-        //接收消息
+        //接收消息为空，不做处理
+        if(msg.getEventMode() == EventMode.OUT) {
+            return;
+        }
+
+        //接收Event
+//        switch (msg.getCommand()){
+//            //设置节目列表event
+//            case COM_LIVE_SET_PROGRAM_LIST: {
+//                setProgramList(parseProgramData(msg.getData()));
+//                aotuSet = false;//自动设置？？？？？？？
+//                if (-1 == curProPosition) {
+//                    proItemClick(0);
+//                }
+//                break;
+//            }
+//
+//            //设置选择的节目epg信息
+//            case COM_EPG_SET_SELECT_PROGRAM: {
+//                setDateList(parseDateData(msg.getData()));
+//                if (aotuSet) {
+//                    Log.i(TAG, "自动设置date");
+//                    dateItemClick(curDatePosition);
+//                } else if (-1 == curDatePosition) {
+//                    dateItemClick(0);
+//                }
+//                break;
+//            }
+//
+//            //系统回应
+//            case COM_SYSTEM_RESPOND: {
+//                Respond respond = DataParse.getRespond(msg.getData());
+//                switch (respond.getCommand()) {
+//                    case COM_CONNECT_DETACH:
+//                        if (respond.getFlag()) {
+//                            detach();
+//                        }
+//                        break;
+//                    case COM_CONNECT_ATTACH:
+//                        if (respond.getFlag()) {
+//                            attach();
+//                        }
+//                        break;
+//                    case COM_EPG_SET_RESERVE:
+//                        if (respond.getFlag()) {
+//                            aotuSet = true;
+//                            getSelectEpgInfo(curProgram.getIndex());
+//                        }
+//                    default:
+//                        break;
+//                }
+//
+//                break;
+//            }
+//            default:
+//                break;
+//        }
     }
+
+//    private void setProgramList(String[] programs)
+//    {
+//        errorMaskView.setVisibleGone();
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>
+//                (context,android.R.layout.simple_expandable_list_item_1,programs);
+//        programListView.setAdapter(adapter);
+//    }
+//
+//    //数据转换
+//    private String[] parseProgramData(String data){
+//        programList = DataParse.getProgramList(data);
+//        String[] programs = new String[programList.size()];
+//        int i = 0;
+//        for (Program p : programList) {
+//            programs[i++] = p.getName();
+//        }
+//
+//        return programs;
+//    }
 
 
 /*****************自定义方法***********************/
@@ -93,9 +187,9 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
     public void init_adapter() {
         Context context = EPGActivity.this;
         //初始化数据
-        ArrayList<Epg_progItem> itemData = new ArrayList<Epg_progItem>();
-        ArrayList<Epg_TVName> tvNameData = new ArrayList<Epg_TVName>();
-        ArrayList<Epg_TVDate> tvDateData = new ArrayList<Epg_TVDate>();
+        itemData = new ArrayList<Epg_progItem>();
+        tvNameData = new ArrayList<Epg_TVName>();
+        tvDateData = new ArrayList<Epg_TVDate>();
         //找到各自列表的Id
         progListView = (ListView) findViewById(R.id.epg_mainProgList);
         Spinner spin_tvName = (Spinner) findViewById(R.id.epg_mainTVName);
@@ -104,6 +198,14 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
         epg_progItemAdapter = new Epg_myAdapter<Epg_progItem>(context, itemData, R.layout.epg_progitem) {
             @Override
             public void bindView(Holder holder, Epg_progItem obj) {
+                holder.setText(R.id.epg_progName, obj.getProgName());
+                holder.setText(R.id.epg_progTime, obj.getPorgTime());
+
+                holder.setTextMarquee(R.id.epg_simpleProgInfo);//长文本缩略处理
+                View fullSetting = holder.getItem().findViewById(R.id.epg_full_ProgSetting);
+                fullSetting.setVisibility(View.GONE);//隐藏详细设置
+
+                holder.setText(R.id.epg_simpleProgInfo, obj.getProgInfo());
                 holder.setBackgroundResource(R.id.epg_simple_recBtnOnce,obj.getSimpleRecBtnOnce());
                 holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, obj.getSimpleRecBtnCycle());
                 holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, obj.getSimpleWatchBtnOnce());
@@ -149,24 +251,30 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
 
     //Item的点击事件
     private class ItemClick implements AdapterView.OnItemClickListener {
-        private boolean[] isTouch;
+        private boolean[] isSpread;
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-            if (isTouch == null) {
-                l = adapterView.getCount();
+            if (isSpread == null) {
+                int len = adapterView.getCount();
                 Log.e("消息", "item行数：" + l);
-                isTouch = new boolean[(int)l];
+                isSpread = new boolean[len];
             }
             View settingView = view.findViewById(R.id.epg_full_ProgSetting);
+            Epg_myAdapter.Holder holder = (Epg_myAdapter.Holder)view.getTag();
 
-            if (!isTouch[pos]) {
-                Log.e("消息", "选中了第" + pos + "行， 隐藏详细设置");
-                settingView.setVisibility(View.GONE);
-            } else {
+            if (!isSpread[pos]) {
                 Log.e("消息", "选中了第" + pos + "行， 显示详细设置");
-                settingView.setVisibility(View.VISIBLE);
+                settingView.setVisibility(View.VISIBLE);//显示详细设置
+                holder.setGONE(R.id.epg_simpleBtn);//隐藏按钮
+                holder.setTextNormal(R.id.epg_simpleProgInfo);//去除文本框特殊属性
+                holder.setTextHeight(R.id.epg_simpleProgInfo, ViewGroup.LayoutParams.WRAP_CONTENT);//改变高度
+            } else {
+                Log.e("消息", "选中了第" + pos + "行， 隐藏详细设置");
+                settingView.setVisibility(View.GONE);//显示详细设置
+                holder.setVISIBLE(R.id.epg_simpleBtn);//显示按钮
+                holder.setTextMarquee(R.id.epg_simpleProgInfo);//加入文本框属性
             }
-            isTouch[pos] = !isTouch[pos];
+            isSpread[pos] = !isSpread[pos];
         }
     }
 
@@ -190,101 +298,25 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
                 case R.id.epg_simple_recBtnOnce:
                 case R.id.epg_full_recBtnOnce: {
                     Log.e(CS.ADAPTER_TAG, "点中了预定录制一次按钮");
-                    //更改按钮样式
-                    if (!isRecOnce) {
-                        holder.setBackgroundResource(R.id.epg_simple_recBtnOnce, R.drawable.epg_simple_recbtn_once_true);
-                        holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, R.drawable.epg_simple_recbtn_cycle_false);
-                        holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, R.drawable.epg_simple_watchbtn_once_false);
-                        holder.setBackgroundResource(R.id.epg_simple_watchBtnCycle, R.drawable.epg_simple_watchbtn_cycle_false);
-
-                        holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_btn_true);
-                        holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_btn_false);
-                        holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_btn_false);
-                        holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_btn_false);
-
-                        isRecCycle = false;
-                        isWatchOnce = false;
-                        isWatchCycle = false;
-                    } else {
-                        holder.setBackgroundResource(R.id.epg_simple_recBtnOnce, R.drawable.epg_simple_recbtn_once_false);
-                        holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_btn_false);
-                    }
-                    isRecOnce = !isRecOnce;
+                    clickRecordOnce();
                     break;
                 }
                 case R.id.epg_simple_recBtnCycle:
                 case R.id.epg_full_recBtnCycle: {
                     Log.e(CS.ADAPTER_TAG, "点中了预定循环录制按钮");
-                    //更改按钮样式
-                    if (!isRecCycle) {
-                        holder.setBackgroundResource(R.id.epg_simple_recBtnOnce, R.drawable.epg_simple_recbtn_once_false);
-                        holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, R.drawable.epg_simple_recbtn_cycle_true);
-                        holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, R.drawable.epg_simple_watchbtn_once_false);
-                        holder.setBackgroundResource(R.id.epg_simple_watchBtnCycle, R.drawable.epg_simple_watchbtn_cycle_false);
-
-                        holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_btn_false);
-                        holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_btn_true);
-                        holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_btn_false);
-                        holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_btn_false);
-
-                        isRecOnce = false;
-                        isWatchOnce = false;
-                        isWatchCycle = false;
-                    } else {
-                        holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, R.drawable.epg_simple_recbtn_cycle_false);
-                        holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_btn_false);
-                    }
-                    isRecCycle = !isRecCycle;
+                    clickRecordCycle();
                     break;
                 }
                 case R.id.epg_simple_watchBtnOnce:
                 case R.id.epg_full_watchBtnOnce: {
                     Log.e(CS.ADAPTER_TAG, "点中了预定观看一天按钮");
-                    //更改按钮样式
-                    if (!isWatchOnce) {
-                        holder.setBackgroundResource(R.id.epg_simple_recBtnOnce, R.drawable.epg_simple_recbtn_once_false);
-                        holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, R.drawable.epg_simple_recbtn_cycle_false);
-                        holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, R.drawable.epg_simple_watchbtn_once_true);
-                        holder.setBackgroundResource(R.id.epg_simple_watchBtnCycle, R.drawable.epg_simple_watchbtn_cycle_false);
-
-                        holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_btn_false);
-                        holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_btn_false);
-                        holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_btn_true);
-                        holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_btn_false);
-
-                        isRecOnce = false;
-                        isRecCycle = false;
-                        isWatchCycle = false;
-                    } else {
-                        holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, R.drawable.epg_simple_watchbtn_once_false);
-                        holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_btn_false);
-                    }
-                    isWatchOnce = !isWatchOnce;
+                    clickWatchOnce();
                     break;
                 }
                 case R.id.epg_simple_watchBtnCycle:
                 case R.id.epg_full_watchBtnCycle: {
                     Log.e(CS.ADAPTER_TAG, "点中了预定循环观看按钮");
-                    //更改按钮样式
-                    if (!isWatchCycle) {
-                        holder.setBackgroundResource(R.id.epg_simple_recBtnOnce, R.drawable.epg_simple_recbtn_once_false);
-                        holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, R.drawable.epg_simple_recbtn_cycle_false);
-                        holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, R.drawable.epg_simple_watchbtn_once_false);
-                        holder.setBackgroundResource(R.id.epg_simple_watchBtnCycle, R.drawable.epg_simple_watchbtn_cycle_true);
-
-                        holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_btn_false);
-                        holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_btn_false);
-                        holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_btn_false);
-                        holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_btn_true);
-
-                        isRecOnce = false;
-                        isRecCycle = false;
-                        isWatchOnce = false;
-                    } else {
-                        holder.setBackgroundResource(R.id.epg_simple_watchBtnCycle, R.drawable.epg_simple_watchbtn_cycle_false);
-                        holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_btn_false);
-                    }
-                    isWatchCycle = !isWatchCycle;
+                    clickWatchCycle();
                     break;
                 }
 
@@ -293,6 +325,99 @@ public class EPGActivity extends AppCompatActivity implements AdapterView.OnItem
                     break;
                 }
             }
+        }
+
+        //点击录制一次按钮
+        public void clickRecordOnce() {
+            //更改按钮样式
+            if (!isRecOnce) {
+                holder.setBackgroundResource(R.id.epg_simple_recBtnOnce, R.drawable.epg_simple_recbtn_once_true);
+                holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, R.drawable.epg_simple_recbtn_cycle_false);
+                holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, R.drawable.epg_simple_watchbtn_once_false);
+                holder.setBackgroundResource(R.id.epg_simple_watchBtnCycle, R.drawable.epg_simple_watchbtn_cycle_false);
+
+                holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_lbtn_true);
+                holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_rbtn_false);
+                holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_lbtn_false);
+                holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_rbtn_false);
+
+                isRecCycle = false;
+                isWatchOnce = false;
+                isWatchCycle = false;
+            } else {
+                holder.setBackgroundResource(R.id.epg_simple_recBtnOnce, R.drawable.epg_simple_recbtn_once_false);
+                holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_lbtn_false);
+            }
+            isRecOnce = !isRecOnce;
+        }
+        //点击循环录制按钮
+        public void clickRecordCycle() {
+            //更改按钮样式
+            if (!isRecCycle) {
+                holder.setBackgroundResource(R.id.epg_simple_recBtnOnce, R.drawable.epg_simple_recbtn_once_false);
+                holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, R.drawable.epg_simple_recbtn_cycle_true);
+                holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, R.drawable.epg_simple_watchbtn_once_false);
+                holder.setBackgroundResource(R.id.epg_simple_watchBtnCycle, R.drawable.epg_simple_watchbtn_cycle_false);
+
+                holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_lbtn_false);
+                holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_rbtn_true);
+                holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_lbtn_false);
+                holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_rbtn_false);
+
+                isRecOnce = false;
+                isWatchOnce = false;
+                isWatchCycle = false;
+            } else {
+                holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, R.drawable.epg_simple_recbtn_cycle_false);
+                holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_rbtn_false);
+            }
+            isRecCycle = !isRecCycle;
+        }
+        //点击观看一次按钮
+        public void clickWatchOnce() {
+            //更改按钮样式
+            if (!isWatchOnce) {
+                holder.setBackgroundResource(R.id.epg_simple_recBtnOnce, R.drawable.epg_simple_recbtn_once_false);
+                holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, R.drawable.epg_simple_recbtn_cycle_false);
+                holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, R.drawable.epg_simple_watchbtn_once_true);
+                holder.setBackgroundResource(R.id.epg_simple_watchBtnCycle, R.drawable.epg_simple_watchbtn_cycle_false);
+
+                holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_lbtn_false);
+                holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_rbtn_false);
+                holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_lbtn_true);
+                holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_rbtn_false);
+
+                isRecOnce = false;
+                isRecCycle = false;
+                isWatchCycle = false;
+            } else {
+                holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, R.drawable.epg_simple_watchbtn_once_false);
+                holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_lbtn_false);
+            }
+            isWatchOnce = !isWatchOnce;
+        }
+        //点击循环观看按钮
+        public void clickWatchCycle() {
+            //更改按钮样式
+            if (!isWatchCycle) {
+                holder.setBackgroundResource(R.id.epg_simple_recBtnOnce, R.drawable.epg_simple_recbtn_once_false);
+                holder.setBackgroundResource(R.id.epg_simple_recBtnCycle, R.drawable.epg_simple_recbtn_cycle_false);
+                holder.setBackgroundResource(R.id.epg_simple_watchBtnOnce, R.drawable.epg_simple_watchbtn_once_false);
+                holder.setBackgroundResource(R.id.epg_simple_watchBtnCycle, R.drawable.epg_simple_watchbtn_cycle_true);
+
+                holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_lbtn_false);
+                holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_rbtn_false);
+                holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_lbtn_false);
+                holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_rbtn_true);
+
+                isRecOnce = false;
+                isRecCycle = false;
+                isWatchOnce = false;
+            } else {
+                holder.setBackgroundResource(R.id.epg_simple_watchBtnCycle, R.drawable.epg_simple_watchbtn_cycle_false);
+                holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_rbtn_false);
+            }
+            isWatchCycle = !isWatchCycle;
         }
     }
 }

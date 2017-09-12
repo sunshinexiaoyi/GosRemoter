@@ -7,6 +7,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -17,13 +18,13 @@ import java.util.ArrayList;
 
 import gos.remoter.R;
 
-/**
- * Created by QXTX-OBOOK on 2017/9/10.
- * 一个通配适配器
+/**一个通配适配器
  * 传参：
  * 1、上下文
  * 2、item
  * 3、布局id
+ *
+ * 备注：ViewGroup:上层layout， 利用它可以对上层layout进行操作
  */
 
 public abstract class Epg_myAdapter<T> extends BaseAdapter {
@@ -39,7 +40,7 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
 
     @Override
     public int getCount() {
-        Log.e("消息", "一共有" + list.size() + "行");
+        //Log.e("消息", "一共有" + list.size() + "行");
         return list == null? 0 : list.size();
     }
     @Override
@@ -50,8 +51,6 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-
-    //ViewGroup:上层layout， 利用它可以对上层layout进行操作
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         /**将获取convertView部分放到Holder构造中
@@ -71,11 +70,15 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
 
 
 /************************静态内部类Holder*****************************/
-    /**
-     * 这里的Holder需要完成的工作
+    /**静态的内部类
+     *
+     * 这里的Holder需要完成的工作：
      * 1、保存convertView
      * 2、设置Tag
-     * 3、暴露一堆set方法，用于在外部实现set属性
+     * 3、暴露一堆set方法
+     *
+     * 备注1：暴露的set方法，用于在Adapter外部也能实现view属性的设置
+     * 备注2：因为这里的Adapter为泛型适配器，传进来的类型千奇百怪，无法在这里进行预先设置，所以需要暴露set方法以便在外部设置
      */
     public static class Holder {
         private int position;
@@ -111,7 +114,7 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
                                   ViewGroup parent, int layoutRes, Context context) {
             Holder holder = null;
             if (convertView == null) {
-                Log.e("消息", "convertView为空");
+                //Log.e("消息", "convertView为空");
                 holder = new Holder(context, parent, layoutRes);//这里完成了holder的两项基本工作
             } else {
                 //从convertView中获取到holder
@@ -124,14 +127,17 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
 
 
 /**************实例化item的各种属性、获取item位置*******************/
-        /**
-         * 这个方法的功能是获取各种id提供给之后的set方法使用
-         * 并将这些id添加到一个list中保存
+        /**id实例化，保存得到的view
+         *
+         * 1、将获取到的各种view的id进行实例化，以便提供给暴露的set方法使用
+         * 2、将得到的view添加到一个list中保存
+         * 3、返回一个泛型view，可以是layout的view，也可以是dialog的view，等等
+         *
+         * 备注：set方法中使用这个返回的view，可能需要将这个泛型view进行类型转换后，以便调用某些特定view才有的方法
          */
         public <T extends View>T getView(int id) {
             T t = (T)itemView.get(id);//从列表中获得id
             if (t == null) {
-                Log.e("消息", "列表中没有");
                 //如果列表中没有，则从主View中拿，然后放进列表中，变相的完成了findById()方法
                 t = (T)convertView.findViewById(id);
                 //将id保存起来。因为sparseArray还可以用一个key来索引数据，提供两种索引方式。
@@ -149,73 +155,101 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
             return position;
         }
 
-        //提供itemView
 
 /*******************实例化item中的各种属性************************/
         /**上文获取了一堆id，这里将要set一堆数据
-         * 通过传入一个id，将此id保存到item列表中
-         * CharSequence：字符数据，接口，String为实现接口的一种
          *
          * 目前set方法有
          * 1、setText
-         * 2、setImageResource(ImageView)
-         * 2、setBackgroundResource(Button、ImageButton)
-         * 3、setVisibility
-         * 4、setOnClickListener
-         * 5、setItemOnClickLIstener
+         * 2、setTextWidth
+         * 3、setTextHeight
+         * 4、setGONE
+         * 5、setVISIBLE
+         * 6、setTextMarquee
+         * 7、setTextNormal
+         * 8、setBackgroundResource
+         * 9、setImageResource
+         * 10、setOnClickListener
+         * 11、setItemOnClickLIstener
+         *
+         * 备注1：通过传入一个id，将此id保存到item列表中
+         * 备注2：CharSequence：字符数据类型接口，String为其中一种实现
+         * 备注3：Holder类型的返回值目前看起来用不到，可以将这些方法置为void类型
          */
 
-        //设置文本
+        //1、设置文本
         public Holder setText(int id, CharSequence text) {
             View view = getView(id);
             if (view instanceof TextView) {
                 ((TextView) view).setText(text.toString());//需要将view转换成相应的view
             }
-            return this;//为什么要返回一个Holder类型的值？？？？看起来用不到，能不能不返回？
+            return this;
         }
 
-        //设置文本框最大宽度
-        public void setTextWidth(int id, int len) {
+        //2、设置文本框宽度
+        public void setTextWidth(int id, int px) {
+            //不处理特殊数据：wrap_content/match_parent/fill_parent（都是负数）
+            if (px >= 0) {
+                px = (int)(px * 401 / 160);//这里强制以5.5寸、1080P的属性计算，后期可以同通过获取设备ppi的方式精确计算
+            }
             View view = getView(id);
-            ((TextView)view).setMaxWidth(len);
-            ((TextView)view).setSingleLine(true);
+            view.getLayoutParams().width = px;
         }
-        //设置文本过长时显示模式
+        //3、设置文本框高度
+        public void setTextHeight(int id, int px) {
+            //不处理特殊数据：wrap_content/match_parent/fill_parent（都是负数）
+            if (px >= 0) {
+                px = (int)(px * 401 / 160);//这里强制以5.5寸、1080P的属性计算，后期可以同通过获取设备ppi的方式精确计算
+            }
+            View view = getView(id);
+            view.getLayoutParams().height = px;
+        }
+
+        //4、隐藏控件
+        public void setGONE(int id) {
+            View view = getView(id);
+            view.setVisibility(View.GONE);
+        }
+        //5、显示控件
+        public void setVISIBLE(int id) {
+            View view = getView(id);
+            view.setVisibility(View.VISIBLE);
+        }
+
+        //6、设置文本过长时显示模式
         public void setTextMarquee(int id) {
             View view = getView(id);
-            ((TextView)view).setEllipsize(TextUtils.TruncateAt.MARQUEE);//跑马灯
+            ((TextView)view).setEllipsize(TextUtils.TruncateAt.END);//省略号
             ((TextView)view).setSingleLine(true);
         }
+        //7、取消文本过长处理状态
+        public void setTextNormal(int id) {
+            View view = getView(id);
+            ((TextView)view).setEllipsize(null);
+            ((TextView)view).setSingleLine(false);
+        }
 
-        //设置背景，包括Button， ImageButton，但不包括ImageView
+        //8、设置背景，包括Button， ImageButton，但不包括ImageView
         public Holder setBackgroundResource(int id, int drawableRes) {
             View view = getView(id);
             view.setBackgroundResource(drawableRes);
             return this;
         }
-
-        //设置背景，ImageView独占
+        //9、设置背景，ImageView独占
         public Holder setImageResource(int id, int drawableRes) {
             View view = getView(id);
             ((ImageView)view).setImageResource(drawableRes);
             return this;
         }
 
-        //设置可见/隐藏
-        public Holder setVisibility(int id, int visible) {
-            View view = getView(id);
-            view.setVisibility(visible);
-            return this;
-        }
-
-        //设置监听item中的按钮点击
+        //10、设置监听item中的按钮点击
         public Holder setOnClickListener(int id, View.OnClickListener click) {
             View view = getView(id);
             view.setOnClickListener(click);
             return this;
         }
 
-        //设置监听item点击
+        //11、设置监听item点击
         public Holder setItemOnClickLIstener(ListView listView, AdapterView.OnItemClickListener itemClick) {
             listView.setOnItemClickListener(itemClick);
             return this;
@@ -224,7 +258,8 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
 
 
 /*******************为Adapter暴露添加元素的方法************************/
-    /**
+    /**这里是Adapter方法
+     * 目前可暴露的方法有：
      * 1、添加一个item（默认在队列末端）
      * 2、在制定位置添加 一个tiem
      */
@@ -247,5 +282,13 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public abstract void bindView(Holder holder, T obj);//抽象方法，用来设置各种属性
+
+/*************************抽象方法*****************************/
+    /**抽象方法，
+     * 1、为不同蜡yout设置不同的数据
+     * 2、实现暴露的方法
+     * 3、可回调obj方法实现属性数据的获取
+     * 4、增强Adapter的外部扩展性
+     */
+    public abstract void bindView(Holder holder, T obj);
 }

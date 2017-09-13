@@ -1,5 +1,6 @@
 <resources>
 
+
     <!--EPG主题-->
     <style name = "EPGTheme" parent = "Theme.AppCompat.Light.NoActionBar">
         <!-- 隐藏ActionBar的自定义ToolBar -->
@@ -7,6 +8,13 @@
         <item name="colorPrimaryDark">@color/epg_blue_Toolbar</item><!--状态栏-->
         <item name = "android:textColorPrimary">@color/epg_black</item><!--文字-->
     </style>
+    <!--EPG文字大小-->
+    <dimen name="epg_spinner_title">18sp</dimen>
+    <dimen name="epg_info_title">18sp</dimen>
+    <dimen name="epg_info_content">14sp</dimen>
+    <dimen name="epg_info_set_title">16sp</dimen>
+    <dimen name="epg_info_button_text">12sp</dimen>
+
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -34,7 +42,6 @@
         <item name="android:maxHeight">13dip</item>
         <item name="android:paddingLeft">15.0dip</item>
         <item name="android:paddingRight">15.0dip</item>
-
     </style>
 
     <style name="tab_menu_item">
@@ -66,5 +73,4 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
 </resources>

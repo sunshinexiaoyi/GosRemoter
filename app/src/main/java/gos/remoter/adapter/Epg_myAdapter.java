@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -200,6 +201,7 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
          * 9、setImageResource
          * 10、setOnClickListener
          * 11、setItemOnClickLIstener
+         * 12、setItemSelectListener
          *
          * 备注1：通过传入一个id，将此id保存到item列表中
          * 备注2：CharSequence：字符数据类型接口，String为其中一种实现
@@ -279,8 +281,14 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
         }
 
         //11、设置监听item点击
-        public Holder setItemOnClickLIstener(ListView listView, AdapterView.OnItemClickListener itemClick) {
+        public Holder setItemOnClickListener(ListView listView, AdapterView.OnItemClickListener itemClick) {
             listView.setOnItemClickListener(itemClick);
+            return this;
+        }
+
+        //12、设置下拉列表选择监听
+        public Holder setItemSelectListener(Spinner spinner, AdapterView.OnItemSelectedListener itemSelected) {
+            spinner.setOnItemSelectedListener(itemSelected);
             return this;
         }
     }
@@ -309,6 +317,14 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
             list = new ArrayList<>();
         }
         list.add(position, obj);
+        notifyDataSetChanged();
+    }
+
+    //清除列表
+    public void clear() {
+        if (list != null) {
+            list.clear();
+        }
         notifyDataSetChanged();
     }
 

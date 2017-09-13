@@ -1,7 +1,7 @@
 package gos.remoter.adapter;
 
 import gos.remoter.R;
-import gos.remoter.activity.EPGActivity;
+import gos.remoter.activity.EpgActivity;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,28 +16,20 @@ public class Epg_progItem {
     private String progName;//节目名
     private String progTime;//节目播放时间
     private String progInfo;//节目信息
-    private int simpleRecBtnOnce;//缩略图预定记录
-    private int simpleRecBtnCycle;//缩略图预定记录
-    private int simpleWatchBtnOnce;//缩略图预定记录
-    private int simpleWatchBtnCycle;//缩略图预定记录
+    private int simpleBtn;//希望只有一个简单按钮
     private int recBtnOnce;//预定记录一次
     private int recBtnCycle;//预定记录每天
     private int watchBtnOnce;//预定观看一次
     private int watchBtnCycle;//预定观看每天
 
-    public Epg_progItem(String progName, String progTime, String progInfo,
-                   int simpleRecBtnOnce, int simpleRecBtnCycle,
-                   int simpleWatchBtnOnce, int simpleWatchBtnCycle,
-                   int recBtnOnce, int recBtnCycle,
-                   int watchBtnOnce, int watchBtnCycle) {
+    //希望只有一个简单按钮
+    public Epg_progItem(String progName, String progTime, String progInfo, int simpleBtn,
+                        int recBtnOnce, int recBtnCycle,
+                        int watchBtnOnce, int watchBtnCycle) {
         this.progName = progName;
         this.progTime = progTime;
         this.progInfo = progInfo;
-        this.simpleRecBtnOnce = simpleRecBtnOnce;
-        this.simpleRecBtnCycle = simpleRecBtnCycle;
-        this.simpleWatchBtnOnce = simpleWatchBtnOnce;
-        this.simpleWatchBtnOnce = simpleWatchBtnOnce;
-        this.simpleWatchBtnCycle = simpleWatchBtnCycle;
+        this.simpleBtn = simpleBtn;
         this.recBtnOnce = recBtnOnce;
         this.recBtnCycle = recBtnCycle;
         this.watchBtnOnce = watchBtnOnce;
@@ -54,17 +46,8 @@ public class Epg_progItem {
     public String getProgInfo() {
         return progInfo;
     }
-    public int getSimpleRecBtnOnce() {
-        return simpleRecBtnOnce;
-    }
-    public int getSimpleRecBtnCycle() {
-        return simpleRecBtnCycle;
-    }
-    public int getSimpleWatchBtnOnce() {
-        return simpleWatchBtnOnce;
-    }
-    public int getSimpleWatchBtnCycle() {
-        return simpleWatchBtnCycle;
+    public int getSimpleBtn() {
+        return simpleBtn;
     }
 
     public int getRecBtnOnce() {
@@ -89,19 +72,10 @@ public class Epg_progItem {
     public void setProgInfo(String progInfo) {
         this.progInfo = progInfo;
     }
-    public void setSimpleRecBtnOnce(int simpleRecBtnOnce) {
-        this.simpleRecBtnOnce = simpleRecBtnOnce;
-    }
-    public void setSimpleRecBtnCycle(int simpleRecBtnCycle) {
-        this.simpleRecBtnCycle = simpleRecBtnCycle;
-    }
-    public void setSimpleWatchBtnOnce(int simpleWatchBtnOnce) {
-        this.simpleWatchBtnOnce = simpleWatchBtnOnce;
-    }
-    public void setSimpleWatchBtnCycle(int simpleWatchBtnCycle) {
-        this.simpleWatchBtnCycle = simpleWatchBtnCycle;
-    }
 
+    public void setSimpleBtn(int simpleBtn) {
+        this.simpleBtn = simpleBtn;
+    }
     public void setRecBtnOnce(int recBtnOnce) {
         this.recBtnOnce = recBtnOnce;
     }

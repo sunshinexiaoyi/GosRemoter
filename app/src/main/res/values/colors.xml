@@ -13,9 +13,6 @@
 
     <color name="connect_btn_text">#22A7FF</color>
     <color name="home_grid_bg">#eaeaea</color>
-
-    <color name="colorPrimary">#22A7FF</color>
-    <color name="colorPrimaryDark">#22A7FF</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="bg_topbar">#FF4081</color>

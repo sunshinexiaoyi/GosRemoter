@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import gos.remoter.R;
+import gos.remoter.adapter.Epg_myAdapter;
 import gos.remoter.adapter.ReuseAdapter;
 import gos.remoter.data.GridActivity;
 import gos.remoter.data.Program;

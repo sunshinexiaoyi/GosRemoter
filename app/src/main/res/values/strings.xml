@@ -22,6 +22,23 @@
 
     <!--遥控器-->
     <string name="remoter_title">Remoter</string>
+    <string name="remoter_number">123</string>
+    <string name="remoter_menu">Menu</string>
+    <string name="remoter_fav">Fav</string>
+    <string name="remoter_pvr">PVR</string>
+    <string name="remoter_exit">Exit</string>
+    <string name="remoter_zero">0</string>
+    <string name="remoter_one">1</string>
+    <string name="remoter_two">2</string>
+    <string name="remoter_three">3</string>
+    <string name="remoter_four">4</string>
+    <string name="remoter_five">5</string>
+    <string name="remoter_six">6</string>
+    <string name="remoter_seven">7</string>
+    <string name="remoter_eight">8</string>
+    <string name="remoter_nine">9</string>
+    <string name="remoter_back">BACK</string>
+    <string name="remoter_ok">OK</string>
 
 
     <!--EPG-->
@@ -32,10 +49,6 @@
     <string name="epg_progSettingBtnText_Days">每天</string>
 
     <string name="epg_test">核心是重写BaseExpandableListAdpter，其实和之前写的普通的BaseAdapter是类似的， 但是BaseExpandableListAdpter则分成了两部分：组和子列表，具体看代码你就知道了！</string>
-
-
-
-
 
 
     <string name="title_activity_init">InitActivity</string>

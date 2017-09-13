@@ -7,6 +7,7 @@
 
     <color name="connect_btn_text">#22A7FF</color>
     <color name="home_grid_bg">#eaeaea</color>
+    <color name="remoter_hint">#d5e0f7</color>
 
     <color name="colorPrimary">#22A7FF</color>
     <color name="colorPrimaryDark">#22A7FF</color>
@@ -21,6 +22,7 @@
     <color name="dialog_out_back">#e5e5e5</color>
     <color name="dialog_in_back">#FFE5E5E5</color>
 
+    <color name="remoter_bg"> #f6f7fb </color>
     <color name="textColorforItemTitle">#ff666666</color>
     <color name="buy">#ff22a7ff</color>
     <color name="black">#ff000000</color>
@@ -45,6 +47,7 @@
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="horizontalLine">#ffeeeeee</color>
 
+    <color name="blue_scan">#2a96e6</color>
     <color name="dark_blue">#22A7FF</color>
     <color name="dark_bule_press">#1D7FC0</color>
     <color name="gray_item">#d2d2d2</color>

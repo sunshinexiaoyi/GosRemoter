@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import gos.remoter.R;
+
 /**
  * Created by lp on 2017/9/8.
  */
@@ -24,9 +26,12 @@ public class RemoterSetting extends View {
         Paint paintW;
         Paint paintB;
         Paint paintText;
+        Paint paintF;
         RectF rectf;
         String ok = "OK";
-        int blue = Color.parseColor("#2a96e6");
+        int blue = Color.parseColor("#2a95e5");
+        int bg_color = Color.parseColor("#f6f7fb");
+
         //当前点击位置 0中间，3左，4右，1上，2下
         int clickP = -1;
 
@@ -45,11 +50,14 @@ public class RemoterSetting extends View {
             paintB = new Paint();
             paintW = new Paint();
             paintText = new Paint();
+            paintF = new Paint();
 
-            paintW.setColor(Color.WHITE);
+            paintW.setColor(bg_color);
             paintB.setColor(blue);
             paintText.setColor(blue);
+            paintF.setColor(getResources().getColor(R.color.remoter_hint));
             paintText.setTextSize(100f);
+            // DEFAULT_BOLD :黑体字体类型,SANS_SERIF:sans serif字体类型,Typeface.BOLD:粗体
             Typeface font = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
             paintText.setTypeface(font);
             paintB.setAntiAlias(true);
@@ -59,6 +67,7 @@ public class RemoterSetting extends View {
 
         }
 
+       // View在屏幕上显示出来要先经过measure（计算）和layout（布局）.
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -73,7 +82,7 @@ public class RemoterSetting extends View {
                 height = heightSize;
             }
             rectf.set(5, 5, width - 5, height - 5);
-            setMeasuredDimension(width, height);
+            setMeasuredDimension(width, height);// 传递View的高度和宽度，高速父布局其大小
         }
 
         @Override
@@ -83,7 +92,7 @@ public class RemoterSetting extends View {
                 case 0:
                     /**由于没有现成的箭头图片，一个笨办法，画8个线段吧！*/
                     //右箭头和扇形
-                    canvas.drawArc(rectf, 315, 90, true, paintW);
+                    canvas.drawArc(rectf, 315, 90, true, paintW); //弧度
                     canvas.drawLine(width - 50, height / 2 + 3, width - 100, height / 2 - 50, paintB);
                     canvas.drawLine(width - 50, height / 2 - 3, width - 100, height / 2 + 50, paintB);
                     //上箭头和扇形
@@ -96,13 +105,12 @@ public class RemoterSetting extends View {
                     canvas.drawLine(50, height / 2 - 3, 100, height / 2 + 50, paintB);
                     //下箭头和扇形
                     canvas.drawArc(rectf, 45, 90, true, paintW);
-                    paintW.setColor(Color.WHITE);
                     canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 50, height - 100, paintB);
                     canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 50, height - 100, paintB);
                     //中间圆和字
                     paintB.setStyle(Paint.Style.FILL);
-                    canvas.drawCircle(width / 2, height / 2, width / 5, paintB);
                     paintText.setColor(Color.WHITE);
+                    canvas.drawCircle(width / 2, height / 2, width / 5, paintB);
                     canvas.drawText(ok, (width / 2) - 75, (height / 2) + 30, paintText);
                     paintText.setColor(blue);
                     break;
@@ -113,11 +121,11 @@ public class RemoterSetting extends View {
                     canvas.drawLine(width - 50, height / 2 - 3, width - 100, height / 2 + 50, paintB);
                     //上箭头和扇形
                     paintW.setColor(blue);
-                    canvas.drawArc(rectf, 225, 90, true, paintW);
-                    paintW.setColor(Color.WHITE);
                     paintB.setColor(Color.WHITE);
+                    canvas.drawArc(rectf, 225, 90, true, paintW);
                     canvas.drawLine(width / 2 + 3, 50, width / 2 - 50, 100, paintB);
                     canvas.drawLine(width / 2 - 3, 50, width / 2 + 50, 100, paintB);
+                    paintW.setColor(bg_color);
                     paintB.setColor(blue);
                     //左箭头和扇形
                     canvas.drawArc(rectf, 135, 90, true, paintW);
@@ -147,11 +155,11 @@ public class RemoterSetting extends View {
                     canvas.drawLine(50, height / 2 - 3, 100, height / 2 + 50, paintB);
                     //下箭头和扇形
                     paintW.setColor(blue);
-                    canvas.drawArc(rectf, 45, 90, true, paintW);
-                    paintW.setColor(Color.WHITE);
                     paintB.setColor(Color.WHITE);
+                    canvas.drawArc(rectf, 45, 90, true, paintW);
                     canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 50, height - 100, paintB);
                     canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 50, height - 100, paintB);
+                    paintW.setColor(bg_color);
                     paintB.setColor(blue);
                     //中间圆和字
                     canvas.drawCircle(width / 2, height / 2, width / 5, paintW);
@@ -169,11 +177,11 @@ public class RemoterSetting extends View {
                     canvas.drawLine(width / 2 - 3, 50, width / 2 + 50, 100, paintB);
                     //左箭头和扇形
                     paintW.setColor(blue);
-                    canvas.drawArc(rectf, 135, 90, true, paintW);
-                    paintW.setColor(Color.WHITE);
                     paintB.setColor(Color.WHITE);
+                    canvas.drawArc(rectf, 135, 90, true, paintW);
                     canvas.drawLine(50, height / 2 + 3, 100, height / 2 - 50, paintB);
                     canvas.drawLine(50, height / 2 - 3, 100, height / 2 + 50, paintB);
+                    paintW.setColor(bg_color);
                     paintB.setColor(blue);
                     //下箭头和扇形
                     canvas.drawArc(rectf, 45, 90, true, paintW);
@@ -187,11 +195,11 @@ public class RemoterSetting extends View {
                 case 4:
                     //右箭头和扇形
                     paintW.setColor(blue);
-                    canvas.drawArc(rectf, 315, 90, true, paintW);
-                    paintW.setColor(Color.WHITE);
                     paintB.setColor(Color.WHITE);
+                    canvas.drawArc(rectf, 315, 90, true, paintW);
                     canvas.drawLine(width - 50, height / 2 + 3, width - 100, height / 2 - 50, paintB);
                     canvas.drawLine(width - 50, height / 2 - 3, width - 100, height / 2 + 50, paintB);
+                    paintW.setColor(bg_color);
                     paintB.setColor(blue);
                     //上箭头和扇形
                     canvas.drawArc(rectf, 225, 90, true, paintW);
@@ -233,11 +241,20 @@ public class RemoterSetting extends View {
 
                     break;
             }
-            paintB.setStyle(Paint.Style.STROKE);
-            paintB.setStrokeWidth(6);
 
+            /*// 阴影,加一个圆环，
+            paintF.setStrokeWidth(7);
+            paintF.setStyle(Paint.Style.STROKE);
+            paintF.setAlpha( 200);
+            canvas.drawCircle(width / 2 + 3, height / 2 + 8, width / 2 - 5, paintF);
+*/
+
+            paintB.setStyle(Paint.Style.STROKE); //空心效果
+            paintB.setStrokeWidth(6);  //线宽
+            //canvas.drawColor(bg_color); //画布背景
             canvas.drawCircle(width / 2, height / 2, width / 2 - 5, paintB);
             canvas.drawCircle(width / 2, height / 2, width / 5, paintB);
+
         }
 
         @Override

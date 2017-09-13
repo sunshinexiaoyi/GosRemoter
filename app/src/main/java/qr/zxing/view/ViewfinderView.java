@@ -177,7 +177,7 @@ public final class ViewfinderView extends View {
 		} else {
 
 			//画扫描框边上的角，总共8个部分
-			paint.setColor(getResources().getColor(R.color.dark_blue));
+			paint.setColor(getResources().getColor(R.color.blue_scan));
 			canvas.drawRect(frame.left, frame.top, frame.left + ScreenRate,
 					frame.top + CORNER_WIDTH, paint);
 			canvas.drawRect(frame.left, frame.top, frame.left + CORNER_WIDTH, frame.top
@@ -195,10 +195,11 @@ public final class ViewfinderView extends View {
 			canvas.drawRect(frame.right - CORNER_WIDTH, frame.bottom - ScreenRate,
 					frame.right, frame.bottom, paint);
 			// 四条边线
-			canvas.drawRect(frame.left, frame.top, frame.right, frame.top + SIDE_WIDTH, paint);
-			canvas.drawRect(frame.left, frame.top, frame.left + SIDE_WIDTH, frame.bottom, paint);
-			canvas.drawRect(frame.left, frame.bottom - SIDE_WIDTH, frame.right, frame.bottom, paint);
-			canvas.drawRect(frame.right - SIDE_WIDTH, frame.top, frame.right, frame.bottom, paint);
+			paint.setColor(getResources().getColor(R.color.epg_littleBlack));
+			canvas.drawRect(frame.left + ScreenRate, frame.top, frame.right - ScreenRate, frame.top + SIDE_WIDTH, paint);
+			canvas.drawRect(frame.left, frame.top + ScreenRate, frame.left + SIDE_WIDTH, frame.bottom - ScreenRate, paint);
+			canvas.drawRect(frame.left + ScreenRate, frame.bottom - SIDE_WIDTH, frame.right - ScreenRate, frame.bottom, paint);
+			canvas.drawRect(frame.right - SIDE_WIDTH, frame.top + ScreenRate, frame.right, frame.bottom - ScreenRate, paint);
 
 			//绘制中间的线,每次刷新界面，中间的线往下移动SPEEN_DISTANCE
 			slideTop += SPEEN_DISTANCE;
@@ -212,7 +213,7 @@ public final class ViewfinderView extends View {
 			lineRect.right = frame.right;
 			lineRect.top = slideTop;
 			lineRect.bottom = slideTop + 18;
-			canvas.drawBitmap(((BitmapDrawable)(getResources().getDrawable(R.drawable.scan_line))).getBitmap(), null, lineRect, paint);
+			canvas.drawBitmap(((BitmapDrawable)(getResources().getDrawable(R.drawable.scan_line_2))).getBitmap(), null, lineRect, paint);
 /*
 			//画扫描框下面的字
 			paint.setColor(Color.WHITE);

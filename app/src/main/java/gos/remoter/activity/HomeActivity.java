@@ -3,21 +3,17 @@ package gos.remoter.activity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import gos.remoter.R;
 import gos.remoter.adapter.ReuseAdapter;
 import gos.remoter.data.GridActivity;
-import gos.remoter.data.Program;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
 

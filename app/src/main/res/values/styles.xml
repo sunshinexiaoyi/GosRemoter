@@ -9,6 +9,14 @@
 
     </style>
 
+    <style name="AppTheme2" parent="android:Theme.Light.NoTitleBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowBackground">@drawable/init_default</item>
+    </style>
+
     <style name="TitleBar">
         <item name="android:layout_height">@dimen/title_bar_height</item>
         <item name="android:layout_width">match_parent</item>
@@ -50,5 +58,6 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
     </style>
-    
+
+
 </resources>

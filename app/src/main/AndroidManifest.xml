@@ -24,7 +24,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
-        <activity android:name=".activity.InitActivity">
+        <activity android:name=".activity.InitActivity"
+            android:theme="@style/AppTheme2"
+            android:windowSoftInputMode="adjustPan"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,7 +66,9 @@
 
         </activity>
 
-        <activity android:name=".activity.RemoterActivity" />
+        <activity android:name=".activity.RemoterActivity" >
+
+        </activity>
         <activity android:name=".activity.EpgActivity" />
         <activity android:name=".activity.LiverActivity" />
         <activity android:name=".activity.ProgramActivity"></activity>

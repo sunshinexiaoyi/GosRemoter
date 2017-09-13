@@ -33,7 +33,10 @@
             android:layout_weight="1"
             android:overlapAnchor="false"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp" />
+            tools:layout_editor_absoluteY="8dp"
+            android:dropDownWidth="match_parent"
+            android:scrollbars="none"
+            />
 
         <Spinner
             android:id="@+id/dateSpinner"
@@ -42,7 +45,9 @@
             android:layout_weight="1"
             android:overlapAnchor="false"
             app:layout_constraintTop_toBottomOf="@+id/titleBar"
-            tools:layout_editor_absoluteX="172dp" />
+            tools:layout_editor_absoluteX="172dp"
+            android:scrollbars="none"
+            />
     </LinearLayout>
 
     <ListView
@@ -57,6 +62,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:scrollbars="none"
+        />
 
 </android.support.constraint.ConstraintLayout>

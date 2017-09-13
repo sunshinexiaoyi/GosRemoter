@@ -2,6 +2,7 @@ package gos.remoter.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,9 +52,11 @@ public class LiverClassifyListAdapter extends BaseAdapter {
         mPosition = position;
         tv.setText(strings[position]);
         if (position == LiverActivity.mPosition) {
-            convertView.setBackgroundResource(R.drawable.liver_checked);
+            tv.setBackgroundResource(R.drawable.liver_checked);
             tv.setTextColor(Color.parseColor("#3490DB"));
-            tv.setTextSize(24);
+            tv.setTextSize(22);
+          ;
+            Log.i("live",  tv.getLayoutParams()+"");
         } else {
             convertView.setBackgroundColor(Color.parseColor("#ffffff"));
         }

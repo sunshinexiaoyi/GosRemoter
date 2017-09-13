@@ -25,14 +25,15 @@
         android:orientation="horizontal">
 
         <ListView
-            android:paddingTop="15dp"
             android:id="@+id/live_classify_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.2"
+            android:divider="@android:color/transparent"
             android:dividerHeight="5dp"
             android:listSelector="@android:color/transparent"
-            android:divider="@android:color/transparent">
+            android:paddingTop="15dp"
+            android:scrollbars="none">
 
         </ListView>
 

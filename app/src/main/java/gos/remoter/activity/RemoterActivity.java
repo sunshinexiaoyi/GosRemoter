@@ -64,7 +64,7 @@ public class RemoterActivity extends Activity implements OnClickListener {
         titleBar.setAlpha(255);
 
         titleBar.setTextTitle(R.string.remoter_title);
-        titleBar.setImageLeft(R.drawable.remote_return, new OnClickListener() {
+        titleBar.setImageLeft(R.drawable.activity_return, new OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

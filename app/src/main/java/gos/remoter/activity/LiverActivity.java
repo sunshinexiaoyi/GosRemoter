@@ -71,6 +71,12 @@ public class LiverActivity extends FragmentActivity implements AdapterView.OnIte
         /*标题栏*/
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
         titleBar.setTextTitle(R.string.live_title);
+        titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         //分类列表
         mListView = (ListView) findViewById(R.id.live_classify_list);
@@ -107,6 +113,8 @@ public class LiverActivity extends FragmentActivity implements AdapterView.OnIte
             for (int i = 0; i < lists.get(mPosition).size(); i++) {
                 program[i] = lists.get(mPosition).get(i);
             }
+
+            //bundle.putSerializable("programList",);
 
             bundle.putStringArray("program", program); //得到的数据
             liveFragment.setArguments(bundle);
@@ -178,6 +186,8 @@ public class LiverActivity extends FragmentActivity implements AdapterView.OnIte
         liveFragment.setArguments(bundle);
         fragmentTransaction.commit();
     }
+
+
 
 
     //节目分类

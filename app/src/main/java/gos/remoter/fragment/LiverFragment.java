@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -43,7 +44,12 @@ public class LiverFragment extends Fragment {
         arrayAdapterGridview = new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 R.layout.liver_program_gridview_item, program);
         gridView.setAdapter(arrayAdapterGridview);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+            }
+        });
         return view;
     }
 

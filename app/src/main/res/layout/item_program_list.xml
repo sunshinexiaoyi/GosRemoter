@@ -13,7 +13,7 @@
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
         android:textColor="#808080"
-        android:textSize="24sp" />
+        android:textSize="@dimen/program_list_size" />
 
     <TextView
         android:id="@+id/textName"
@@ -21,7 +21,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:textSize="24sp"
+        android:textSize="@dimen/program_list_size"
         android:textColor="#808080"
         android:paddingTop="5dp"
         android:paddingBottom="5dp" />

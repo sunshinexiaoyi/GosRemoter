@@ -1,7 +1,6 @@
 package gos.remoter.activity;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 
 import gos.remoter.R;
 import gos.remoter.adapter.ReuseAdapter;
-import gos.remoter.data.GridActivity;
 import gos.remoter.data.Program;
 import gos.remoter.data.Respond;
 import gos.remoter.define.DataParse;
@@ -97,14 +95,18 @@ public class ProgramActivity extends Activity {
 
         /*标题栏*/
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-
-
         titleBar.setTextTitle(R.string.program_title);
         titleBar.setImageRight(R.drawable.program_list_more, new View.OnClickListener() {
             @Override
             public void onClick(View v) {//更多
                 Toast.makeText(ProgramActivity.this, "更多", Toast.LENGTH_SHORT).show();
 
+            }
+        });
+        titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

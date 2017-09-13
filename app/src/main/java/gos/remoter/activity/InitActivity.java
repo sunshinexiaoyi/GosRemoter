@@ -33,9 +33,6 @@ public class InitActivity extends Activity {
     void initView(){
         new ImmersionLayout(this).setImmersion();
 
-        TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-        titleBar.setNullBackground();
-        titleBar.setTextTitle(R.string.connect_title);
     }
 
     void startService(){

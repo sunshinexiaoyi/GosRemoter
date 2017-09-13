@@ -12,5 +12,5 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="1995-12-25"
-        android:textSize="18sp" />
+        android:textSize="@dimen/epg_spinner_title" />
 </LinearLayout>

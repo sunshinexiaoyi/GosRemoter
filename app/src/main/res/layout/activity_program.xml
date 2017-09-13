@@ -11,15 +11,11 @@
     <gos.remoter.view.TitleBarNew
         android:id="@+id/titleBar"
         style="@style/TitleBar"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-       />
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/program_list_title_height"
         android:orientation="horizontal"
         android:id="@+id/linearLayout"
         android:background="@drawable/home_item_bg">
@@ -29,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="24sp"
+            android:textSize="@dimen/program_list_title_size"
             android:text="@string/program_lcn"
             android:textColor="#323232"
             android:paddingTop="10dp"
@@ -40,7 +36,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="24sp"
+            android:textSize="@dimen/program_list_title_size"
             android:text="@string/program_name"
             android:textColor="#323232"
             android:paddingTop="10dp"
@@ -54,7 +50,9 @@
         android:layout_height="wrap_content"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:scrollbars="none"
+        >
     </ListView>
 
 </LinearLayout>

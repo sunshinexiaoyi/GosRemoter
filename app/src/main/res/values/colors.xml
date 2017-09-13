@@ -5,8 +5,16 @@
 
     <color name="title_bar_text">#FFFFFFFF</color>
 
+    <!--主页-->
+    <color name="home_split_line">#808080</color>
+    <color name="home_grid_bg">#f6f7fb</color>
+    
+    <color name="live_program_type">#808080</color>
+    <color name="live_program_split_line">#e5e5e5</color>
+    <color name="live_program_bg">#fcfcfc</color>
+
+
     <color name="connect_btn_text">#22A7FF</color>
-    <color name="home_grid_bg">#eaeaea</color>
 
     <color name="colorPrimary">#22A7FF</color>
     <color name="colorPrimaryDark">#22A7FF</color>

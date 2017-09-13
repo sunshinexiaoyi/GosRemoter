@@ -10,8 +10,7 @@
         android:id="@+id/img_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_centerInParent="true"
-        />
+        android:layout_centerInParent="true" />
 
     <TextView
         android:id="@+id/txt_icon"
@@ -19,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/img_icon"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:textSize="18sp" />
+        android:layout_marginTop="25dp"
+        android:textSize="@dimen/home_item_size" />
 
 </RelativeLayout>

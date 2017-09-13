@@ -42,7 +42,7 @@ public class ExampleUnitTest {
     };
 
     InetAddress local =null;
-    ArrayList<EpgProgram> epgPrograms = createEpgPrograms(5);
+    ArrayList<EpgProgram> epgPrograms = createEpgPrograms(15);
     @Test
     public void addition_isCorrect() throws Exception {
         startServer();
@@ -220,20 +220,25 @@ public class ExampleUnitTest {
         epgProgram.setIndex(index);
         epgProgram.setLcn(1234);
         epgProgram.setServiceId(10);
+        epgProgram.setType(index%4);
+
+        String str = "好的每tion取出对应的boolean值，然后再进行checkbox的状态设置； 而笔者的做法则是在entity类中加入了一个boolean值用于判断，";
 
         ArrayList<Date> dateArrayList = epgProgram.getDateArray();
         int position = 0;
         for(int i=0;i<5;i++){
             Date date = new Date();
-            date.setDate(String.format("2017-08-%d",i+15));
+            int startDate = index +i;
+            date.setDate(String.format("2017-08-%d",startDate));
             ArrayList<Time> timeArrayList = date.getTimeArray();
             for(int j=0;j<5;j++){
                 Time time = new Time();
                 time.setEventType(String.valueOf(j%5));
                 time.setStartTime(String.format("%d:00",j));
                 time.setEndTime(String.format("%d:00",j+1));
-                time.setShortDes("short des"+String.format(" %d:%d",i,j));
-                time.setEvent(String.format("bbc-%d",j+1));
+
+                time.setShortDes("short des"+str+String.format(" %d:%d",i,j));
+                time.setEvent(String.format("bbc %d-%d-%d",index,startDate,j+1));
                 time.setEventID(String.valueOf(position++));
 
                 timeArrayList.add(time);
@@ -253,6 +258,8 @@ public class ExampleUnitTest {
         {
             EpgProgram epgProgram = epgPrograms.get(i);
             Program program = new Program(epgProgram.getName(),epgProgram.getIndex());
+            program.setType(epgProgram.getType());
+
             programList.add(program);
         }
 

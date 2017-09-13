@@ -20,21 +20,18 @@
         android:id="@+id/liver_fragment_textview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_weight="0.5"
         android:gravity="center"
         android:textColor="#808080"
-        android:textSize="24sp" />
+        android:textSize="@dimen/live_program_title" />
 
     <GridView
         android:id="@+id/liver_fragment_gridview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5.0"
-        android:numColumns="3"
         android:listSelector="@android:color/transparent"
-        android:verticalSpacing="2dp"
-        android:horizontalSpacing="2dp"
-        android:stretchMode="columnWidth">
-    </GridView>
+        android:numColumns="3"
+        android:stretchMode="columnWidth"></GridView>
 
 </LinearLayout>

@@ -306,9 +306,13 @@ public class EpgActivity extends Activity {
 
         /*标题栏*/
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-
-
         titleBar.setTextTitle(R.string.epg_title);
+        titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         ListView epgListView = (ListView)findViewById(R.id.epgListView);
         epgListView.setAdapter(epgAdapter);

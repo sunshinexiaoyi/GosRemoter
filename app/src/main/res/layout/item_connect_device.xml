@@ -12,16 +12,18 @@
 
         <Button
             android:id="@+id/address"
-            android:layout_width="290dp"
+            android:layout_width="310dp"
             android:layout_height="45dp"
             android:layout_marginRight="0dp"
             android:background="@drawable/connect_ip_btn"
             android:clickable="false"
             android:text="Button"
             android:paddingBottom="3dp"
-            android:paddingLeft="35dp"
+            android:paddingLeft="30dp"
+            android:textStyle="normal"
+            android:typeface="normal"
             android:textSize="@dimen/connect_driver_btn"
-            android:textColor="@color/connect_driver_btn"
+            android:textColor="#323232"
             app:layout_constraintRight_toRightOf="parent"
             tools:layout_editor_absoluteY="6dp" />
     </android.support.constraint.ConstraintLayout>

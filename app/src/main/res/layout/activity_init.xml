@@ -6,9 +6,6 @@
     android:background="@drawable/init_default"
 
     >
-    <gos.remoter.view.TitleBarNew
-        android:id="@+id/titleBar"
-        style="@style/TitleBar">
-    </gos.remoter.view.TitleBarNew>
+
 
 </LinearLayout>

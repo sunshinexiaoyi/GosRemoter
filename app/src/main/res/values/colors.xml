@@ -4,7 +4,7 @@
     <color name="epg_littleBlack">#808080</color>
 
     <color name="title_bar_text">#FFFFFFFF</color>
-
+   <color name="connect_driver_btn">#808080</color>
     <color name="connect_btn_text">#22A7FF</color>
     <color name="home_grid_bg">#eaeaea</color>
 

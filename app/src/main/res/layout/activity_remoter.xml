@@ -15,16 +15,16 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/titleBar"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:background="#f6f7fb">
+        android:layout_marginTop="7dp"
+        android:background="@color/remoter_bg">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
             android:gravity="center_vertical">
 
             <ImageView
@@ -37,7 +37,7 @@
             <ImageView
                 android:id="@+id/remoteBack"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_height="85dp"
                 android:layout_toLeftOf="@+id/remoteOnOff"
                 android:layout_marginRight="50dp"
                 android:layout_alignBottom="@+id/remoteOnOff"
@@ -46,7 +46,7 @@
             <ImageView
                 android:id="@+id/remoteMute"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_height="85dp"
                 android:layout_toRightOf="@+id/remoteOnOff"
                 android:layout_marginLeft="50dp"
                 android:layout_alignBottom="@+id/remoteOnOff"
@@ -63,8 +63,8 @@
 
             <gos.remoter.adapter.RemoterSetting
                 android:id="@+id/remoteSet"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:layout_centerHorizontal="true"
                 />
 
@@ -76,13 +76,18 @@
             android:layout_weight="1"
             android:layout_gravity="center">
 
-            <ImageView
+            <Button
                 android:id="@+id/remoteNumber"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/remoter_number"/>
+                android:text="@string/remoter_number"
+                android:textSize="30sp"
+                android:paddingRight="6dp"
+                android:paddingBottom="5dp"
+                android:textColor="@drawable/remoter_text_color"
+                android:background="@drawable/remoter_null"/>
 
         </RelativeLayout>
 
@@ -96,43 +101,63 @@
             android:paddingRight="20dp"
             android:orientation="horizontal">
 
-            <ImageView
+            <Button
                 android:id="@+id/remoteMenu"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/remoter_menu"/>
+                android:text="@string/remoter_menu"
+                android:textSize="20sp"
+                android:paddingRight="4dp"
+                android:paddingBottom="4dp"
+                android:textColor="@drawable/remoter_text_color"
+                android:background="@drawable/remoter_null"/>
 
-            <ImageView
+            <Button
                 android:id="@+id/remoteFav"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/remoter_fav"/>
+                android:text="@string/remoter_fav"
+                android:textSize="20sp"
+                android:paddingRight="3dp"
+                android:paddingBottom="4dp"
+                android:textColor="@drawable/remoter_text_color"
+                android:background="@drawable/remoter_null"/>
 
-            <ImageView
+            <Button
                 android:id="@+id/remotePvr"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/remoter_pvr"/>
+                android:text="@string/remoter_pvr"
+                android:textSize="20sp"
+                android:paddingRight="3dp"
+                android:paddingBottom="4dp"
+                android:textColor="@drawable/remoter_text_color"
+                android:background="@drawable/remoter_null"/>
 
-            <ImageView
+            <Button
                 android:id="@+id/remoteExit"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/remoter_exit"/>
+                android:text="@string/remoter_exit"
+                android:textSize="20sp"
+                android:paddingRight="3dp"
+                android:paddingBottom="4dp"
+                android:textColor="@drawable/remoter_text_color"
+                android:background="@drawable/remoter_null"/>
 
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5">
+            android:layout_weight="0.3">
         </RelativeLayout>
 
     </LinearLayout>

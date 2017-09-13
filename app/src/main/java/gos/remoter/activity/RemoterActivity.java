@@ -1,6 +1,7 @@
 package gos.remoter.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -25,11 +26,11 @@ public class RemoterActivity extends Activity implements OnClickListener {
     private ImageView remoteBack;
     private ImageView remoteOnOff;
     private ImageView remoteMute;
-    private ImageView remoteNumber;
-    private ImageView remoteMenu;
-    private ImageView remoteFav;
-    private ImageView remotePvr;
-    private ImageView remoteExit;
+    private Button remoteNumber;
+    private Button remoteMenu;
+    private Button remoteFav;
+    private Button remotePvr;
+    private Button remoteExit;
     private TitleBarNew titleBar;
     private RemoterSetting remoterSetting;
 
@@ -45,18 +46,28 @@ public class RemoterActivity extends Activity implements OnClickListener {
     private Button numberBack;
     private Button numberZero;
     private Button numberOk;
+
     private View viewNumber;
+    private AlertDialog alertDialog = null;
+    private AlertDialog.Builder builder = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remoter);
+        initTitle();
         initView();
 
-        init();
+        builder = new AlertDialog.Builder(this);
+        viewNumber = LayoutInflater.from(this).inflate(R.layout.remoter_number_dialog, null, false);
+        builder.setView(viewNumber);
+        builder.setCancelable(true);
+        alertDialog = builder.create();
+        initNumber();
+
     }
 
-    void initView(){
+    void initTitle(){
         new ImmersionLayout(this).setImmersion();
 
         /*标题栏*/
@@ -79,15 +90,15 @@ public class RemoterActivity extends Activity implements OnClickListener {
         });
     }
 
-    private void init() {
+    private void initView() {
         remoteBack = (ImageView) findViewById(R.id.remoteBack);
         remoteOnOff = (ImageView) findViewById(R.id.remoteOnOff);
         remoteMute = (ImageView) findViewById(R.id.remoteMute);
-        remoteNumber = (ImageView) findViewById(R.id.remoteNumber);
-        remoteMenu = (ImageView) findViewById(R.id.remoteMenu);
-        remoteFav = (ImageView) findViewById(R.id.remoteFav);
-        remotePvr = (ImageView) findViewById(R.id.remotePvr);
-        remoteExit = (ImageView) findViewById(R.id.remoteExit);
+        remoteNumber = (Button) findViewById(R.id.remoteNumber);
+        remoteMenu = (Button) findViewById(R.id.remoteMenu);
+        remoteFav = (Button) findViewById(R.id.remoteFav);
+        remotePvr = (Button) findViewById(R.id.remotePvr);
+        remoteExit = (Button) findViewById(R.id.remoteExit);
         remoterSetting = (RemoterSetting) findViewById(R.id.remoteSet);
 
         remoteBack.setOnClickListener(this);
@@ -110,7 +121,8 @@ public class RemoterActivity extends Activity implements OnClickListener {
             case R.id.remoteMute:
                 break;
             case R.id.remoteNumber:
-                initPopWindows(view);
+                //initPopWindows(view);
+                alertDialog.show();
 
                 break;
             case R.id.remoteMenu:
@@ -176,7 +188,6 @@ public class RemoterActivity extends Activity implements OnClickListener {
         //设置popupWindow显示的位置，参数依次是参照View，相对于父控件的位置,x轴的偏移量，y轴的偏移量
         popWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
        // popWindow.dismiss();
-
     }
 
     private void initNumber() {

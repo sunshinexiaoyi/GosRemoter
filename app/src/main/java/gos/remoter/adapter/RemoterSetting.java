@@ -21,8 +21,8 @@ import gos.remoter.R;
 public class RemoterSetting extends View {
 
         private static final String TAG = "View";
-        int width = 100;
-        int height = 100;
+        int width = 120;
+        int height = 120;
         Paint paintW;
         Paint paintB;
         Paint paintText;
@@ -55,7 +55,6 @@ public class RemoterSetting extends View {
             paintW.setColor(bg_color);
             paintB.setColor(blue);
             paintText.setColor(blue);
-            paintF.setColor(getResources().getColor(R.color.remoter_hint));
             paintText.setTextSize(100f);
             // DEFAULT_BOLD :黑体字体类型,SANS_SERIF:sans serif字体类型,Typeface.BOLD:粗体
             Typeface font = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
@@ -64,6 +63,12 @@ public class RemoterSetting extends View {
             paintW.setAntiAlias(true);
             paintText.setAntiAlias(true);
             rectf = new RectF();
+
+            //阴影,加一个圆环，
+            paintF.setAlpha(1);
+            paintF.setColor(getResources().getColor(R.color.remoter_hint));
+            paintF.setStrokeWidth(7);
+            paintF.setStyle(Paint.Style.STROKE);
 
         }
 
@@ -219,6 +224,8 @@ public class RemoterSetting extends View {
 
                     break;
                 default:
+
+                    //canvas.drawCircle(width / 2 + 3, height / 2 + 6, width / 2 - 3, paintF);
                     //右箭头和扇形
                     canvas.drawArc(rectf, 315, 90, true, paintW);
                     canvas.drawLine(width - 50, height / 2 + 3, width - 100, height / 2 - 50, paintB);
@@ -242,12 +249,6 @@ public class RemoterSetting extends View {
                     break;
             }
 
-            /*// 阴影,加一个圆环，
-            paintF.setStrokeWidth(7);
-            paintF.setStyle(Paint.Style.STROKE);
-            paintF.setAlpha( 200);
-            canvas.drawCircle(width / 2 + 3, height / 2 + 8, width / 2 - 5, paintF);
-*/
 
             paintB.setStyle(Paint.Style.STROKE); //空心效果
             paintB.setStrokeWidth(6);  //线宽

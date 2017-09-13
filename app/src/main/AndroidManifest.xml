@@ -28,11 +28,7 @@
             android:theme="@style/AppTheme2"
             android:windowSoftInputMode="adjustPan"
             >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.MainActivity"
@@ -67,7 +63,11 @@
         </activity>
 
         <activity android:name=".activity.RemoterActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".activity.EpgActivity" />
         <activity android:name=".activity.LiverActivity" />

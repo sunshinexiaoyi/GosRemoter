@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@drawable/remoter_number_dialog"
-
     >
 
     <TableLayout
@@ -16,6 +15,7 @@
         android:paddingRight="20dp"
         android:paddingTop="27dp"
         android:paddingBottom="27dp"
+        android:background="@drawable/remoter_number_dialog"
 
         >
 

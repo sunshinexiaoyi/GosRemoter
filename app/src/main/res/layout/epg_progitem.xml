@@ -16,19 +16,18 @@
         <TextView
             android:id = "@+id/epg_progName"
             android:text = "TRRRRRRRC News"
-            android:textSize = "18sp"
+            android:textSize = "@dimen/epg_info_title"
             android:textColor = "@color/epg_blackTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id = "@+id/epg_progTime"
             android:text = "9:00-10:00"
-            android:textSize = "18dp"
+            android:textSize = "@dimen/epg_info_title"
             android:textColor = "@color/epg_littleBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"/>
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
     <LinearLayout
@@ -39,7 +38,7 @@
         <TextView
             android:id = "@+id/epg_simpleProgInfo"
             android:text = "There are somethingmes …"
-            android:textSize = "15dp"
+            android:textSize = "@dimen/epg_info_content"
             android:textColor = "@color/epg_littleBlack"
             android:layout_width = "0dp"
             android:layout_weight="3"
@@ -56,30 +55,12 @@
             android:layout_marginTop="7dp"
             android:layout_weight="2">
             <Button
-                android:id = "@+id/epg_simple_recBtnOnce"
-                android:background="@drawable/epg_simple_watchbtn_once_false"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:gravity = "right|center"
-                android:focusable = "false"/>
-            <Button
-                android:id = "@+id/epg_simple_recBtnCycle"
-                android:background="@drawable/epg_simple_watchbtn_cycle_false"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:focusable = "false"/>
-            <Button
-                android:id = "@+id/epg_simple_watchBtnOnce"
-                android:background="@drawable/epg_simple_recbtn_once_false"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:focusable = "false"/>
-            <Button
-                android:id = "@+id/epg_simple_watchBtnCycle"
-                android:background="@drawable/epg_simple_recbtn_cycle_false"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:focusable = "false"/>
+            android:id = "@+id/epg_simple_btn"
+            android:background="@drawable/epg_simple_recbtn_cycle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="100dp"
+            android:focusable = "false" />
         </LinearLayout>
     </LinearLayout>
 
@@ -100,7 +81,7 @@
         <TextView
             android:id = "@+id/epg_recordText"
             android:text = "@string/epg_Reservation_record"
-            android:textSize = "15sp"
+            android:textSize = "@dimen/epg_info_set_title"
             android:textColor = "@color/epg_littleBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,7 +91,7 @@
             android:id = "@+id/epg_full_recBtnOnce"
             android:text = "@string/epg_progSettingBtnText_Once"
             android:textAllCaps="false"
-            android:textSize = "12sp"
+            android:textSize = "@dimen/epg_info_button_text"
             android:layout_width="70dp"
             android:layout_height="39dp"
             android:background="@drawable/epg_full_lbtn_false"
@@ -123,7 +104,7 @@
             android:id = "@+id/epg_full_recBtnCycle"
             android:text = "@string/epg_progSettingBtnText_Days"
             android:textAllCaps="false"
-            android:textSize = "12sp"
+            android:textSize = "@dimen/epg_info_button_text"
             android:layout_width="70dp"
             android:layout_height="39dp"
             android:background="@drawable/epg_full_rbtn_false"
@@ -143,7 +124,7 @@
         <TextView
             android:id = "@+id/epg_watchText"
             android:text = "@string/epg_Scheduled_to_watch"
-            android:textSize = "15sp"
+            android:textSize = "@dimen/epg_info_set_title"
             android:textColor = "@color/epg_littleBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -154,7 +135,7 @@
             android:id = "@+id/epg_full_watchBtnOnce"
             android:text = "@string/epg_progSettingBtnText_Once"
             android:textAllCaps="false"
-            android:textSize = "12sp"
+            android:textSize = "@dimen/epg_info_button_text"
             android:layout_width="70dp"
             android:layout_height="39dp"
             android:background="@drawable/epg_full_lbtn_false"
@@ -167,7 +148,7 @@
             android:id = "@+id/epg_full_watchBtnCycle"
             android:text = "@string/epg_progSettingBtnText_Days"
             android:textAllCaps="false"
-            android:textSize = "12sp"
+            android:textSize = "@dimen/epg_info_button_text"
             android:layout_width="70dp"
             android:layout_height="39dp"
             android:background="@drawable/epg_full_rbtn_false"
@@ -177,4 +158,9 @@
             android:paddingBottom="1dp"
             android:focusable = "false"/>
     </RelativeLayout>
+
+    <ImageView
+        android:src = "@color/epg_littleBlack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

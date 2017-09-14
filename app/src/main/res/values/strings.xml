@@ -47,15 +47,6 @@
 
     <string name="mask_stop_loading">停止加载</string>
 
-    <!--EPG-->
-    <item name="EPG_TVITEM">EPG_TVItem</item>
-    <item name="EPG_TVNAME">EPG_TVName</item>
-    <item name="EPG_TVDATE">EPG_TVDate</item>
-    <string name="epg_Reservation_record">Reservation record</string>
-    <string name="epg_Scheduled_to_watch">Scheduled to watch</string>
-    <string name="epg_progSettingBtnText_Once">Once</string>
-    <string name="epg_progSettingBtnText_Days">Days</string>
-
     <!--退出弹出框-->
     <string name="exit_dialog_title">系统信息</string>
     <string name="exit_dialog_content">你确定要退出吗?</string>

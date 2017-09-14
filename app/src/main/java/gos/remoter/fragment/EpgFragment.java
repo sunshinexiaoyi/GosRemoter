@@ -117,7 +117,6 @@ public class EpgFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +127,6 @@ public class EpgFragment extends Fragment {
         }
         EventManager.register(this);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -146,19 +144,16 @@ public class EpgFragment extends Fragment {
         }
         return rootView;
     }
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -179,13 +174,10 @@ public class EpgFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventManager.unregister(this);
-
     }
 
     @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
@@ -394,69 +386,6 @@ public class EpgFragment extends Fragment {
             sendReserveSet(reserveEventSend);
         }
     }
-
-
-
-  /*  class ClashDialog {
-
-        //dialog
-        AlertDialog alert = null;
-        AlertDialog.Builder builder = null;
-
-        int select = 0;
-
-        AppReserveClashEvent eventInfo;
-
-        ClashDialog(AppReserveClashEvent eventInfo) {
-            this.eventInfo = eventInfo;
-            String conflictEvent = eventInfo.conflictEvent.get(AppReserveClashEvent.eventName) + "\n" +
-                    eventInfo.conflictEvent.get(AppReserveClashEvent.Date) + "\n" +
-                    eventInfo.conflictEvent.get(AppReserveClashEvent.startTime) + "->" +
-                    eventInfo.conflictEvent.get(AppReserveClashEvent.endTime);
-
-            String selectEvent = eventInfo.selectEvent.get(AppReserveClashEvent.eventName) + "\n" +
-                    eventInfo.selectEvent.get(AppReserveClashEvent.Date) + "\n" +
-                    eventInfo.selectEvent.get(AppReserveClashEvent.startTime) + "->" +
-                    eventInfo.selectEvent.get(AppReserveClashEvent.endTime);
-            final String[] fruits = new String[]{conflictEvent, selectEvent};
-
-
-            alert = null;
-            builder = new AlertDialog.Builder(EpgActivity.this);
-            alert = builder.setIcon(R.mipmap.ic_launcher)
-                    .setTitle(getResources().getString(R.string.epg_clash_dialog_title))
-                    .setSingleChoiceItems(fruits, 0, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            select = which;
-                            //Toast.makeText(getApplicationContext(), "你选择了" + fruits[which], Toast.LENGTH_SHORT).show();
-                        }
-                    }).setNegativeButton(getResources().getString(R.string.epg_clash_dialog_cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .setPositiveButton(getResources().getString(R.string.epg_clash_dialog_confirm), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (1 == select) {
-                                sendClashInfo();
-                            }
-                            //Toast.makeText(getApplicationContext(), "你选择了" + select, Toast.LENGTH_SHORT).show();
-                        }
-                    }).create();
-            alert.show();
-        }
-
-
-        void sendClashInfo() {
-
-            Log.i("ss","sendClashInfo");
-
-
-        }
-    }*/
 
     /*显示控制*/
     public void showDateFrame()

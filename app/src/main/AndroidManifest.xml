@@ -58,6 +58,12 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <!--EPGACT-->
+        <activity android:name=".activity.EPGActivity"
+            android:theme="@style/EPGTheme"></activity>
+
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activity.ConnectActivity" />
         <activity android:name=".activity.HomeActivity" >
 
@@ -68,5 +74,6 @@
         <activity android:name=".activity.LiverActivity" />
         <activity android:name=".activity.ProgramActivity"></activity>
     </application>
+
 
 </manifest>

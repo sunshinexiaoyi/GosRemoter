@@ -25,7 +25,7 @@
         android:theme="@style/AppTheme"
         >
         <activity android:name=".activity.InitActivity"
-            android:theme="@style/AppTheme2"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"
             >
             <intent-filter>

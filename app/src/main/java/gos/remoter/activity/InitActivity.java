@@ -15,25 +15,18 @@ import java.util.TimerTask;
 
 import gos.remoter.R;
 import gos.remoter.service.NetService;
+import gos.remoter.tool.ImmersionLayout;
 
-public class InitActivity extends AppCompatActivity {
+public class InitActivity extends AppCompatActivity{
     private  final String TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
-
+        initView();
         //沉浸式隐藏标题栏
-        if (Build.VERSION.SDK_INT >= 21) {
-            View decorView = getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            decorView.setSystemUiVisibility(option);
-            getWindow().setNavigationBarColor(Color.TRANSPARENT);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 

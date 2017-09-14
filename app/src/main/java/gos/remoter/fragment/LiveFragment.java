@@ -331,7 +331,7 @@ public class LiveFragment extends Fragment {
 
         //设置数据
         imageView.setImageResource(image);
-        textView.setText("──  "+title+"  ──");
+        textView.setText(title);
 
     }
 

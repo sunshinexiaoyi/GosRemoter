@@ -21,8 +21,8 @@ import gos.remoter.R;
 public class RemoterSetting extends View {
 
         private static final String TAG = "View";
-        int width = 120;
-        int height = 120;
+        int width = 100;
+        int height = 100;
         Paint paintW;
         Paint paintB;
         Paint paintText;
@@ -57,7 +57,7 @@ public class RemoterSetting extends View {
             paintText.setColor(blue);
             paintText.setTextSize(100f);
             // DEFAULT_BOLD :黑体字体类型,SANS_SERIF:sans serif字体类型,Typeface.BOLD:粗体
-            Typeface font = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
+            Typeface font = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
             paintText.setTypeface(font);
             paintB.setAntiAlias(true);
             paintW.setAntiAlias(true);
@@ -66,6 +66,7 @@ public class RemoterSetting extends View {
 
             //阴影,加一个圆环，
             paintF.setAlpha(1);
+            paintF.setAntiAlias(true);
             paintF.setColor(getResources().getColor(R.color.remoter_hint));
             paintF.setStrokeWidth(7);
             paintF.setStyle(Paint.Style.STROKE);
@@ -92,26 +93,28 @@ public class RemoterSetting extends View {
 
         @Override
         protected void onDraw(Canvas canvas) {
-            paintB.setStrokeWidth(10);
+            paintB.setStrokeWidth(8); //线宽
+            paintW.setStyle(Paint.Style.FILL);
             switch (clickP) {
                 case 0:
                     /**由于没有现成的箭头图片，一个笨办法，画8个线段吧！*/
                     //右箭头和扇形
-                    canvas.drawArc(rectf, 315, 90, true, paintW); //弧度
-                    canvas.drawLine(width - 50, height / 2 + 3, width - 100, height / 2 - 50, paintB);
-                    canvas.drawLine(width - 50, height / 2 - 3, width - 100, height / 2 + 50, paintB);
+                    //椭圆对象、起始角度、所画角度,为True时，在绘制圆弧时将圆心包括在内，通常用来绘制扇形
+                    canvas.drawArc(rectf, 315, 90, true, paintW);
+                    canvas.drawLine(width - 50, height / 2 + 3, width - 80, height / 2 - 28, paintB);
+                    canvas.drawLine(width - 50, height / 2 - 3, width - 80, height / 2 + 28, paintB);
                     //上箭头和扇形
                     canvas.drawArc(rectf, 225, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 50, 100, paintB);
-                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 50, 100, paintB);
+                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 28, 80, paintB);
+                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 28, 80, paintB);
                     //左箭头和扇形
                     canvas.drawArc(rectf, 135, 90, true, paintW);
-                    canvas.drawLine(50, height / 2 + 3, 100, height / 2 - 50, paintB);
-                    canvas.drawLine(50, height / 2 - 3, 100, height / 2 + 50, paintB);
+                    canvas.drawLine(50, height / 2 + 3, 80, height / 2 - 28, paintB);
+                    canvas.drawLine(50, height / 2 - 3, 80, height / 2 + 28, paintB);
                     //下箭头和扇形
                     canvas.drawArc(rectf, 45, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 50, height - 100, paintB);
-                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 50, height - 100, paintB);
+                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 28, height - 80, paintB);
+                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 28, height - 80, paintB);
                     //中间圆和字
                     paintB.setStyle(Paint.Style.FILL);
                     paintText.setColor(Color.WHITE);
@@ -122,24 +125,24 @@ public class RemoterSetting extends View {
                 case 1:
                     //右箭头和扇形
                     canvas.drawArc(rectf, 315, 90, true, paintW);
-                    canvas.drawLine(width - 50, height / 2 + 3, width - 100, height / 2 - 50, paintB);
-                    canvas.drawLine(width - 50, height / 2 - 3, width - 100, height / 2 + 50, paintB);
+                    canvas.drawLine(width - 50, height / 2 + 3, width - 80, height / 2 - 28, paintB);
+                    canvas.drawLine(width - 50, height / 2 - 3, width - 80, height / 2 + 28, paintB);
                     //上箭头和扇形
                     paintW.setColor(blue);
                     paintB.setColor(Color.WHITE);
                     canvas.drawArc(rectf, 225, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 50, 100, paintB);
-                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 50, 100, paintB);
+                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 28, 80, paintB);
+                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 28, 80, paintB);
                     paintW.setColor(bg_color);
                     paintB.setColor(blue);
                     //左箭头和扇形
                     canvas.drawArc(rectf, 135, 90, true, paintW);
-                    canvas.drawLine(50, height / 2 + 3, 100, height / 2 - 50, paintB);
-                    canvas.drawLine(50, height / 2 - 3, 100, height / 2 + 50, paintB);
+                    canvas.drawLine(50, height / 2 + 3, 80, height / 2 - 28, paintB);
+                    canvas.drawLine(50, height / 2 - 3, 80, height / 2 + 28, paintB);
                     //下箭头和扇形
                     canvas.drawArc(rectf, 45, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 50, height - 100, paintB);
-                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 50, height - 100, paintB);
+                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 28, height - 80, paintB);
+                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 28, height - 80, paintB);
                     //中间圆和字
                     canvas.drawCircle(width / 2, height / 2, width / 5, paintW);
                     canvas.drawText(ok, (width / 2) - 75, (height / 2) + 30, paintText);
@@ -148,22 +151,22 @@ public class RemoterSetting extends View {
                 case 2:
                     //右箭头和扇形
                     canvas.drawArc(rectf, 315, 90, true, paintW);
-                    canvas.drawLine(width - 50, height / 2 + 3, width - 100, height / 2 - 50, paintB);
-                    canvas.drawLine(width - 50, height / 2 - 3, width - 100, height / 2 + 50, paintB);
+                    canvas.drawLine(width - 50, height / 2 + 3, width - 80, height / 2 - 28, paintB);
+                    canvas.drawLine(width - 50, height / 2 - 3, width - 80, height / 2 + 28, paintB);
                     //上箭头和扇形
                     canvas.drawArc(rectf, 225, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 50, 100, paintB);
-                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 50, 100, paintB);
+                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 28, 80, paintB);
+                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 28, 80, paintB);
                     //左箭头和扇形
                     canvas.drawArc(rectf, 135, 90, true, paintW);
-                    canvas.drawLine(50, height / 2 + 3, 100, height / 2 - 50, paintB);
-                    canvas.drawLine(50, height / 2 - 3, 100, height / 2 + 50, paintB);
+                    canvas.drawLine(50, height / 2 + 3, 80, height / 2 - 28, paintB);
+                    canvas.drawLine(50, height / 2 - 3, 80, height / 2 + 28, paintB);
                     //下箭头和扇形
                     paintW.setColor(blue);
                     paintB.setColor(Color.WHITE);
                     canvas.drawArc(rectf, 45, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 50, height - 100, paintB);
-                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 50, height - 100, paintB);
+                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 28, height - 80, paintB);
+                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 28, height - 80, paintB);
                     paintW.setColor(bg_color);
                     paintB.setColor(blue);
                     //中间圆和字
@@ -174,24 +177,24 @@ public class RemoterSetting extends View {
                 case 3:
                     //右箭头和扇形
                     canvas.drawArc(rectf, 315, 90, true, paintW);
-                    canvas.drawLine(width - 50, height / 2 + 3, width - 100, height / 2 - 50, paintB);
-                    canvas.drawLine(width - 50, height / 2 - 3, width - 100, height / 2 + 50, paintB);
+                    canvas.drawLine(width - 50, height / 2 + 3, width - 80, height / 2 - 28, paintB);
+                    canvas.drawLine(width - 50, height / 2 - 3, width - 80, height / 2 + 28, paintB);
                     //上箭头和扇形
                     canvas.drawArc(rectf, 225, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 50, 100, paintB);
-                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 50, 100, paintB);
+                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 28, 80, paintB);
+                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 28, 80, paintB);
                     //左箭头和扇形
                     paintW.setColor(blue);
                     paintB.setColor(Color.WHITE);
                     canvas.drawArc(rectf, 135, 90, true, paintW);
-                    canvas.drawLine(50, height / 2 + 3, 100, height / 2 - 50, paintB);
-                    canvas.drawLine(50, height / 2 - 3, 100, height / 2 + 50, paintB);
+                    canvas.drawLine(50, height / 2 + 3, 80, height / 2 - 28, paintB);
+                    canvas.drawLine(50, height / 2 - 3, 80, height / 2 + 28, paintB);
                     paintW.setColor(bg_color);
                     paintB.setColor(blue);
                     //下箭头和扇形
                     canvas.drawArc(rectf, 45, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 50, height - 100, paintB);
-                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 50, height - 100, paintB);
+                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 28, height - 80, paintB);
+                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 28, height - 80, paintB);
                     //中间圆和字
                     canvas.drawCircle(width / 2, height / 2, width / 5, paintW);
                     canvas.drawText(ok, (width / 2) - 75, (height / 2) + 30, paintText);
@@ -202,22 +205,22 @@ public class RemoterSetting extends View {
                     paintW.setColor(blue);
                     paintB.setColor(Color.WHITE);
                     canvas.drawArc(rectf, 315, 90, true, paintW);
-                    canvas.drawLine(width - 50, height / 2 + 3, width - 100, height / 2 - 50, paintB);
-                    canvas.drawLine(width - 50, height / 2 - 3, width - 100, height / 2 + 50, paintB);
+                    canvas.drawLine(width - 50, height / 2 + 3, width - 80, height / 2 - 28, paintB);
+                    canvas.drawLine(width - 50, height / 2 - 3, width - 80, height / 2 + 28, paintB);
                     paintW.setColor(bg_color);
                     paintB.setColor(blue);
                     //上箭头和扇形
                     canvas.drawArc(rectf, 225, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 50, 100, paintB);
-                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 50, 100, paintB);
+                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 28, 80, paintB);
+                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 28, 80, paintB);
                     //左箭头和扇形
                     canvas.drawArc(rectf, 135, 90, true, paintW);
-                    canvas.drawLine(50, height / 2 + 3, 100, height / 2 - 50, paintB);
-                    canvas.drawLine(50, height / 2 - 3, 100, height / 2 + 50, paintB);
+                    canvas.drawLine(50, height / 2 + 3, 80, height / 2 - 28, paintB);
+                    canvas.drawLine(50, height / 2 - 3, 80, height / 2 + 28, paintB);
                     //下箭头和扇形
                     canvas.drawArc(rectf, 45, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 50, height - 100, paintB);
-                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 50, height - 100, paintB);
+                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 28, height - 80, paintB);
+                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 28, height - 80, paintB);
                     //中间圆和字
                     canvas.drawCircle(width / 2, height / 2, width / 5, paintW);
                     canvas.drawText(ok, (width / 2) - 75, (height / 2) + 30, paintText);
@@ -228,20 +231,20 @@ public class RemoterSetting extends View {
                     //canvas.drawCircle(width / 2 + 3, height / 2 + 6, width / 2 - 3, paintF);
                     //右箭头和扇形
                     canvas.drawArc(rectf, 315, 90, true, paintW);
-                    canvas.drawLine(width - 50, height / 2 + 3, width - 100, height / 2 - 50, paintB);
-                    canvas.drawLine(width - 50, height / 2 - 3, width - 100, height / 2 + 50, paintB);
+                    canvas.drawLine(width - 50, height / 2 + 3, width - 80, height / 2 - 28, paintB);
+                    canvas.drawLine(width - 50, height / 2 - 3, width - 80, height / 2 + 28, paintB);
                     //上箭头和扇形
                     canvas.drawArc(rectf, 225, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 50, 100, paintB);
-                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 50, 100, paintB);
+                    canvas.drawLine(width / 2 + 3, 50, width / 2 - 28, 80, paintB);
+                    canvas.drawLine(width / 2 - 3, 50, width / 2 + 28, 80, paintB);
                     //左箭头和扇形
                     canvas.drawArc(rectf, 135, 90, true, paintW);
-                    canvas.drawLine(50, height / 2 + 3, 100, height / 2 - 50, paintB);
-                    canvas.drawLine(50, height / 2 - 3, 100, height / 2 + 50, paintB);
+                    canvas.drawLine(50, height / 2 + 3, 80, height / 2 - 28, paintB);
+                    canvas.drawLine(50, height / 2 - 3, 80, height / 2 + 28, paintB);
                     //下箭头和扇形
                     canvas.drawArc(rectf, 45, 90, true, paintW);
-                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 50, height - 100, paintB);
-                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 50, height - 100, paintB);
+                    canvas.drawLine(width / 2 + 3, height - 50, height / 2 - 28, height - 80, paintB);
+                    canvas.drawLine(width / 2 - 3, height - 50, height / 2 + 28, height - 80, paintB);
                     //中间圆和字
                     canvas.drawCircle(width / 2, height / 2, width / 5, paintW);
                     canvas.drawText(ok, (width / 2) - 75, (height / 2) + 30, paintText);
@@ -251,7 +254,7 @@ public class RemoterSetting extends View {
 
 
             paintB.setStyle(Paint.Style.STROKE); //空心效果
-            paintB.setStrokeWidth(6);  //线宽
+            paintB.setStrokeWidth(5);  //线宽
             //canvas.drawColor(bg_color); //画布背景
             canvas.drawCircle(width / 2, height / 2, width / 2 - 5, paintB);
             canvas.drawCircle(width / 2, height / 2, width / 5, paintB);
@@ -278,6 +281,7 @@ public class RemoterSetting extends View {
                     } else if (x > width / 3 && x < 2 * width / 3 && y > height / 3 && y < 2 * height / 3) {
                         clickP = 0;
                     }
+                    // onDraw之中调用invalidate()，会再触发onDraw，从而不停刷新显示
                     invalidate();
 
                     return true;

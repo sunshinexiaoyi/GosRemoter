@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@drawable/remoter_number_dialog"
     >
 
     <TableLayout
@@ -11,6 +10,8 @@
         android:layout_height="wrap_content"
         android:minWidth="280dp"
         android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="27dp"
@@ -152,7 +153,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/remoter_back"
-                android:textSize="27sp"
+                android:textSize="23sp"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
 
@@ -174,7 +175,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_ok"
                 android:layout_marginLeft="10dp"
-                android:textSize="27sp"
+                android:textSize="23sp"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
         </TableRow>

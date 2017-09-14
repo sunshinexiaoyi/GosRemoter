@@ -63,6 +63,7 @@ public class RemoterActivity extends Activity implements OnClickListener {
         builder.setView(viewNumber);
         builder.setCancelable(true);
         alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         initNumber();
 
     }

@@ -66,9 +66,10 @@ public class EpgActivity extends Activity {
     private ArrayList<Time> programData;//得到节目Epg信息
 
     private ArrayList<ArrayList<Epg_progItem>> date_itemdata;//每一个日期得到的各自的全部节目item
-    private ArrayList<int[]> sBtnType;//每一个日期的每一个item的简单按钮的初始状态记录
-    private ArrayList<int[]> sBtnId;//每一个日期的每一个item的简单按钮的id
+    private ArrayList<int[]> sBtnType = null;//每一个日期的每一个item的简单按钮的初始状态记录
+    private ArrayList<int[]> sBtnId = null;//每一个日期的每一个item的简单按钮的id
 
+    private static int tvIndex = 0;
     private static int tvDateCache = 0;//记录日期
     private static boolean undoEventType = false;//回滚按钮状态
 
@@ -133,6 +134,11 @@ public class EpgActivity extends Activity {
 
         epg_progItemAdapter.clear();//清除上一次的节目信息列表
         epg_tvDateAdapter.clear();//清除日期信息
+        if (sBtnId != null) {
+            sBtnId.clear();
+            sBtnType.clear();
+            Log.e(CS.EPGACT_TAG, "清除了按钮信息");
+        }
 
         //得到日期信息
         programDate = DataParse.getEpgProgram(data).getDateArray();
@@ -210,6 +216,7 @@ public class EpgActivity extends Activity {
         public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
             //列表被选择事件
             Log.e(CS.EPGACT_TAG, "选择了第" + pos + "个节目，向服务器请求获取第" + pos + "个节目的EPG信息");
+            tvIndex = pos;
             getSelectEpgInfo(index[pos]);//获取第pos个节目的EPG信息
             //设置被选中的列表文字颜色
             TextView textName = (TextView)findViewById(R.id.epg_TVName);
@@ -346,11 +353,13 @@ public class EpgActivity extends Activity {
 
             //将按钮设置发送给服务器
             int[] id = sBtnId.get(tvDateCache);
+            itemEventType = 0;//变成0
             ReserveEventSend reserveSet = new ReserveEventSend();
             reserveSet.setEventId(Integer.toString(id[itemPos]));
             reserveSet.setEventType(Integer.toString(itemEventType));//请求取消状态
-            reserveSet.setIndex(index[itemPos]);
+            reserveSet.setIndex(index[tvIndex]);
             sendReserveSet(reserveSet);
+            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + Integer.toString(id[itemPos]) + "更改的按钮类型" + Integer.toString(itemEventType) + "节目index" + index[itemPos]);
             Log.e(CS.EPGACT_TAG, "将按钮状态发送给服务器，是日期" + tvDateCache + "是第" + itemPos + "个节目的按钮状态");
 
             undo_simpleBtn();//检查服务回应结果和回滚按钮状态
@@ -415,6 +424,16 @@ public class EpgActivity extends Activity {
             sBtnType.set(tvDateCache, DateEventType);//这里需要改掉列表中的按钮资源图片
             Log.e(CS.EPGACT_TAG, "将日期" + tvDateCache + "的行数：" + DateEventType[itemPos] + "的按钮状态更改为" + DateEventType[itemPos]);
             isBtnSelected[1] = !isBtnSelected[1];
+
+            //将按钮设置发送给服务器
+            int[] id = sBtnId.get(tvDateCache);
+            ReserveEventSend reserveSet = new ReserveEventSend();
+            reserveSet.setEventId(Integer.toString(id[itemPos]));
+            reserveSet.setEventType(Integer.toString(itemEventType));//请求取消状态
+            reserveSet.setIndex(index[tvIndex]);
+            sendReserveSet(reserveSet);
+            Log.e(CS.EPGACT_TAG, "将按钮状态发送给服务器，是日期" + tvDateCache + "是第" + itemPos + "个节目的按钮状态");
+            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + Integer.toString(id[itemPos]) + "更改的按钮类型" + Integer.toString(itemEventType) + "节目index" + index[itemPos]);
         }
         //点击循环录制按钮
         public void clickRecordCycle() {
@@ -441,6 +460,16 @@ public class EpgActivity extends Activity {
             sBtnType.set(tvDateCache, DateEventType);//这里需要改掉列表中的按钮资源图片
             Log.e(CS.EPGACT_TAG, "将日期" + tvDateCache + "的行数：" + DateEventType[itemPos] + "的按钮状态更改为" + DateEventType[itemPos]);
             isBtnSelected[2] = !isBtnSelected[2];
+
+            //将按钮设置发送给服务器
+            int[] id = sBtnId.get(tvDateCache);
+            ReserveEventSend reserveSet = new ReserveEventSend();
+            reserveSet.setEventId(Integer.toString(id[itemPos]));
+            reserveSet.setEventType(Integer.toString(itemEventType));//请求取消状态
+            reserveSet.setIndex(index[tvIndex]);
+            sendReserveSet(reserveSet);
+            Log.e(CS.EPGACT_TAG, "将按钮状态发送给服务器，是日期" + tvDateCache + "是第" + itemPos + "个节目的按钮状态");
+            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + Integer.toString(id[itemPos]) + "更改的按钮类型" + Integer.toString(itemEventType) + "节目index" + index[itemPos]);
         }
         //点击观看一次按钮
         public void clickWatchOnce() {
@@ -466,6 +495,16 @@ public class EpgActivity extends Activity {
             sBtnType.set(tvDateCache, DateEventType);//这里需要改掉列表中的按钮资源图片
             Log.e(CS.EPGACT_TAG, "将日期" + tvDateCache + "的行数：" + DateEventType[itemPos] + "的按钮状态更改为" + DateEventType[itemPos]);
             isBtnSelected[3] = !isBtnSelected[3];
+
+            //将按钮设置发送给服务器
+            int[] id = sBtnId.get(tvDateCache);
+            ReserveEventSend reserveSet = new ReserveEventSend();
+            reserveSet.setEventId(Integer.toString(id[itemPos]));
+            reserveSet.setEventType(Integer.toString(itemEventType));//请求取消状态
+            reserveSet.setIndex(index[tvIndex]);
+            sendReserveSet(reserveSet);
+            Log.e(CS.EPGACT_TAG, "将按钮状态发送给服务器，是日期" + tvDateCache + "是第" + itemPos + "个节目的按钮状态");
+            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + Integer.toString(id[itemPos]) + "更改的按钮类型" + Integer.toString(itemEventType) + "节目index" + index[itemPos]);
         }
         //点击循环观看按钮
         public void clickWatchCycle() {
@@ -491,6 +530,16 @@ public class EpgActivity extends Activity {
             sBtnType.set(tvDateCache, DateEventType);//这里需要改掉列表中的按钮资源图片
             Log.e(CS.EPGACT_TAG, "将日期" + tvDateCache + "的行数：" + DateEventType[itemPos] + "的按钮状态更改为" + DateEventType[itemPos]);
             isBtnSelected[4] = !isBtnSelected[4];
+
+            //将按钮设置发送给服务器
+            int[] id = sBtnId.get(tvDateCache);
+            ReserveEventSend reserveSet = new ReserveEventSend();
+            reserveSet.setEventId(Integer.toString(id[itemPos]));
+            reserveSet.setEventType(Integer.toString(itemEventType));//请求取消状态
+            reserveSet.setIndex(index[tvIndex]);
+            sendReserveSet(reserveSet);
+            Log.e(CS.EPGACT_TAG, "将按钮状态发送给服务器，是日期" + tvDateCache + "是第" + itemPos + "个节目的按钮状态");
+            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + Integer.toString(id[itemPos]) + "更改的按钮类型" + Integer.toString(itemEventType) + "节目index" + index[itemPos]);
         }
     }
 

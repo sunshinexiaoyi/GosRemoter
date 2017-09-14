@@ -2,23 +2,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
+    android:padding="7dp"
+    android:gravity="center"
     android:background="@drawable/home_item_bg"
     >
 
-    <ImageView
-        android:id="@+id/img_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_centerInParent="true" />
-
-    <TextView
-        android:id="@+id/txt_icon"
+    <LinearLayout
+        android:id="@+id/gridItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/img_icon"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:textSize="@dimen/home_item_size" />
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/img_icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/home_more"/>
+
+        <TextView
+            android:id="@+id/txt_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:enabled="false"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

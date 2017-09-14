@@ -31,6 +31,7 @@
     <color name="dialog_out_back">#e5e5e5</color>
     <color name="dialog_in_back">#FFE5E5E5</color>
 
+    <color name="dialog">#0e000000</color>
     <color name="remoter_bg"> #f6f7fb </color>
     <color name="textColorforItemTitle">#ff666666</color>
     <color name="buy">#ff22a7ff</color>

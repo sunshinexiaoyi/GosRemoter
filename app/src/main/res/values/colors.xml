@@ -14,6 +14,7 @@
     <color name="live_program_bg">#fcfcfc</color>
 
 
+   <color name="connect_driver_btn">#808080</color>
     <color name="connect_btn_text">#22A7FF</color>
 
     <color name="remoter_hint">#b9cefa</color>

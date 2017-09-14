@@ -4,6 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -56,6 +59,7 @@ public class ConnectActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
+
         initView();
         initData();
         EventManager.register(this);
@@ -116,16 +120,28 @@ public class ConnectActivity extends Activity {
     }
 
     void initView(){
-        new ImmersionLayout(this).setImmersion();
+        //new ImmersionLayout(this).setImmersion();
+        //沉浸式隐藏标题栏
+        if (Build.VERSION.SDK_INT >= 21) {
+            View decorView = getWindow().getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            getWindow().setNavigationBarColor(Color.TRANSPARENT);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
 
+        //标题栏
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
         titleBar.setNullBackground();
         titleBar.setTextTitle(R.string.connect_title);
+
         titleBar.setImageRight(R.drawable.connect_scan, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startScan();
-                Toast.makeText(ConnectActivity.this, "scan", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConnectActivity.this, "open scan", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -164,8 +180,6 @@ public class ConnectActivity extends Activity {
     private void getDevice(){
         EventManager.send(COM_CONNECT_GET_DEVICE,"", EventMode.OUT);
     }
-
-
 
     private void startScan(){
         //点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转

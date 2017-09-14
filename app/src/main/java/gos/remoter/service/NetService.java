@@ -50,12 +50,14 @@ public class NetService extends Service {
      */
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onRecviveEvent(EventMsg msg){
+        Log.i(TAG,"发送模式:"+msg.getEventMode());
+        Log.i(TAG,"发送命令:"+msg.getCommand());
+        Log.i(TAG,"发送数据:"+new String(msg.getData()));
+
         if(EventMode.OUT == msg.getEventMode()){//对外
             DataPackage dataPackage = new DataPackage();
             dataPackage.command = msg.getCommand();
             dataPackage.setData(msg.getData());
-            Log.i(TAG,"发送命令:"+dataPackage.getCommand());
-            Log.i(TAG,"发送数据:"+new String(dataPackage.getData()));
 
             switch (dataPackage.getCommand())
             {
@@ -75,6 +77,14 @@ public class NetService extends Service {
                             netSender.send(dataPackage.toByte());
                         }catch (Exception e){e.printStackTrace();}
                     }
+                    break;
+            }
+        }else if(EventMode.IN == msg.getEventMode()){//对内
+            switch (msg.getCommand()){
+                case COM_SYS_EXIT://退出
+                    destroyNetService();
+                    break;
+                default:
                     break;
             }
         }
@@ -98,6 +108,7 @@ public class NetService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.e(TAG,"网络服务销毁");
         super.onDestroy();
         EventManager.unregister(this);//取消订阅
     }
@@ -133,7 +144,7 @@ public class NetService extends Service {
                         break;
                 }
             }
-        },0,1000);
+        },0,3000);
     }
 
 
@@ -169,7 +180,7 @@ public class NetService extends Service {
                         e.printStackTrace();
                     }
                 }
-            },0,500);
+            },0,50);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -234,6 +245,14 @@ public class NetService extends Service {
         }
         return  ((ipAddress & 0xff)+"."+(ipAddress>>8 & 0xff)+"."
                 +(ipAddress>>16 & 0xff)+"."+(ipAddress>>24 & 0xff));
+    }
+
+    private void destroyNetService(){
+        Log.i(TAG,"destroyNetService");
+        serverTimer.cancel();
+        netReceiver.close();
+
+        stopSelf();
     }
 
 }

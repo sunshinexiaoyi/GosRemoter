@@ -5,19 +5,34 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import gos.remoter.R;
 import gos.remoter.adapter.ReuseAdapter;
 import gos.remoter.data.GridActivity;
+import gos.remoter.data.Respond;
+import gos.remoter.define.DataParse;
+import gos.remoter.define.SystemInfo;
+import gos.remoter.enumkey.SystemState;
+import gos.remoter.event.EventManager;
+import gos.remoter.event.EventMode;
+import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
 
+import static gos.remoter.define.CommandType.*;
+
+
 public class HomeActivity extends Activity {
+    private String TAG = this.getClass().getSimpleName();
     AlertDialog logoutAlert;
     long firstTime;//保存第一次按退出键的时间
 
@@ -30,12 +45,59 @@ public class HomeActivity extends Activity {
         }
     };
 
+
+    /**
+     * 接收内部事件
+     * @param msg   接收的消息
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRecviveEvent(EventMsg msg){
+        if(EventMode.IN == msg.getEventMode()){  //对内
+            switch (msg.getCommand()){
+                case COM_SYSTEM_RESPOND:    //回应
+                    Respond respond = DataParse.getRespond(msg.getData());
+                    parseRespond(respond);
+                    break;
+                case COM_SYS_EXIT:
+                    finish();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void parseRespond(Respond respond){
+        switch (respond.getCommand()){
+            case COM_CONNECT_DETACH:
+                if(respond.getFlag()){
+                    detach();
+                }else{
+                    Log.i(TAG,"断开连接失败");
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        EventManager.register(this);
         initView();
     }
+
+    @Override
+    protected void onDestroy() {
+        Log.e(TAG,"销毁");
+        sendDetachDevice();
+        super.onDestroy();
+        EventManager.unregister(this);
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -44,8 +106,7 @@ public class HomeActivity extends Activity {
                 Toast.makeText(this, R.string.exit2, Toast.LENGTH_SHORT).show();
                 firstTime = System.currentTimeMillis();
             } else {
-                finish();
-                System.exit(0);
+                exitSystem();
             }
             return true; //不返回，一次就立马退出，
         }
@@ -95,7 +156,7 @@ public class HomeActivity extends Activity {
 
     }
 
-    void logout(){
+    void restartConnect(){
         Intent intent = new Intent(this,ConnectActivity.class);
         startActivity(intent);
         finish();
@@ -115,7 +176,7 @@ public class HomeActivity extends Activity {
                 .setPositiveButton(R.string.home_alert_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        logout();
+                        sendDetachDevice();
                     }
                 }).create();
     }
@@ -127,4 +188,39 @@ public class HomeActivity extends Activity {
 
         logoutAlert.show();
     }
+
+
+    //断开与服务器的连接
+    private void sendDetachDevice(){
+        if(SystemState.ATTACH == SystemInfo.getInstance().getState()) {
+            Log.e(TAG,"发送断开与服务器的连接");
+            EventManager.send(COM_CONNECT_DETACH, "", EventMode.OUT);
+        }
+    }
+
+    private void detach(){
+        if(SystemState.EXIT != SystemInfo.getInstance().getState()) {
+            SystemInfo.getInstance().setState(SystemState.DETACH);
+            restartConnect();
+        }
+    }
+
+    void exitSystem(){
+        if(SystemState.ATTACH == SystemInfo.getInstance().getState()) {
+            sendDetachDevice();
+        }
+        sendExitSystem();
+    }
+
+    /**
+     * 退出系统
+     */
+    void sendExitSystem(){
+        if(SystemState.EXIT != SystemInfo.getInstance().getState()) {
+            Log.e(TAG,"发送退出系统");
+            SystemInfo.getInstance().setState(SystemState.EXIT);
+            EventManager.send(COM_SYS_EXIT,"",EventMode.IN);
+        }
+    }
+
 }

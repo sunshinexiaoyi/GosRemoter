@@ -7,11 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import gos.remoter.R;
@@ -22,7 +24,7 @@ import gos.remoter.define.DataParse;
 import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
-import gos.remoter.fragment.LiverFragment;
+import gos.remoter.fragment.LiveFragment;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
 
@@ -34,27 +36,14 @@ public class LiverActivity extends FragmentActivity implements AdapterView.OnIte
     private ListView mListView;
     private String[] programType;
     private LiverClassifyListAdapter mListAdapter;
-    public static int mPosition;
-    ArrayList<Program> programs;
+    public static int selectPosition = 0;//选择的节目类型
 
     //Fragment资源
-    private LiverFragment liveFragment;
+    private LiveFragment liveFragment;
+    FragmentTransaction fragmentTransaction;
     private int[] image;
-    private String[] program;
 
-    //节目分类下的节目
-    private List<String> list0 = new ArrayList<>();
-    private List<String> list1 = new ArrayList<>();
-    private List<String> list2 = new ArrayList<>();
-    private List<String> list3 = new ArrayList<>();
-    private List<String> list4 = new ArrayList<>();
-    private List<String> list5 = new ArrayList<>();
-    private List<String> list6 = new ArrayList<>();
-    private List<String> list7 = new ArrayList<>();
-    private List<String> list8 = new ArrayList<>();
-    private List<String> list9 = new ArrayList<>();
-
-    private List<List<String>> lists = new ArrayList<>();
+    private HashMap<Integer,ArrayList<Program>> typeList = new HashMap<>();//保存分类的节目列表
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +51,11 @@ public class LiverActivity extends FragmentActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_liver);
         EventManager.register(this);
         initView();
+        initData();
     }
 
     void initView(){
-        initData();
+
         new ImmersionLayout(this).setImmersion();
 
         /*标题栏*/
@@ -91,35 +81,20 @@ public class LiverActivity extends FragmentActivity implements AdapterView.OnIte
                 R.drawable.liver_movies_image, R.drawable.liver_movies_image, R.drawable.liver_movies_image, R.drawable.liver_movies_image};
     }
 
+    private void initData() {
+        initFragment();
+        getProgramList();
+    }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         //拿到当前位置
-        mPosition = position;
-        Log.e("onItemClick", "点击第: " + mPosition + " 项");
+        selectPosition = position;
+        Log.e("onItemClick", "点击第: " + selectPosition + " 项");
 
         //即时刷新adapter
         mListAdapter.notifyDataSetChanged();
-
-        for (int a = 0; a < programType.length; a++) {
-            liveFragment = new LiverFragment();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager()
-                    .beginTransaction();
-            fragmentTransaction.replace(R.id.liver_fragment, liveFragment);
-            Bundle bundle = new Bundle();
-            bundle.putInt("image", image[mPosition]); //需要创建一个图片数组
-            bundle.putString("text", programType[mPosition]); //xml存在一个分类数组
-
-            program = new String[lists.get(mPosition).size()];
-            for (int i = 0; i < lists.get(mPosition).size(); i++) {
-                program[i] = lists.get(mPosition).get(i);
-            }
-
-            //bundle.putSerializable("programList",);
-
-            bundle.putStringArray("program", program); //得到的数据
-            liveFragment.setArguments(bundle);
-            fragmentTransaction.commit();
-        }
+        updateFragment(position);
     }
 
     @Override
@@ -139,7 +114,7 @@ public class LiverActivity extends FragmentActivity implements AdapterView.OnIte
                 ArrayList<Program> programList = DataParse.getProgramList(msg.getData());
                 Log.i(TAG,msg.getData());
                 classify(programList);
-                initFragment();
+                updateFragment(selectPosition);//默认设置选择的节目类型
                 break;
 
             case COM_SYSTEM_RESPOND:    //回应
@@ -166,72 +141,46 @@ public class LiverActivity extends FragmentActivity implements AdapterView.OnIte
 
     }
 
+    /**
+     * 初始化节目列表的fragment
+     */
     public void initFragment() {
         //创建MyFragment对象
-        liveFragment = new LiverFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        liveFragment = new LiveFragment();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.liver_fragment, liveFragment);
-
-        //通过bundle传值给MyFragment
-        Bundle bundle = new Bundle();
-        bundle.putInt("image", image[mPosition]); //图片数组
-        bundle.putString("text", programType[mPosition]); //分类节目名数组
-
-        program = new String[lists.get(mPosition).size()]; //分类后的节目名
-        for (int i = 0; i < lists.get(mPosition).size(); i++) {
-            program[i] = lists.get(mPosition).get(i);
-        }
-
-        bundle.putStringArray("program", program);
-        liveFragment.setArguments(bundle);
         fragmentTransaction.commit();
     }
 
+    /**
+     * 将指定类型的节目更新到列表
+     * @param type  指定类型
+     */
+    public void updateFragment(int type){
+        if(!typeList.containsKey(type)){//类型节目不存在
+            String errorInfo = getResources().getString(R.string.live_not_found_program);
+            Toast.makeText(this, errorInfo, Toast.LENGTH_SHORT).show();
+            liveFragment.updateUi(programType[type], image[type],new ArrayList<Program>());//发送空节目数据
 
+            return;
+        }
+
+        liveFragment.updateUi(programType[type], image[type],typeList.get(type));
+    }
 
 
     //节目分类
     public void classify( ArrayList<Program> programs) {
+        for(Program p:programs){
+            Integer type = p.getType();
 
-        for (Program p : programs) {
-            if(0 == p.getType()) {
-                list0.add(p.getName());
-            } else if (1 == p.getType()) {
-                list1.add(p.getName());
-            } else if (2 == p.getType()) {
-                list2.add(p.getName());
-            } else if (3 == p.getType()) {
-                list3.add(p.getName());
-            } else if (4 == p.getType()) {
-                list4.add(p.getName());
-            } else if (5 == p.getType()) {
-                list5.add(p.getName());
-            } else if (6 == p.getType()) {
-                list6.add(p.getName());
-            } else if (7 == p.getType()) {
-                list7.add(p.getName());
-            } else if (8 == p.getType()) {
-                list8.add(p.getName());
-            } else if (9 == p.getType()) {
-                list9.add(p.getName());
+            if(!typeList.containsKey(type)){ //判断是否存在该类型的key
+                typeList.put(type,new ArrayList<Program>());    //添加该类型
             }
+            typeList.get(type).add(p);  //添加该类型节目
         }
-
-        lists.add(list0);
-        lists.add(list1);
-        lists.add(list2);
-        lists.add(list3);
-        lists.add(list4);
-        lists.add(list5);
-        lists.add(list6);
-        lists.add(list7);
-        lists.add(list8);
-        lists.add(list9);
     }
 
-    private void initData() {
-        getProgramList();
-    }
 
     /**
      * 获取节目列表

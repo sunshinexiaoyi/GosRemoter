@@ -1,10 +1,12 @@
 package gos.remoter.data;
 
+import java.io.Serializable;
+
 /**
  * Created by wuxy on 2017/7/7.
  */
 
-public class Program extends IndexClass{
+public class Program extends IndexClass implements Serializable{
     private String name;
     private int lcn;
     private int serviceId;

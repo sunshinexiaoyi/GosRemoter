@@ -11,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 
@@ -21,6 +24,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 
 import gos.remoter.R;
+import gos.remoter.adapter.ReuseAdapter;
 import gos.remoter.data.IndexClass;
 import gos.remoter.data.Program;
 import gos.remoter.data.ProgramUrl;
@@ -63,11 +67,22 @@ public class LiveFragment extends Fragment {
 
     private ErrorMaskView errorMaskView = null;
 
+    ImageView imageView;
+    TextView textView;
+    GridView gridView;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    ReuseAdapter<Program> gridAdapter = new ReuseAdapter<Program>(R.layout.liver_program_gridview_item) {
+        @Override
+        public void bindView(ViewHolder holder, Program obj) {
+            holder.setText(R.id.name,obj.getName());
+        }
+    };
 
     public LiveFragment() {
         // Required empty public constructor
@@ -113,7 +128,7 @@ public class LiveFragment extends Fragment {
                              Bundle savedInstanceState) {
         if(null == rootView){
 
-            rootView   = inflater.inflate(R.layout.fragment_live, container, false);
+            rootView   = inflater.inflate(R.layout.fragment_liver, container, false);
             initLayout(rootView);
             initData();
 
@@ -172,14 +187,13 @@ public class LiveFragment extends Fragment {
         if(EventMode.IN == msg.getEventMode()){//对内
             switch (msg.getCommand()){
                 case COM_SYS_HEARTBEAT_STOP:
-                    detach();
-                    break;
-                case COM_LIVE_SET_PROGRAM_LIST:
-                    setProgramList(parseProgramData(msg.getData()));
+                    //detach();
                     break;
                 case COM_LIVE_SET_PROGRAM_URL:
                     errorMaskView.setVisibleGone();
                     ProgramUrl programUrl = JSON.parseObject(msg.getData(),ProgramUrl.class);
+                    Log.i(TAG,"programUrl:"+programUrl);
+
                     if(curProgram == null)
                         break;
                     Log.i(TAG,"getIndex:"+curProgram.getIndex());
@@ -187,10 +201,7 @@ public class LiveFragment extends Fragment {
                         startPlayByUrl(programUrl.getUrl());
                     }
                     break;
-                case COM_LIVE_UPDATE_PROGRAM_LIST:
-                    sendFinishLive();
-                    getProgramList();   //节目列表更新时，重新获取节目列表
-                    break;
+
                 case COM_SYSTEM_RESPOND:    //回应
                     Respond respond = DataParse.getRespond(msg.getData());
                     switch (respond.getCommand()){
@@ -201,7 +212,7 @@ public class LiveFragment extends Fragment {
                             break;
                         case COM_CONNECT_ATTACH:
                             if(respond.getFlag()){
-                                attach();
+                              //  attach();
                             }
                             break;
                         case COM_LIVE_STOP_PROGRAM:
@@ -224,43 +235,25 @@ public class LiveFragment extends Fragment {
     }
 
     protected void initLayout(View view) {
-        TitleBar mTitleBar = (TitleBar) view.findViewById(R.id.titlebar);
-        mTitleBar.setTitleInfoWithText(R.string.app_name);
-
-        listView = (ListView) rootView.findViewById(R.id.programList);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(null != curProgram){     //停止上一个节目
-                    stopProgram(curProgram.getIndex());
-                }
-                curProgram = programList.get(position);
-                Log.i(TAG,"getIndex:\n"+curProgram.getIndex());
-                getProgramUrl(curProgram.getIndex());
-            }
-        });
-
         errorMaskView = (ErrorMaskView)rootView.findViewById(R.id.maskView);
-        if( SystemInfo.getInstance().getState() == SystemState.DETACH){
-            detach();
-        }
+        imageView  = (ImageView) view.findViewById(R.id.liver_fragment_image);
+        textView  = (TextView) view.findViewById(R.id.liver_fragment_textview);
+        gridView  = (GridView) view.findViewById(R.id.liver_fragment_gridview);
 
     }
 
     private void initData(){
-        if( SystemInfo.getInstance().getState() == SystemState.ATTACH) {
-            getProgramList();
-        }
+        gridView.setAdapter(gridAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                curProgram = gridAdapter.getItem(position);
+                getProgramUrl(curProgram.getIndex());
+            }
+        });
     }
 
-    /**
-     * 获取节目列表
-     */
-    private void getProgramList(){
-        Log.i(TAG,"获取节目列表:");
-        errorMaskView.setLoadingStatus();
-        EventManager.send(COM_LIVE_GET_PROGRAM_LIST,"", EventMode.OUT);
-    }
+
 
     /**
      * 获取节目url
@@ -291,31 +284,10 @@ public class LiveFragment extends Fragment {
         EventManager.send(COM_SYS_JUMP_CONNECT,"", EventMode.IN);
     }
 
-    private void setProgramList(String[] programs)
-    {
-        errorMaskView.setVisibleGone();
-        //创建ArrayAdapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (context,android.R.layout.simple_expandable_list_item_1,programs);
-        //获取ListView对象，通过调用setAdapter方法为ListView设置Adapter设置适配器
-        listView.setAdapter(adapter);
-    }
 
-    private String[] parseProgramData(String data){
-        //Log.i(TAG,"programList:\n"+data);
-        programList = DataParse.getProgramList(data);
-        Log.i(TAG,"programList:\n"+JSON.toJSONString(programList));
-        String[] programs = new String[programList.size()];
-        int i = 0;
-        for (Program p :
-                programList) {
-            programs[i++] = p.getName();
-        }
-
-        return programs;
-    }
 
     private void startPlayByUrl(String url){
+        Log.i(TAG,"url:"+url);
         Intent intent = new Intent(context,LiveActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(MsgKey.url,url);
@@ -343,7 +315,6 @@ public class LiveFragment extends Fragment {
     }
 
     private void detach(){
-        setProgramList(new String[0]);  //清空节目列表
 
         errorMaskView.setErrorStatus(true,R.string.jump_connect);
         errorMaskView.setOnRetry(R.string.jump,new View.OnClickListener() {
@@ -354,9 +325,16 @@ public class LiveFragment extends Fragment {
         });
     }
 
-    private void attach(){
-        getProgramList();
+    public void updateUi(String title,int image,ArrayList<Program> programList){
+        Log.i("list",programList.toString());
+        gridAdapter.reset(programList);
+
+        //设置数据
+        imageView.setImageResource(image);
+        textView.setText("──  "+title+"  ──");
+
     }
+
 
 
 }

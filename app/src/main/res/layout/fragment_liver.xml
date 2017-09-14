@@ -7,7 +7,9 @@
     android:paddingTop="10dp"
     android:orientation="vertical"
     tools:context="gos.remoter.fragment.LiverFragment">
-
+    <gos.remoter.view.ErrorMaskView
+        android:id="@+id/maskView"
+        style="@style/ErrorMaskView"/>
     <ImageView
         android:id="@+id/liver_fragment_image"
         android:layout_width="match_parent"

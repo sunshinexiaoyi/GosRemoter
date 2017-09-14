@@ -6,5 +6,7 @@ package gos.remoter.enumkey;
 
 public enum SystemState {
     ATTACH, //连接
-    DETACH  //断开连接
+    DETACH,  //断开连接
+    EXIT  //退出状态
+
 }

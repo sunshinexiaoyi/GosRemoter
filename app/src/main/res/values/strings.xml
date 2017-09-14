@@ -16,12 +16,12 @@
 
     <!--节目列表-->
     <string name="program_lcn">LCN</string>
-    <string name="program_name">Name</string>
+    <string name="program_name">节目名</string>
     <string name="program_title">节目列表</string>
 
 
     <!--遥控器-->
-    <string name="remoter_title">Remoter</string>
+    <string name="remoter_title">遥控器</string>
     <string name="remoter_number">123</string>
     <string name="remoter_menu">Menu</string>
     <string name="remoter_fav">Fav</string>
@@ -52,7 +52,7 @@
 
     <!--直播-->
     <string name="live_title">直播</string>
-
+    <string name="live_not_found_program">不存在该类型的节目</string>
 
 
     <string name="title_activity_init">InitActivity</string>

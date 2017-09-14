@@ -146,15 +146,16 @@ public class ExampleUnitTest {
                 sendData = JSON.toJSONString(getProgramList());
                 break; //
             case COM_LIVE_GET_PROGRAM_URL :
-                System.out.println("获取节目url");
                 //String testUrl ="
                 dataPackage.command = COM_LIVE_SET_PROGRAM_URL;
                 IndexClass indexClass = JSON.parseObject(dataPackage.getData(),IndexClass.class);
                 int index = indexClass.getIndex();
-                if(index<testUrl.length){
-                    ProgramUrl programUrl = new ProgramUrl(index,testUrl[index]);
-                    sendData = JSON.toJSONString(programUrl);
-                }
+                System.out.println("获取节目url  index:"+index);
+
+
+                ProgramUrl programUrl = new ProgramUrl(index,testUrl[0]);
+                sendData = JSON.toJSONString(programUrl);
+
 
                 break; //
 

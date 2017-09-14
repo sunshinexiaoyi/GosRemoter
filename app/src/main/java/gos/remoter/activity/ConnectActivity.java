@@ -63,6 +63,7 @@ public class ConnectActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        sendExitSystem();
         super.onDestroy();
         EventManager.unregister(this);
     }
@@ -83,7 +84,7 @@ public class ConnectActivity extends Activity {
                     deviceAdapter.add(device);
                     break;
                 case COM_SYS_EXIT:  //系统退出时，断开连接
-
+                    finish();
                     break;
                 case COM_SYSTEM_RESPOND:
                     Respond respond = DataParse.getRespond(msg.getData());
@@ -270,7 +271,17 @@ public class ConnectActivity extends Activity {
     void startHomeActivity(){
         Intent intent = new Intent(this,HomeActivity.class);
         startActivity(intent);
-        finish();
+    }
+
+
+    /**
+     * 退出系统
+     */
+    void sendExitSystem(){
+        if(SystemState.EXIT != SystemInfo.getInstance().getState()) {
+            Log.e(TAG,"退出系统");
+            EventManager.send(COM_SYS_EXIT,"",EventMode.IN);
+        }
     }
 
 }

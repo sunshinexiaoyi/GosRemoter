@@ -5,10 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft = "18dp"
-    android:descendantFocusability="blocksDescendants"
-    >
-
-    <!--缩略信息-->
+    android:descendantFocusability="blocksDescendants">
 
     <!--详细设置-->
     <LinearLayout

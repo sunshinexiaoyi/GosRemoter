@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import gos.remoter.R;
+import gos.remoter.adapter.Epg_myAdapter;
 import gos.remoter.adapter.ReuseAdapter;
 import gos.remoter.data.GridActivity;
 import gos.remoter.data.Respond;

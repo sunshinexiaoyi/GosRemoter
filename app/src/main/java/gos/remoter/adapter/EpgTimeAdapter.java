@@ -43,17 +43,14 @@ public class EpgTimeAdapter extends BaseAdapter{
         imgIcon.put(4,R.drawable.ic_record);
 
     }
-
     @Override
     public int getCount() {
         return timeArrayList.size();
     }
-
     @Override
     public Object getItem(int position) {
         return timeArrayList.get(position);
     }
-
     @Override
     public long getItemId(int position) {
         return position;
@@ -61,6 +58,7 @@ public class EpgTimeAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        //保存view
         ViewHolder holder = null;
         if(convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.schedule_item,parent,false);
@@ -74,11 +72,12 @@ public class EpgTimeAdapter extends BaseAdapter{
         }
 
         //Log.i("getEventType",timeArrayList.get(position).getEventType());
+        //得到当前的位置
         Time time = timeArrayList.get(position);
+        //设置这个位置的数据
         holder.imgBtn.setImageResource(imgIcon.get(Integer.parseInt(time.getEventType())));
         holder.imgBtn.setOnClickListener(new ClickSet(context,time));
-        holder.imgBtn.setFocusable(false); //设置为false，item才能触发click事件
-
+        holder.imgBtn.setFocusable(false); //设置为false，item才能触发click事件//不需要
         String timeStr = time.getStartTime()+"->"+time.getEndTime();
         holder.time.setText(timeStr);
         holder.event.setText(time.getEvent());
@@ -87,8 +86,9 @@ public class EpgTimeAdapter extends BaseAdapter{
     }
 
 
+    //提交数据更改
+    //clear()方法？
     public void setNotifyDataSetChanged(ArrayList<Time> timeArrayList) {
-
         this.timeArrayList.clear();
         this.timeArrayList.addAll(timeArrayList);
        // Log.i("reserve","setNotifyDataSetChanged");
@@ -96,23 +96,20 @@ public class EpgTimeAdapter extends BaseAdapter{
         super.notifyDataSetChanged();
     }
 
-    public void setMenuCallback(ReserveSetCallback reserveSetCallback)
-    {
+    public void setMenuCallback(ReserveSetCallback reserveSetCallback) {
         this.reserveSetCallback = reserveSetCallback;
     }
 
+    //点击事件
     class ClickSet implements View.OnClickListener
     {
         Context context;
         Time time;
-
-
-        public ClickSet(Context context,Time time)
-        {
+        //clone方法？自定义方法，转换Json数据串
+        public ClickSet(Context context,Time time) {
             this.time = time.clone();
             this.context = context;
         }
-
 
         @Override
         public void onClick(View v) {
@@ -123,6 +120,7 @@ public class EpgTimeAdapter extends BaseAdapter{
                 PopupMenu popupMenu = new PopupMenu(context,v);
                 popupMenu.getMenuInflater().inflate(R.menu.menu_reserve_set,popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    //先获取事件类型
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         Log.i("getItemId",""+item.getItemId());
@@ -173,7 +171,6 @@ public class EpgTimeAdapter extends BaseAdapter{
             }
 
         }
-
     }
 
     static class ViewHolder{

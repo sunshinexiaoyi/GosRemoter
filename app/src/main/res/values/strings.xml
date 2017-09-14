@@ -62,7 +62,6 @@
     <string name="tab_menu_connect">连接</string>
     <string name="tab_menu_epg">EPG</string>
 
-
     <string name="mask_stop_loading">停止加载</string>
 
     <!--退出弹出框-->
@@ -435,4 +434,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_epg">EPGActivity</string>
 </resources>

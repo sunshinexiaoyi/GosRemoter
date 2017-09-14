@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--EPG-->
+    <color name="epg_blue_Toolbar">#2891e2</color>
     <color name="epg_blackTitle">#323232</color>
     <color name="epg_littleBlack">#808080</color>
+    <color name="epg_black">#ffffff</color>
+
+    <color name="colorPrimary">#2891e2</color>
+    <color name="colorPrimaryDark">#2891e2</color>
 
     <color name="title_bar_text">#FFFFFFFF</color>
 
@@ -20,6 +26,7 @@
     <color name="remoter_hint">#b9cefa</color>
     <color name="colorPrimary">#22A7FF</color>
     <color name="colorPrimaryDark">#22A7FF</color>
+    <color name="home_grid_bg">#eaeaea</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="bg_topbar">#FF4081</color>

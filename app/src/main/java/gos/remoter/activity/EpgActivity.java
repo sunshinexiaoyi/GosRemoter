@@ -625,10 +625,10 @@ public class EpgActivity extends Activity {
         /*标题栏*/
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
         titleBar.setTextTitle(R.string.connect_title);
-        titleBar.setImageRight(R.drawable.home_logout, new View.OnClickListener() {
+        titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
             @Override
-            public void onClick(View v) {//退出连接
-                logoutAlert();
+            public void onClick(View v) {
+                finish();
             }
         });
         EventManager.register(this);//注册EventManager

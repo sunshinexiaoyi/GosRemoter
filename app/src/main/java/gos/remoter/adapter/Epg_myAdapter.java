@@ -291,6 +291,8 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
             spinner.setOnItemSelectedListener(itemSelected);
             return this;
         }
+
+        //13、设置更改列表中文字颜色
     }
 
 

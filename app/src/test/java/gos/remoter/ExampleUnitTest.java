@@ -173,14 +173,14 @@ public class ExampleUnitTest {
                 sendData = JSON.toJSONString(epgPrograms.get(indexClass1.getIndex()) );
                 break;
             case COM_EPG_SET_RESERVE:
-                System.out.println("设置预定事件");
+                System.out.println("----设置预定事件----");
+
                 ReserveEventSend reserveEventSend = DataParse.getReserveEventSend(dataPackage.getData());
-
-
                 EpgProgram epgProgram = epgPrograms.get(reserveEventSend.getIndex());
 
-                System.out.println("事件ID:"+reserveEventSend.getEventId());
-                System.out.println("事件类型:"+reserveEventSend.getEventType());
+                System.out.println("节目索引  index:"+reserveEventSend.getIndex());
+                System.out.println("ID      eventId:"+reserveEventSend.getEventId());
+                System.out.println("类型     eventType:"+reserveEventSend.getEventType());
 
                 Time setTime = getTimeByEventId(epgProgram.getDateArray(),reserveEventSend.getEventId());
                 if(null != setTime){

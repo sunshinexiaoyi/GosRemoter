@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 
@@ -25,6 +26,8 @@ import gos.remoter.data.EpgProgram;
 import gos.remoter.data.ExpandableTime;
 import gos.remoter.data.IndexClass;
 import gos.remoter.data.Program;
+import gos.remoter.data.ReserveEvent;
+import gos.remoter.data.ReserveEventSend;
 import gos.remoter.data.Respond;
 import gos.remoter.data.Time;
 import gos.remoter.define.DataParse;
@@ -44,6 +47,9 @@ public class EpgActivity extends Activity {
 
     ArrayList<Program> programList ;
     ArrayList<Date> dateList;
+    Program selectProgram;
+
+    int datePosition = 0;
 
     private EpgProgram epgProgram = null;
     ReuseAdapter<Program> programAdapter = new ReuseAdapter<Program>(R.layout.item_epg_spinner) {
@@ -167,8 +173,14 @@ public class EpgActivity extends Activity {
             }
             time.setEventType(setEventType);
 
-            //发送修改事件
 
+            ReserveEventSend set = new ReserveEventSend();
+            set.setEventType(time.getEventType());
+            set.setEventId(time.getEventID());
+            set.setIndex(selectProgram.getIndex());
+
+            //发送修改事件
+            sendReserveSet(set);
 
             notifyDataSetChanged();
         }
@@ -253,38 +265,52 @@ public class EpgActivity extends Activity {
             case COM_EPG_SET_SELECT_PROGRAM:
                 epgProgram = DataParse.getEpgProgram(msg.getData());
                 dateList = epgProgram.getDateArray();
+                Log.i(TAG,"COM_EPG_SET_SELECT_PROGRAM");
+                Log.i(TAG,msg.getData());
+
                 dateAdapter.reset(dateList);
+                datePosition = datePosition>dateList.size()?0:datePosition;
+                dateSpinner.setSelection(datePosition,true);
 
                 break;
             case COM_EPG_CLASH_RESERVE:
                 break;
             case COM_SYSTEM_RESPOND:    //回应
                 Respond respond = DataParse.getRespond(msg.getData());
-                switch (respond.getCommand()){
-                    case COM_CONNECT_DETACH:
-                        if(respond.getFlag()){
-                           // detach();
-                        }
-                        break;
-                    case COM_CONNECT_ATTACH:
-                        if(respond.getFlag()){
-                           // attach();
-                        }
-                        break;
-                    case COM_EPG_SET_RESERVE:
-                        if(respond.getFlag()){
-                           // aotuSet = true;
-                           // getSelectEpgInfo(curProgram.getIndex());
-                        }
-                    default:
-                        break;
-                }
+                parseRespond(respond);
                 break;
             default:
                 break;
         }
 
     }
+
+    private void parseRespond( Respond respond){
+        switch (respond.getCommand()){
+            case COM_CONNECT_DETACH:
+                if(respond.getFlag()){
+                    // detach();
+                }
+                break;
+            case COM_CONNECT_ATTACH:
+                if(respond.getFlag()){
+                    // attach();
+                }
+                break;
+            case COM_EPG_SET_RESERVE:
+                if(!respond.getFlag()){
+                    // aotuSet = true;
+                    Toast.makeText(this, "setting failed", Toast.LENGTH_SHORT).show();
+                    getSelectEpgInfo(selectProgram.getIndex());//设置失败，重新获取
+                }else {
+                    Log.i(TAG,"设置epg预定事件成功");
+                }
+
+            default:
+                break;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -314,6 +340,7 @@ public class EpgActivity extends Activity {
             }
         });
 
+        //epg事件列表
         ListView epgListView = (ListView)findViewById(R.id.epgListView);
         epgListView.setAdapter(epgAdapter);
         epgListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -329,13 +356,15 @@ public class EpgActivity extends Activity {
             }
         });
 
+        //节目下拉列表
         programSpinner = (Spinner)findViewById(R.id.programSpinner);
         programSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Program selectProgram = programAdapter.getItem(position);
+                selectProgram = programAdapter.getItem(position);
                 Log.i(TAG,"selectProgram:"+selectProgram.getName());
                 getSelectEpgInfo(selectProgram.getIndex());
+
             }
 
             @Override
@@ -345,15 +374,18 @@ public class EpgActivity extends Activity {
         });
         programSpinner.setAdapter(programAdapter);
 
+        //日期下拉列表
         dateSpinner = (Spinner)findViewById(R.id.dateSpinner);
         dateSpinner.setAdapter(dateAdapter);
         dateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                datePosition = position;
+
                 Date date = dateAdapter.getItem(position);
 
                 ArrayList<Time> timeList = date.getTimeArray();
-                Log.i("epg","t"+timeList.toString());
+                Log.i(TAG,"time size:"+timeList.size());
                 ArrayList<ExpandableTime> expandableTimes =ExpandableTime.toExpandableTime(timeList);
                 epgAdapter.reset(expandableTimes);
             }
@@ -363,11 +395,7 @@ public class EpgActivity extends Activity {
 
             }
         });
-
-
-
     }
-
 
     private void initData() {
         getProgramList();
@@ -405,5 +433,14 @@ public class EpgActivity extends Activity {
         }
 
         return dates;
+    }
+
+    /**
+     * 发送预定事件设置
+     * @param reserveSet
+     */
+    private void sendReserveSet(ReserveEventSend reserveSet){
+        EventManager.send(COM_EPG_SET_RESERVE,JSON.toJSONString(reserveSet), EventMode.OUT);
+
     }
 }

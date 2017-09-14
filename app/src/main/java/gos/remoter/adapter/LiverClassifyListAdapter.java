@@ -54,11 +54,10 @@ public class LiverClassifyListAdapter extends BaseAdapter {
         if (position == LiverActivity.mPosition) {
             tv.setBackgroundResource(R.drawable.liver_checked);
             tv.setTextColor(Color.parseColor("#3490DB"));
-            tv.setTextSize(22);
-          ;
+            tv.setTextSize(18);
             Log.i("live",  tv.getLayoutParams()+"");
         } else {
-            convertView.setBackgroundColor(Color.parseColor("#ffffff"));
+            tv.setBackgroundColor(Color.parseColor("#ffffff"));
         }
         return convertView;
     }

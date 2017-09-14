@@ -40,7 +40,7 @@ public class LiverFragment extends Fragment {
 
         //设置数据
         imageView.setImageResource(image);
-        textView.setText("──  "+text+"  ──");
+        textView.setText(text);
         arrayAdapterGridview = new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 R.layout.liver_program_gridview_item, program);
         gridView.setAdapter(arrayAdapterGridview);

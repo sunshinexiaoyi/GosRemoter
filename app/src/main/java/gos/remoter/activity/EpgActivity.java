@@ -71,69 +71,48 @@ public class EpgActivity extends Activity {
 
     private static int tvIndex = 0;
     private static int tvDateCache = 0;//记录日期
+    private static String tvDateStr;
     private static boolean undoEventType = false;//回滚按钮状态
-
+    private static boolean mySelect = false;//默认下拉选择
     private int[] simpleBtn;
     private int[] fullSettingBtn;
     private int[] fullBtnId;
-
     private int[] tempBtn;
-
-    private Handler handler;
-
+    private Handler handler;//回滚时改变ui
 
 /****************节目数据处理部分****************/
-    /**节目号处理
-     *包括：
-     * 1、获取所有节目号
-     * 2、将所有节目号装载到节目号下拉列表中
-     */
     private void makeProgramList(String data){
         programInfo = DataParse.getProgramList(data);//得到节目总信息
         String[] programList = new String[programInfo.size()];//得到一个合适的长度数组
         Log.e(CS.EPGACT_TAG, "节目数目是：" + programInfo.size());
         index = new int[programInfo.size()];//得到一个合适的长度数组
-        //将节目号提取出来
         for (int i = 0; i < programInfo.size(); i++) {
             index[i] =  programInfo.get(i).getIndex();//得到节目索引
             programList[i] = programInfo.get(i).getName();//得到节目名字
         }
-
         for (String program : programList) {
             epg_tvNameAdapter.add(new Epg_TVName(program));
         }
-
-        Log.e(CS.EPGACT_TAG, "向服务器获取第一个节目中的EPG信息，index是：" + index[0]);
         getSelectEpgInfo(index[0]);//获取第1个节目信息首先被显示在列表中
-        //装载节目列表完成
     }
 
-    /**节目信息处理
-     *
-     * 1、获取节目Epg信息
-     * 2、将节目信息装载到节目列表中
-     */
+    //节目信息处理
     private void makeProgramData(String data) {
         String progName = null;//频道中节目的名字
         String progWatchTime = null;//播放时间
         String progShortDes = null;//短描述
         int[] eventType = null;//一个频道中的所有item的按钮状态的集合
         int[] eventId = null;//一个频道中所有item的按钮状态的id集合
-        //简单按钮对应的资源id
-        int[] simpleBtn = new int[]{R.drawable.epg_simple_btn_null, R.drawable.epg_simple_watchbtn_once, R.drawable.epg_simple_watchbtn_cycle,
-                R.drawable.epg_simple_recbtn_once, R.drawable.epg_simple_recbtn_cycle,};//按钮类型
-        //详细按钮对应的资源id
-        int[] fullSettingBtnFalse = new int[]{R.drawable.epg_simple_btn_null, R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
+        int[] fullSettingBtnFalse = new int[] {R.drawable.epg_simple_btn_null, R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
                 R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false};
-        //详细按钮被按下的资源id
-        int [] fullSettingBtnTrue = new int[]{R.drawable.epg_simple_btn_null, R.drawable.epg_full_lbtn_true, R.drawable.epg_full_rbtn_true,
+        final int[] simpleBtn = new int[]{R.drawable.epg_simple_btn_null, R.drawable.epg_simple_recbtn_once, R.drawable.epg_simple_recbtn_cycle,
+                R.drawable.epg_simple_watchbtn_once, R.drawable.epg_simple_watchbtn_cycle};//按钮类型
+        final int[] fullSettingBtnTrue = new int[]{R.drawable.epg_simple_btn_null, R.drawable.epg_full_lbtn_true, R.drawable.epg_full_rbtn_true,
                 R.drawable.epg_full_lbtn_true, R.drawable.epg_full_rbtn_true};
-        //备份资源id
         final int[] temp = new int[]{R.drawable.epg_simple_btn_null, R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
                 R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false};
 
         epg_progItemAdapter.clear();//清除上一次的节目信息列表
-        epg_tvDateAdapter.clear();//清除日期信息
         if (sBtnId != null) {
             sBtnId.clear();
             sBtnType.clear();
@@ -142,83 +121,60 @@ public class EpgActivity extends Activity {
 
         //得到日期信息
         programDate = DataParse.getEpgProgram(data).getDateArray();
-        String[] dateList = new String[programDate.size()];//得到合适的长度
-        //Log.e(CS.EPGACT_TAG, "日期数目：" + programDate.size() + "个");
+        String[] programDateList = new String[programDate.size()];//得到合适的长度
 
         date_itemdata = new ArrayList<>();//一个频道中所有日期的所有信息的集合
         sBtnType = new ArrayList<int[]>();//一个频道中所有日期的所有按钮状态的集合
         sBtnId = new ArrayList<int[]>();//一个频道中所有日期的所有按钮id的集合
 
-    /***************这里是一个频道中的日期遍历*******************/
-        //Log.e(CS.EPGACT_TAG, "此节目一共有" + programDate.size() + "个日期的信息");
+        /***************这里是一个频道中的日期遍历*******************/
         for (int i = 0; i < programDate.size(); i++) {
+            programDateList[i] = programDate.get(i).getDate();//得到一个日期字符串
+            epg_tvDateAdapter.add(new Epg_TVDate(programDateList[i]));//将日期添加到日期列表中
+            programData = programDate.get(i).getTimeArray();//这里得到了一个日期的所有节目item
+
             ArrayList<Epg_progItem> date_item = new ArrayList<Epg_progItem>();
-            //得到一个日期字符串
-            dateList[i] = programDate.get(i).getDate();
-
-            //将日期添加到日期列表中
-            epg_tvDateAdapter.add(new Epg_TVDate(dateList[i]));
-            Log.e(CS.EPGACT_TAG, "添加了日期" + dateList[i]);
-
-            //这里得到了一个日期的所有节目item
-            programData = programDate.get(i).getTimeArray();
             eventType = new int[programData.size()];
             eventId = new int[programData.size()];
 
             /***************这里是一个日期中的所有信息遍历*****************/
             for (int j = 0; j < programData.size(); j++) {
+                progName = programData.get(j).getEvent();//获取到节目名
+                progWatchTime = programData.get(j).getStartTime() + "~" + programData.get(j).getEndTime();//获取到节目播放时间
+                progShortDes = programData.get(j).getShortDes();//获取到节目短描述
+                eventType[j] = Integer.parseInt(programData.get(j).getEventType());//获取到按钮的状态
 
-                //获取到节目名、节目播放时间、节目短描述、按钮状态
-                progName = programData.get(j).getEvent();
-                progWatchTime = programData.get(j).getStartTime() + "~" + programData.get(j).getEndTime();
-                progShortDes = programData.get(j).getShortDes();
-
-                //获取到按钮的状态
-                eventType[j] = Integer.parseInt(programData.get(j).getEventType());
-                //Log.e(CS.EPGACT_TAG, "得到的按钮状态是：" + eventType[j]);//0, 1, 2, 3, 4
-                fullSettingBtnFalse[eventType[j]] = fullSettingBtnTrue[eventType[j]];//更改被按下状态的资源id
-
-                //获取到按钮的eventId
+                fullSettingBtnFalse[eventType[j]] = fullSettingBtnTrue[eventType[j]];//更改被按下状态的资源id，使用后需要还原
                 eventId[j] = Integer.parseInt(programData.get(j).getEventID());
-                Log.e(CS.EPGACT_TAG, "得到的按钮eventId是：" + eventId[j]);
+                Log.e(CS.EPGACT_TAG, "得到的按钮eventType是：" + eventType[j]);
 
                 //保存了一个节目item
                 date_item.add(new Epg_progItem(progName, progWatchTime, progShortDes, simpleBtn[eventType[j]], fullSettingBtnFalse[1], fullSettingBtnFalse[2], fullSettingBtnFalse[3], fullSettingBtnFalse[4]));
-                //Log.e(CS.EPGACT_TAG, "保存了日期" + dateList[i] + "的第" + j + "个节目item");
                 fullSettingBtnFalse[eventType[j]] = temp[eventType[j]];//还原数组值
             }
 
-
             sBtnId.add(eventId);//保存当前日期的全部节目的按钮id
             sBtnType.add(eventType);//保存当前日期的全部节目的按钮状态
-            //保存一个日期的全部节目信息
-            date_itemdata.add(date_item);
+            date_itemdata.add(date_item);//保存一个日期的全部节目信息
         }
 
         //添加第一个日期的节目信息到列表
-        tvDateCache = date_itemdata.size() < tvDateCache? 0 : tvDateCache;//如果没有这个日期则回到第一天的节目
         for (int i = 0; i < date_itemdata.get(0).size(); i++) {
-            epg_progItemAdapter.add((date_itemdata.get(tvDateCache)).get(i));
+            epg_progItemAdapter.add((date_itemdata.get(0)).get(i));
         }
     }
-
-    /**节目的Epg设置数据
-     *？？？
-     */
-    private void makeProgramEpgSet(String data) {
-    }
-
 
 /*******************自定义点击事件***************************/
     //频道下拉列表被选择事件
     private class NameItemSelect implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-            //列表被选择事件
             Log.e(CS.EPGACT_TAG, "选择了第" + pos + "个节目，向服务器请求获取第" + pos + "个节目的EPG信息");
             tvIndex = pos;
             getSelectEpgInfo(index[pos]);//获取第pos个节目的EPG信息
-            //设置被选中的列表文字颜色
+            mySelect = false;//复位默认触发日期下拉选择第0个列表的开关
+            epg_tvDateAdapter.clear();//清除日期信息
+
             TextView textName = (TextView)findViewById(R.id.epg_TVName);
             textName.setTextColor(Color.parseColor("#2891e2"));//被选中的item设置蓝色字体
         }
@@ -231,17 +187,23 @@ public class EpgActivity extends Activity {
         public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
             Log.e(CS.EPGACT_TAG, "选择了第" + pos + "个节目日期");
             tvDateCache = pos;
+            tvDateStr = programDate.get(pos).getDate();//记录日期
+            Log.e(CS.EPGACT_TAG, "记录了日期" + tvDateStr);
 
-            //重置频道颜色
-            TextView textName = (TextView)findViewById(R.id.epg_TVName);
-            textName.setTextColor(Color.parseColor("#808080"));
-            //设置被选中的列表文字颜色
-            TextView textDate = (TextView) view.findViewById(R.id.epg_TVDate);
-            textDate.setTextColor(Color.parseColor("#2891e2"));//被选中的item设置蓝色字体
+            if (!mySelect) {
+                Log.e(CS.EPGACT_TAG, "被默认触发");
+                mySelect = true;
+            } else {
+                Log.e(CS.EPGACT_TAG, "手动改变日期");
+                TextView textName = (TextView) findViewById(R.id.epg_TVName);
+                textName.setTextColor(Color.parseColor("#808080"));//重置频道颜色
 
-            //刷新到这个日期的节目信息
+                TextView textDate = (TextView) view.findViewById(R.id.epg_TVDate);
+                textDate.setTextColor(Color.parseColor("#2891e2"));//被选中的item设置蓝色字体
+            }
+
             epg_progItemAdapter.clear();//清除当前的列表中信息
-            for (int i = 0; i < date_itemdata.get(pos).size(); i++) {
+            for (int i = 0; i < date_itemdata.get(tvDateCache).size(); i++) {
                 //这里需要更新按钮的状态
                 int[] tempSimpleBtn = sBtnType.get(tvDateCache);
                 int temp = fullSettingBtn[tempSimpleBtn[i]];
@@ -255,7 +217,9 @@ public class EpgActivity extends Activity {
             }
         }
         @Override
-        public void onNothingSelected (AdapterView<?> adapterView) {}
+        public void onNothingSelected (AdapterView<?> adapterView) {
+            Log.e(CS.EPGACT_TAG, "执行了日期的onNothingSelected()方法");
+        }
     }
     //Item的点击事件
     private class ItemClick implements AdapterView.OnItemClickListener {
@@ -293,16 +257,13 @@ public class EpgActivity extends Activity {
         private boolean[] isBtnSelected = new boolean[] {false, false, false, false, false};//删除 + 4个按钮的状态开关
         private boolean[] temp = new boolean[] {false, false, false, false, false};//4个按钮的状态开关+删除
 
-        int tempBtnType;//记录改变前的按钮状态，实现可能的状态回滚
-
-        //构造方法初始化
         private ButtonClick(Epg_myAdapter.Holder holder) {
             this.holder = holder;
             itemPos = holder.getItemPosition();
             DateEventType = sBtnType.get(tvDateCache);//当前日期的按钮状态
             itemEventType = DateEventType[itemPos];//当前item的按钮状态
             Log.e(CS.EPGACT_TAG, "item的行数是：" + itemPos + "日期是" + tvDateCache + "按钮状态是：" + itemEventType);
-            isBtnSelected[itemEventType] = true;//第0个是无设置状态
+            isBtnSelected[itemEventType] = true;//将被选中状态加入按钮状态集合中
         }
 
         @Override
@@ -342,37 +303,26 @@ public class EpgActivity extends Activity {
 
         //点击简略按钮
         public void clickSimpleBtn() {
-            //这里要知道上面的type，只有不为0时才有点击效果
             Log.e(CS.EPGACT_TAG, "简单按钮的状态是：" + itemEventType);
-
             if (itemEventType != 0) {
                 Log.e(CS.EPGACT_TAG, "处于设置状态模式");//改变状态
                 holder.setBackgroundResource(R.id.epg_simple_btn, R.drawable.epg_simple_btn_null);//使简单按钮透明化
                 holder.setBackgroundResource(fullBtnId[itemEventType - 1], fullSettingBtn[itemEventType]);
             }
 
-            //将按钮设置发送给服务器
-            int[] id = sBtnId.get(tvDateCache);
             itemEventType = 0;//变成0
-            ReserveEventSend reserveSet = new ReserveEventSend();
-            reserveSet.setEventId(Integer.toString(id[itemPos]));
-            reserveSet.setEventType(Integer.toString(itemEventType));//请求取消状态
-            reserveSet.setIndex(index[tvIndex]);
-            sendReserveSet(reserveSet);
-            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + Integer.toString(id[itemPos]) + "更改的按钮类型" + Integer.toString(itemEventType) + "节目index" + index[itemPos]);
-            Log.e(CS.EPGACT_TAG, "将按钮状态发送给服务器，是日期" + tvDateCache + "是第" + itemPos + "个节目的按钮状态");
+            sendBtnEventType();//将按钮状态发送给服务器
 
             undo_simpleBtn();//检查服务回应结果和回滚按钮状态
         }
-            //服务器回应结果处理1
+            //服务器回应结果处理&&回滚
             public void undo_simpleBtn() {
             //检查服务回应结果和回滚按钮状态
             Thread tsimpleBtn = new Thread() {
-                boolean unfoldTheRun;
+                boolean unfold;
                 public void run() {
-                    //需要等待服务器回应结果
                     try {
-                        Thread.sleep(600);
+                        Thread.sleep(600);//需要等待服务器回应结果
                     } catch (InterruptedException sleepError) {Log.e(CS.EPGACT_TAG, "睡眠失败");}
 
                     if (undoEventType) {
@@ -390,28 +340,24 @@ public class EpgActivity extends Activity {
                         DateEventType[itemPos] = 0;//将这个状态更新到列表信息中
                         sBtnType.set(tvDateCache, DateEventType);//这里需要改掉列表中的按钮资源图片
                         isBtnSelected[itemEventType] = false;//复位
-                        Log.e(CS.EPGACT_TAG, "将日期" + tvDateCache + "的行数：" + DateEventType[itemPos] + "的按钮状态更改为" + DateEventType[itemPos]);
                     }
                     Log.e(CS.EPGACT_TAG, "线程死亡");
                 }
             };
             tsimpleBtn.start();
         }
-
         //点击录制一次按钮
         public void clickRecordOnce() {
             //更改按钮样式，要将按钮状态更改提交给保存的列表
             if (!isBtnSelected[1]) {
                 Log.e(CS.EPGACT_TAG, "需要设置按钮状态");
-                //这里应该设置为透明，防止GONE后文本描述占满父容器
-                holder.setBackgroundResource(R.id.epg_simple_btn, R.drawable.epg_simple_recbtn_once);
                 DateEventType[itemPos] = 1;//记录效果
                 itemEventType = DateEventType[itemPos];//更新简单按钮状态
+                holder.setBackgroundResource(R.id.epg_simple_btn, R.drawable.epg_simple_recbtn_once);
                 holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_lbtn_true);
                 holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_rbtn_false);
                 holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_lbtn_false);
                 holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_rbtn_false);
-
                 System.arraycopy(temp, 0, isBtnSelected, 0, temp.length);
             } else {
                 Log.e(CS.EPGACT_TAG, "需要取消按钮状态");
@@ -425,30 +371,18 @@ public class EpgActivity extends Activity {
             Log.e(CS.EPGACT_TAG, "将日期" + tvDateCache + "的行数：" + DateEventType[itemPos] + "的按钮状态更改为" + DateEventType[itemPos]);
             isBtnSelected[1] = !isBtnSelected[1];
 
-            //将按钮设置发送给服务器
-            int[] id = sBtnId.get(tvDateCache);
-            ReserveEventSend reserveSet = new ReserveEventSend();
-            reserveSet.setEventId(Integer.toString(id[itemPos]));
-            reserveSet.setEventType(Integer.toString(itemEventType));//请求取消状态
-            reserveSet.setIndex(index[tvIndex]);
-            sendReserveSet(reserveSet);
-            Log.e(CS.EPGACT_TAG, "将按钮状态发送给服务器，是日期" + tvDateCache + "是第" + itemPos + "个节目的按钮状态");
-            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + Integer.toString(id[itemPos]) + "更改的按钮类型" + Integer.toString(itemEventType) + "节目index" + index[itemPos]);
+            sendBtnEventType();//将按钮设置发送给服务器
         }
         //点击循环录制按钮
         public void clickRecordCycle() {
-            //更改按钮样式
             if (!isBtnSelected[2]) {
-                //这里应该设置为透明，防止GONE后文本描述占满父容器
                 DateEventType[itemPos] = 2;//记录效果
                 itemEventType = DateEventType[itemPos];
                 holder.setBackgroundResource(R.id.epg_simple_btn, R.drawable.epg_simple_recbtn_cycle);
-
                 holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_lbtn_false);
                 holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_rbtn_true);
                 holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_lbtn_false);
                 holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, R.drawable.epg_full_rbtn_false);
-
                 System.arraycopy(temp, 0, isBtnSelected, 0, temp.length);
             } else {
                 DateEventType[itemPos] = 0;
@@ -461,24 +395,14 @@ public class EpgActivity extends Activity {
             Log.e(CS.EPGACT_TAG, "将日期" + tvDateCache + "的行数：" + DateEventType[itemPos] + "的按钮状态更改为" + DateEventType[itemPos]);
             isBtnSelected[2] = !isBtnSelected[2];
 
-            //将按钮设置发送给服务器
-            int[] id = sBtnId.get(tvDateCache);
-            ReserveEventSend reserveSet = new ReserveEventSend();
-            reserveSet.setEventId(Integer.toString(id[itemPos]));
-            reserveSet.setEventType(Integer.toString(itemEventType));//请求取消状态
-            reserveSet.setIndex(index[tvIndex]);
-            sendReserveSet(reserveSet);
-            Log.e(CS.EPGACT_TAG, "将按钮状态发送给服务器，是日期" + tvDateCache + "是第" + itemPos + "个节目的按钮状态");
-            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + Integer.toString(id[itemPos]) + "更改的按钮类型" + Integer.toString(itemEventType) + "节目index" + index[itemPos]);
+            sendBtnEventType();//将按钮设置发送给服务器
         }
         //点击观看一次按钮
         public void clickWatchOnce() {
-            //更改按钮样式
             if (!isBtnSelected[3]) {
                 DateEventType[itemPos] = 3;//记录效果
                 itemEventType = DateEventType[itemPos];
                 holder.setBackgroundResource(R.id.epg_simple_btn, R.drawable.epg_simple_watchbtn_once);
-
                 holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_lbtn_false);
                 holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_rbtn_false);
                 holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_lbtn_true);
@@ -496,24 +420,14 @@ public class EpgActivity extends Activity {
             Log.e(CS.EPGACT_TAG, "将日期" + tvDateCache + "的行数：" + DateEventType[itemPos] + "的按钮状态更改为" + DateEventType[itemPos]);
             isBtnSelected[3] = !isBtnSelected[3];
 
-            //将按钮设置发送给服务器
-            int[] id = sBtnId.get(tvDateCache);
-            ReserveEventSend reserveSet = new ReserveEventSend();
-            reserveSet.setEventId(Integer.toString(id[itemPos]));
-            reserveSet.setEventType(Integer.toString(itemEventType));//请求取消状态
-            reserveSet.setIndex(index[tvIndex]);
-            sendReserveSet(reserveSet);
-            Log.e(CS.EPGACT_TAG, "将按钮状态发送给服务器，是日期" + tvDateCache + "是第" + itemPos + "个节目的按钮状态");
-            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + Integer.toString(id[itemPos]) + "更改的按钮类型" + Integer.toString(itemEventType) + "节目index" + index[itemPos]);
+            sendBtnEventType();//将按钮设置发送给服务器
         }
         //点击循环观看按钮
         public void clickWatchCycle() {
-            //更改按钮样式
             if (!isBtnSelected[4]) {
                 DateEventType[itemPos] = 4;//记录效果
                 itemEventType = DateEventType[itemPos];
                 holder.setBackgroundResource(R.id.epg_simple_btn, R.drawable.epg_simple_watchbtn_cycle);
-
                 holder.setBackgroundResource(R.id.epg_full_recBtnOnce, R.drawable.epg_full_lbtn_false);
                 holder.setBackgroundResource(R.id.epg_full_recBtnCycle, R.drawable.epg_full_rbtn_false);
                 holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, R.drawable.epg_full_lbtn_false);
@@ -531,6 +445,10 @@ public class EpgActivity extends Activity {
             Log.e(CS.EPGACT_TAG, "将日期" + tvDateCache + "的行数：" + DateEventType[itemPos] + "的按钮状态更改为" + DateEventType[itemPos]);
             isBtnSelected[4] = !isBtnSelected[4];
 
+            sendBtnEventType();//将按钮设置发送给服务器
+        }
+            //将按钮状态发送给服务器
+            public void sendBtnEventType() {
             //将按钮设置发送给服务器
             int[] id = sBtnId.get(tvDateCache);
             ReserveEventSend reserveSet = new ReserveEventSend();
@@ -538,46 +456,39 @@ public class EpgActivity extends Activity {
             reserveSet.setEventType(Integer.toString(itemEventType));//请求取消状态
             reserveSet.setIndex(index[tvIndex]);
             sendReserveSet(reserveSet);
-            Log.e(CS.EPGACT_TAG, "将按钮状态发送给服务器，是日期" + tvDateCache + "是第" + itemPos + "个节目的按钮状态");
-            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + Integer.toString(id[itemPos]) + "更改的按钮类型" + Integer.toString(itemEventType) + "节目index" + index[itemPos]);
+            Log.e(CS.EPGACT_TAG, "发送的按钮ID是：" + id[itemPos] +  " && 频道index" + index[tvIndex]+ " && 日期" + tvDateCache + " && 更改的按钮类型" + itemEventType + " && 按钮所在item" + itemPos);
         }
     }
-
 
 /*****************初始化部分***********************/
     public void init_adapter() {
         Context context = EpgActivity.this;
-        //初始化数据
-        itemData = new ArrayList<Epg_progItem>();
+        itemData = new ArrayList<Epg_progItem>();//初始化数据
         tvNameData = new ArrayList<Epg_TVName>();
         tvDateData = new ArrayList<Epg_TVDate>();
-        //找到各自列表的Id
-        progListView = (ListView) findViewById(R.id.epg_mainProgList);
+
+        progListView = (ListView) findViewById(R.id.epg_mainProgList);//找到各自列表的Id
         tvNameSpinner = (Spinner) findViewById(R.id.epg_mainTVName);
         tvDateSpinner = (Spinner) findViewById(R.id.epg_mainTVDate);
         //初始化适配器
         epg_progItemAdapter = new Epg_myAdapter<Epg_progItem>(context, itemData, R.layout.epg_progitem) {
             @Override
             public void bindView(Holder holder, Epg_progItem obj) {
-                holder.setText(R.id.epg_progName, obj.getProgName());
-                holder.setText(R.id.epg_progTime, obj.getPorgTime());
-
                 holder.setTextMarquee(R.id.epg_simpleProgInfo);//长文本缩略处理
                 View fullSetting = holder.getItem().findViewById(R.id.epg_full_ProgSetting);
                 fullSetting.setVisibility(View.GONE);//隐藏详细设置
-
                 holder.setText(R.id.epg_simpleProgInfo, obj.getProgInfo());
+
+                holder.setText(R.id.epg_progName, obj.getProgName());
+                holder.setText(R.id.epg_progTime, obj.getPorgTime());
                 holder.setBackgroundResource(R.id.epg_simple_btn,obj.getSimpleBtn());
                 holder.setBackgroundResource(R.id.epg_full_recBtnOnce, obj.getRecBtnOnce());
                 holder.setBackgroundResource(R.id.epg_full_recBtnCycle, obj.getRecBtnCycle());
                 holder.setBackgroundResource(R.id.epg_full_watchBtnOnce, obj.getWatchBtnOnce());
                 holder.setBackgroundResource(R.id.epg_full_watchBtnCycle, obj.getWatchBtnCycle());
 
-                //item的监听
-                holder.setItemOnClickListener(progListView, new ItemClick());
-
-                //item中的按钮监听
-                ButtonClick buttonClick = new ButtonClick(holder);
+                holder.setItemOnClickListener(progListView, new ItemClick());//节目列表的监听
+                ButtonClick buttonClick = new ButtonClick(holder);//节目列表中按钮的监听
                 holder.setOnClickListener(R.id.epg_simple_btn, buttonClick);
                 holder.setOnClickListener(R.id.epg_full_recBtnOnce, buttonClick);
                 holder.setOnClickListener(R.id.epg_full_recBtnCycle, buttonClick);
@@ -589,31 +500,25 @@ public class EpgActivity extends Activity {
             @Override
             public void bindView(Holder holder, Epg_TVName obj) {
                 holder.setText(R.id.epg_TVName, obj.getTVName());
-
-                //添加节目号列表选择事件
-                holder.setItemSelectListener(tvNameSpinner, new NameItemSelect());
+                holder.setItemSelectListener(tvNameSpinner, new NameItemSelect());//添加节目号列表选择事件的监听
             }
         };
         epg_tvDateAdapter = new Epg_myAdapter<Epg_TVDate>(context, tvDateData, R.layout.epg_spinner_tvdate) {
             @Override
             public void bindView(Holder holder, Epg_TVDate obj) {
                 holder.setText(R.id.epg_TVDate, obj.getTVDate());
-
-                //添加节目号列表选择事件
-                holder.setItemSelectListener(tvDateSpinner, new DateItemSelect());
+                holder.setItemSelectListener(tvDateSpinner, new DateItemSelect());//添加节目号列表选择事件
             }
         };
-        //列表使用适配器
-        progListView.setAdapter(epg_progItemAdapter);
+
+        progListView.setAdapter(epg_progItemAdapter);//列表使用适配器
         tvNameSpinner.setAdapter(epg_tvNameAdapter);
         tvDateSpinner.setAdapter(epg_tvDateAdapter);
         Log.e(CS.EPGACT_TAG, CS.EPGACT_INITADA_SUCEESS);//初始化适配器成功
 
-        //向服务器获取第一个节目信息，但节目列表不需要重复获取了
         Log.e(CS.EPGACT_TAG, "向服务器获取节目数据");
         getProgramList();//获取第一个节目的所有信息，装载到列表中
     }
-
 
 /*******************必需重写的方法***********************/
     @Override
@@ -622,9 +527,9 @@ public class EpgActivity extends Activity {
         setContentView(R.layout.epg_main);
         new ImmersionLayout(this).setImmersion();
         handler = new Handler();
-        /*标题栏*/
-        TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-        titleBar.setTextTitle(R.string.connect_title);
+
+        TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);//标题栏
+        titleBar.setTextTitle(R.string.epg_title);
         titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -637,13 +542,10 @@ public class EpgActivity extends Activity {
 
         simpleBtn = new int[] {R.drawable.epg_simple_btn_null, R.drawable.epg_simple_recbtn_once, R.drawable.epg_simple_recbtn_cycle,
                 R.drawable.epg_simple_watchbtn_once, R.drawable.epg_simple_watchbtn_cycle};
-
         fullSettingBtn = new int[] {R.drawable.epg_simple_btn_null, R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false,
                 R.drawable.epg_full_lbtn_false, R.drawable.epg_full_rbtn_false};
-
         tempBtn = new int[] {R.drawable.epg_simple_btn_null, R.drawable.epg_full_lbtn_true, R.drawable.epg_full_rbtn_true,
                 R.drawable.epg_full_lbtn_true, R.drawable.epg_full_rbtn_true};
-
         fullBtnId = new int[] {R.id.epg_full_recBtnOnce, R.id.epg_full_recBtnCycle, R.id.epg_full_watchBtnOnce, R.id.epg_full_watchBtnCycle};
     }
     @Override
@@ -651,18 +553,16 @@ public class EpgActivity extends Activity {
         Log.e(CS.EPG_TAG, CS.EPG_ONDESTROY);//流程顺序索引
         super.onDestroy();
         EventManager.unregister(this);//取消注册event接收器
-        Log.e(CS.EPG_TAG, CS.EPGACT_UNREGISTER_EVENTMANAGER);//告知取消注册event
-        Log.e(CS.EPGACT_TAG, CS.EPGACT_DEATH);//告知EPGACT被杀死
+        Log.e(CS.EPG_TAG, CS.EPGACT_UNREGISTER_EVENTMANAGER + CS.EPGACT_DEATH);//告知取消注册event//告知EPGACT被杀死
     }
 
     /*******************事件接收器*******************/
     @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
     public void onReceiveEvent(EventMsg msg) {
-        //接收消息为空，不做处理
         if(msg.getEventMode() == EventMode.OUT) {
-            return;
+            return;//接收消息为空，不做处理
         }
-        //接收Event
+
         switch (msg.getCommand()){
             //设置节目列表event
             case COM_LIVE_SET_PROGRAM_LIST: {
@@ -693,41 +593,33 @@ public class EpgActivity extends Activity {
     }
 
 /*****************向服务器要求获取数据***********************/
-    //获取节目列表
     private void getProgramList() {
-        Log.i(CS.EPGACT_TAG, "获取节目列表:");
-        EventManager.send(COM_LIVE_GET_PROGRAM_LIST,"", EventMode.OUT);
+        EventManager.send(COM_LIVE_GET_PROGRAM_LIST,"", EventMode.OUT);//获取节目列表
     }
-    //获取选中的节目epg信息
     private void getSelectEpgInfo(int index){
         IndexClass indexClass = new IndexClass(index);
-        EventManager.send(COM_EPG_GET_SELECT_PROGRAM, JSON.toJSONString(indexClass), EventMode.OUT);
+        EventManager.send(COM_EPG_GET_SELECT_PROGRAM, JSON.toJSONString(indexClass), EventMode.OUT);//获取选中的节目epg信息
     }
-    //发送预定事件设置
     private void sendReserveSet(ReserveEventSend reserveSet){
-        EventManager.send(COM_EPG_SET_RESERVE,JSON.toJSONString(reserveSet), EventMode.OUT);
+        EventManager.send(COM_EPG_SET_RESERVE,JSON.toJSONString(reserveSet), EventMode.OUT);//发送预定事件设置
     }
-
 
 /*******************关于退出和状态栏***********************/
-    //退出
     void logout(){
         Intent intent = new Intent(this,ConnectActivity.class);
         startActivity(intent);
-        finish();
+        finish();//退出
     }
     void initLogoutAlert(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        logoutAlert = builder.setIcon(R.drawable.home_logout_black)
-                .setTitle(R.string.homeTitle)
+        logoutAlert = builder.setIcon(R.drawable.home_logout_black).setTitle(R.string.homeTitle)
                 .setMessage(R.string.home_alert_msg)
                 .setNegativeButton(R.string.home_alert_negative, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         logoutAlert.dismiss();
                     }
-                })
-                .setPositiveButton(R.string.home_alert_positive, new DialogInterface.OnClickListener() {
+                }).setPositiveButton(R.string.home_alert_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         logout();
@@ -738,7 +630,6 @@ public class EpgActivity extends Activity {
         if(null == logoutAlert){
             initLogoutAlert();
         }
-
         logoutAlert.show();
     }
 }

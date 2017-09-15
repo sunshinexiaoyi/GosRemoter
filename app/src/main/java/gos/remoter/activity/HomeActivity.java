@@ -126,7 +126,6 @@ public class HomeActivity extends Activity {
         titleBar.setImageRight(R.drawable.home_logout, new View.OnClickListener() {
             @Override
             public void onClick(View v) {//退出连接
-                //Toast.makeText(HomeActivity.this, "logout", Toast.LENGTH_SHORT).show();
                 logoutAlert();
             }
         });
@@ -152,6 +151,7 @@ public class HomeActivity extends Activity {
 
                 Intent intent = new Intent(HomeActivity.this,selectActivity.getActivity());
                 startActivity(intent);
+                finish();//！！！
             }
         } );
 

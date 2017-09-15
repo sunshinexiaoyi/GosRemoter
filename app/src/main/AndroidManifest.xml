@@ -27,6 +27,7 @@
         <activity android:name=".activity.InitActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleInstance"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +38,8 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleInstance">
 
             <!-- 键盘会覆盖屏幕,避免屏幕整体上移 -->
             <!-- 主页面只允许竖屏，遥控器显示不允许横屏 -->
@@ -50,35 +52,27 @@
             android:exported="true" />
 
         <activity
+            android:launchMode="singleInstance"
             android:name=".activity.LiveActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"> <!-- 非重启Activity的横竖屏切换 -->
-        </activity>
+            android:configChanges="orientation|keyboardHidden|screenSize"/> <!-- 非重启Activity的横竖屏切换 -->
 
         <!-- 隐藏键盘 -->
         <!-- 全屏 -->
         <activity
+            android:launchMode="singleInstance"
             android:name="qr.zxing.MipcaActivityCapture"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
-        <!--EPGACT-->
-        <activity android:name=".activity.EPGActivity"
-            android:theme="@style/EPGTheme"></activity>
+        <activity android:name=".activity.ConnectActivity" android:launchMode="singleInstance"/>
+        <activity android:name=".activity.HomeActivity" android:launchMode="singleInstance"/>
 
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".activity.ConnectActivity" />
-        <activity android:name=".activity.HomeActivity" >
+        <activity android:name=".activity.RemoterActivity" android:launchMode="singleInstance">
 
         </activity>
-
-        <activity android:name=".activity.RemoterActivity" >
-
-        </activity>
-        <activity android:name=".activity.EpgActivity" />
-        <activity android:name=".activity.LiverActivity" />
-        <activity android:name=".activity.ProgramActivity"></activity>
+        <activity android:name=".activity.EpgActivity" android:launchMode="singleInstance"/>
+        <activity android:name=".activity.LiverActivity" android:launchMode="singleInstance"/>
+        <activity android:name=".activity.ProgramActivity" android:launchMode="singleInstance"></activity>
     </application>
-
-
 </manifest>

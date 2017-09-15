@@ -65,11 +65,18 @@ public class ConnectActivity extends Activity {
         EventManager.register(this);
     }
 
+    //！！！
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventManager.unregister(this);
+        finish();
+    }
+
     @Override
     protected void onDestroy() {
-        sendExitSystem();
+        //sendExitSystem();
         super.onDestroy();
-        EventManager.unregister(this);
     }
 
     /**
@@ -80,38 +87,42 @@ public class ConnectActivity extends Activity {
     public void onRecviveEvent(EventMsg msg){
         if(EventMode.IN == msg.getEventMode()){  //对内
             switch (msg.getCommand()){
-                case COM_SYS_HEARTBEAT_STOP:
-
+                case COM_SYS_HEARTBEAT_STOP: {
                     break;
-                case COM_CONNECT_SET_DEVICE:
+                }
+                case COM_CONNECT_SET_DEVICE: {
                     Device device = DataParse.getDevice(msg.getData());
                     deviceAdapter.add(device);
                     break;
-                case COM_SYS_EXIT:  //系统退出时，断开连接
+                }
+                case COM_SYS_EXIT: {
+                    //系统退出时，断开连接
                     finish();
                     break;
-                case COM_SYSTEM_RESPOND:
+                }
+                case COM_SYSTEM_RESPOND: {
                     Respond respond = DataParse.getRespond(msg.getData());
-                    switch (respond.getCommand()){
+                    switch (respond.getCommand()) {
                         case COM_CONNECT_DETACH:
-                            if(respond.getFlag()){
+                            if (respond.getFlag()) {
 
-                            }else{
-                                Log.i(TAG,"断开连接失败");
+                            } else {
+                                Log.i(TAG, "断开连接失败");
                             }
                             break;
                         case COM_CONNECT_ATTACH:
-                            if(respond.getFlag()){
+                            if (respond.getFlag()) {
                                 attach();
 
-                            }else {
-                                Log.i(TAG,"连接设备失败");
+                            } else {
+                                Log.i(TAG, "连接设备失败");
                             }
                             break;
                         default:
                             break;
                     }
                     break;
+                }
                 default:
                     break;
 
@@ -141,11 +152,10 @@ public class ConnectActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-            if(null != selectDevice){
-                attachDevice(selectDevice);
-
+                if(null != selectDevice){
+                  attachDevice(selectDevice);
+                }
             }
-}
         });
 
         deviceSpinner = (Spinner)findViewById(R.id.deviceSpinner);
@@ -157,12 +167,8 @@ public class ConnectActivity extends Activity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
-
     }
 
     private void initData(){

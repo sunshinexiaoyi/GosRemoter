@@ -192,6 +192,7 @@ public class EpgActivity extends Activity {
 
             if (!mySelect) {
                 Log.e(CS.EPGACT_TAG, "被默认触发");
+                Spinner spinner = (Spinner)findViewById(R.id.epg_mainTVDate);
                 mySelect = true;
             } else {
                 Log.e(CS.EPGACT_TAG, "手动改变日期");

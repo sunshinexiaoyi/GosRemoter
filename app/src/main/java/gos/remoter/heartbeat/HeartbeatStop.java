@@ -6,5 +6,5 @@ package gos.remoter.heartbeat;
  */
 
 public interface HeartbeatStop {
-    public void callStopFun();
+    void callStopFun();
 }

@@ -46,7 +46,6 @@ public class HomeActivity extends Activity {
         }
     };
 
-
     /**
      * 接收内部事件
      * @param msg   接收的消息
@@ -87,6 +86,8 @@ public class HomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        System.gc();
+        ACTCollector.add(this);//添加到收集器
         EventManager.register(this);
         initView();
     }
@@ -97,6 +98,7 @@ public class HomeActivity extends Activity {
         sendDetachDevice();
         super.onDestroy();
         EventManager.unregister(this);
+
     }
 
 
@@ -151,7 +153,6 @@ public class HomeActivity extends Activity {
 
                 Intent intent = new Intent(HomeActivity.this,selectActivity.getActivity());
                 startActivity(intent);
-                finish();//！！！
             }
         } );
 

@@ -27,9 +27,7 @@ public class PlayerOptions {
         try {
             return this.getInteger(name);
         } catch (NullPointerException var4) {
-            ;
         } catch (ClassCastException var5) {
-            ;
         }
 
         return defaultValue;

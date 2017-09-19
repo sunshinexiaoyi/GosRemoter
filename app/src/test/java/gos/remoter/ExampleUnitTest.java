@@ -10,6 +10,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import gos.remoter.data.Date;
 import gos.remoter.data.Device;
@@ -223,11 +224,13 @@ public class ExampleUnitTest {
         epgProgram.setServiceId(10);
         epgProgram.setType(index%4);
 
-        String str = "好的每tion取出对应的boolean值，然后再进行checkbox的状态设置； 而笔者的做法则是在entity类中加入了一个boolean值用于判断，";
+        String str = "好的每tion取出对应的boolean值，然后再进行checkbox的状态设置，呵呵呵呵";
 
         ArrayList<Date> dateArrayList = epgProgram.getDateArray();
         int position = 0;
-        for(int i=0;i<5;i++){
+        Random random = new Random();
+        //int dateCount = random.nextInt(25) + 1;//1~26之间的随机数
+        for(int i=1;i<6;i++){
             Date date = new Date();
             int startDate = index +i;
             date.setDate(String.format("2017-08-%d",startDate));

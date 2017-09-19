@@ -198,7 +198,7 @@ public class MartianTabWidget extends LinearLayout implements View.OnFocusChange
     /**
      * Let {@link android.widget.TabHost} know that the user clicked on a tab indicator.
      */
-    public static interface OnTabSelectionChanged {
+    public interface OnTabSelectionChanged {
         /**
          * Informs the TabHost which tab was selected. It also indicates
          * if the tab was clicked/pressed or just focused into.
@@ -208,6 +208,6 @@ public class MartianTabWidget extends LinearLayout implements View.OnFocusChange
          * or due to focus entering the tab through navigation. Pass true
          * if it was due to a press/click and false otherwise.
          */
-        public void onTabSelectionChanged(int tabIndex, boolean clicked);
+        void onTabSelectionChanged(int tabIndex, boolean clicked);
     }
 }

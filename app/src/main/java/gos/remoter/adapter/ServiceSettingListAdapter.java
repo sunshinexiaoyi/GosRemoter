@@ -27,7 +27,7 @@ public class ServiceSettingListAdapter extends BaseAdapter{
 
     public ServiceSettingListAdapter(Context context, ArrayList<String> address){
         this.mcontext = context;
-        this.address = address;
+        ServiceSettingListAdapter.address = address;
     }
     public int getCount(){
         if(address == null)
@@ -62,9 +62,9 @@ public class ServiceSettingListAdapter extends BaseAdapter{
     public void notifyDataSetChanged(ArrayList<String> myAddress){
         super.notifyDataSetChanged();
         if(myAddress == null){
-            this.address = null;
+            address = null;
         }else{
-            this.address = myAddress;
+            address = myAddress;
         }
     }
 }

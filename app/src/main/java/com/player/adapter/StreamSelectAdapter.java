@@ -50,7 +50,7 @@ public class StreamSelectAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = this.layoutInflater.inflate(R.layout.simple_player_list_item, (ViewGroup) null);
+            convertView = this.layoutInflater.inflate(R.layout.simple_player_list_item, null);
             holder = new ViewHolder();
             holder.streamName = (TextView) convertView.findViewById(R.id.simple_player_stream_name);
             convertView.setTag(holder);

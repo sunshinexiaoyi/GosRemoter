@@ -14,7 +14,6 @@
 
     <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
     <!-- 自动聚焦权限 -->
     <application
         android:name=".define.SystemInfo"
@@ -22,13 +21,12 @@
         android:icon="@drawable/gospell_icon_indonesia"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
-        <activity android:name=".activity.InitActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.InitActivity"
             android:launchMode="singleInstance"
-            >
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,9 +35,9 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleInstance">
+            android:windowSoftInputMode="adjustPan">
 
             <!-- 键盘会覆盖屏幕,避免屏幕整体上移 -->
             <!-- 主页面只允许竖屏，遥控器显示不允许横屏 -->
@@ -52,27 +50,37 @@
             android:exported="true" />
 
         <activity
-            android:launchMode="singleInstance"
             android:name=".activity.LiveActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"/> <!-- 非重启Activity的横竖屏切换 -->
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance" /> <!-- 非重启Activity的横竖屏切换 -->
+
 
         <!-- 隐藏键盘 -->
         <!-- 全屏 -->
         <activity
-            android:launchMode="singleInstance"
             android:name="qr.zxing.MipcaActivityCapture"
             android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <activity android:name=".activity.ConnectActivity" android:launchMode="singleInstance"/>
-        <activity android:name=".activity.HomeActivity" android:launchMode="singleInstance"/>
-
-        <activity android:name=".activity.RemoterActivity" android:launchMode="singleInstance">
-
-        </activity>
-        <activity android:name=".activity.EpgActivity" android:launchMode="singleInstance"/>
-        <activity android:name=".activity.LiverActivity" android:launchMode="singleInstance"/>
-        <activity android:name=".activity.ProgramActivity" android:launchMode="singleInstance"></activity>
+        <activity
+            android:name=".activity.ConnectActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".activity.HomeActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".activity.RemoterActivity"
+            android:launchMode="singleInstance"></activity>
+        <activity
+            android:name=".activity.EpgActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".activity.LiverActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".activity.ProgramActivity"
+            android:launchMode="singleInstance" />
     </application>
+
 </manifest>

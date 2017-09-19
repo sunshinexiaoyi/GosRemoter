@@ -1005,7 +1005,7 @@ public class PlayerView {
         } else {
             if (isHasSwitchStream || status == PlayStateParams.STATE_ERROR) {
                 //换源之后声音可播，画面卡住，主要是渲染问题，目前只是提供了软解方式，后期提供设置方式
-                videoView.setRender(videoView.RENDER_TEXTURE_VIEW);
+                videoView.setRender(IjkVideoView.RENDER_TEXTURE_VIEW);
                 videoView.setVideoPath(currentUrl);
                 videoView.seekTo(currentPosition);
                 isHasSwitchStream = false;

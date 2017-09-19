@@ -4,10 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -41,7 +45,7 @@ import gos.remoter.view.TitleBarNew;
 import static gos.remoter.define.CommandType.*;
 
 public class ConnectActivity extends Activity {
-    private  final String TAG = this.getClass().getSimpleName();
+    private String TAG = this.getClass().getSimpleName();
     private final static int SCANNING_GREQUEST_CODE = 1;
     private final static int PERMISSION_CAMERA = 2;
 
@@ -54,11 +58,15 @@ public class ConnectActivity extends Activity {
 
     private Spinner deviceSpinner;
     private Device selectDevice;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
+        System.gc();
+        view = findViewById(R.id.connect);
+        ACTCollector.add(this);//添加到收集器
 
         initView();
         initData();
@@ -70,13 +78,33 @@ public class ConnectActivity extends Activity {
     public void onStop() {
         super.onStop();
         EventManager.unregister(this);
+        TAG = null;
+        Log.e("消息", "ConnectACT死掉了");
         finish();
+        System.gc();
     }
 
     @Override
     protected void onDestroy() {
         //sendExitSystem();
         super.onDestroy();
+        ACTCollector.remove(ACTCollector.getByName(ConnectActivity.this));//从收集器移除
+        setContentView(R.layout.activity_base);
+        Log.e("消息", "ConnectACT死掉了");
+        BitmapDrawable bd1 = (BitmapDrawable)view.getBackground();
+        view.setBackgroundResource(0);
+        bd1.setCallback(null);
+        bd1.getBitmap().recycle();
+        view = null;
+
+        BitmapDrawable bd2 = (BitmapDrawable)deviceSpinner.getBackground();
+        deviceSpinner.setBackgroundResource(0);
+        bd2.setCallback(null);
+        bd2.getBitmap().recycle();
+        deviceSpinner = null;
+        deviceAdapter = null;
+        System.gc();
+        Log.e("消息", "回收完成");
     }
 
     /**
@@ -218,7 +246,7 @@ public class ConnectActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case SCANNING_GREQUEST_CODE:
-                if(resultCode == this.RESULT_OK){
+                if(resultCode == RESULT_OK){
                     //显示扫描到的内容
                     Bundle bundle = data.getExtras();
                     String retData = bundle.getString("result");

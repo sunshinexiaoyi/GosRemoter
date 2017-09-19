@@ -34,34 +34,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <!--！！！这里需要设置缩略文本-->
         <TextView
-            android:id = "@+id/epg_simpleProgInfo"
-            android:text = "There are somethingmes …"
+            android:id = "@+id/epg_shortDesc"
+            android:text = "There are somethingmesfgfr …"
             android:textSize = "@dimen/epg_info_content"
             android:textColor = "@color/epg_littleBlack"
             android:layout_width = "0dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="19dp"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="4dp"
-            android:paddingRight = "20dp"/>
-
-        <LinearLayout
-            android:id = "@+id/epg_simpleBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="7dp"
-            android:layout_weight="2">
-            <Button
-            android:id = "@+id/epg_simple_btn"
+            android:paddingRight = "20dp" />
+        <Button
+            android:id = "@+id/epg_simple_sBtn"
             android:background="@drawable/epg_simple_recbtn_cycle"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="4dp"
             android:focusable = "false" />
-        </LinearLayout>
     </LinearLayout>
 
     <!--详细设置-->
@@ -94,7 +85,7 @@
             android:textSize = "@dimen/epg_info_button_text"
             android:layout_width="70dp"
             android:layout_height="39dp"
-            android:background="@drawable/epg_full_lbtn_false"
+            android:background="@drawable/epg_full_lbtn_selector"
             android:layout_below="@id/epg_recordImg"
             android:layout_marginLeft = "5dp"
             android:paddingLeft="9dp"
@@ -107,7 +98,7 @@
             android:textSize = "@dimen/epg_info_button_text"
             android:layout_width="70dp"
             android:layout_height="39dp"
-            android:background="@drawable/epg_full_rbtn_false"
+            android:background="@drawable/epg_full_rbtn_selector"
             android:layout_below="@id/epg_recordImg"
             android:layout_toRightOf="@id/epg_full_recBtnOnce"
             android:paddingRight="17dp"
@@ -138,7 +129,7 @@
             android:textSize = "@dimen/epg_info_button_text"
             android:layout_width="70dp"
             android:layout_height="39dp"
-            android:background="@drawable/epg_full_lbtn_false"
+            android:background="@drawable/epg_full_lbtn_selector"
             android:layout_below="@id/epg_watchImg"
             android:layout_marginLeft = "5dp"
             android:paddingBottom="1dp"
@@ -151,7 +142,7 @@
             android:textSize = "@dimen/epg_info_button_text"
             android:layout_width="70dp"
             android:layout_height="39dp"
-            android:background="@drawable/epg_full_rbtn_false"
+            android:background="@drawable/epg_full_rbtn_selector"
             android:layout_below="@id/epg_watchImg"
             android:layout_toRightOf="@id/epg_full_recBtnOnce"
             android:paddingRight="17dp"

@@ -32,10 +32,15 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
     private ArrayList<T> list;//一个通用item列表，将获取到的item全部保存到这里，组成一个listview
     private int layoutRes;//布局的id需要从外面传进来，bind中需要用它来获取convertView
 
-    //构造方法，从ACT中传入必需的三个数据
+    //构造方法，从ACT中传入三个数据
     public Epg_myAdapter(Context context, ArrayList<T> list, int layoutRes) {
         this.context = context;
         this.list = list;
+        this.layoutRes = layoutRes;
+    }
+    //构造方法，从ACT中传入两个数据
+    public Epg_myAdapter(Context context, int layoutRes) {
+        this.context = context;
         this.layoutRes = layoutRes;
     }
 
@@ -68,13 +73,11 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
     /**getView()方法
      *
      * 这个方法在每次获取到一个item，都会被调用一次
-     * 此方法提供item自动复用机制
-     * 本方法中的convertView有一下特点：
-     *   1、一个屏幕中可以显示n个item，那么前n+2次调用getVIew()方法时convertView都是null；（固定缓存n+2个convertView）
-     *   2、当屏幕上的列表被滚动，当第n+3个item出现在屏幕中，这个item会由于convertView的复用机制，被填充第1个item的数据；
-     *   也就是第一个item的convertView被回收，给了第n+3个item。
-     *   3、如果给第1个item设置了Tag,则当列表回滚第1个Item再次出现在屏幕上，这个item将会直接通过Tag得到已保存的数据，
-     *   不需要再次申请，而屏幕外的第n+2之后的item全部被回收。
+     * 此方法提供item复用机制
+     * 本方法中的convertView有以下特点：
+     *   1、一个屏幕中可以显示n个item，那么前n+1次调用getVIew()方法时convertView都是null；（固定缓存n+1个convertView）
+     *   2、当屏幕上的列表被滚动，当第n+2个item出现在屏幕中，这个item会由于convertView的复用机制，被填充第1个item的数据；
+     *   也就是第一个item的convertView被回收，给了第n+2个item。
      *
      * 备注：由于每次更新列表都会导致getView被重新调用，因此需要注意其中的局部变量将会被反复初始化而不能长时保存数据。
      */
@@ -82,7 +85,7 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         /**将获取convertView部分放到Holder构造中
          * 完成了findbyId部分
-         * 完成了实例化convertView
+         * 完成了view的实例化
          */
         Holder holder = Holder.bind(position, convertView, parent, layoutRes, context);
 
@@ -91,7 +94,7 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
          * holder提供了set方法
          */
         bindView(holder, getItem(position));
-        //注意：这里返回的convertView不能为空！！！否则会报
+        //注意：这里返回的convertView不能为空！！！否则会报错
         return holder.convertView;
     }
 
@@ -221,7 +224,7 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
         public void setTextWidth(int id, int px) {
             //不处理特殊数据：wrap_content/match_parent/fill_parent（都是负数）
             if (px >= 0) {
-                px = (int)(px * 401 / 160);//这里强制以5.5寸、1080P的属性计算，后期可以同通过获取设备ppi的方式精确计算
+                px = px * 401 / 160;//这里强制以5.5寸、1080P的属性计算，后期可以同通过获取设备ppi的方式精确计算
             }
             View view = getView(id);
             view.getLayoutParams().width = px;
@@ -230,7 +233,7 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
         public void setTextHeight(int id, int px) {
             //不处理特殊数据：wrap_content/match_parent/fill_parent（都是负数）
             if (px >= 0) {
-                px = (int)(px * 401 / 160);//这里强制以5.5寸、1080P的属性计算，后期可以同通过获取设备ppi的方式精确计算
+                px = px * 401 / 160;//这里强制以5.5寸、1080P的属性计算，后期可以同通过获取设备ppi的方式精确计算
             }
             View view = getView(id);
             view.getLayoutParams().height = px;
@@ -292,16 +295,23 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
             return this;
         }
 
-        //13、设置更改列表中文字颜色
+        //13、设置按钮被按下/弹起
+        public Holder setBtnSelected(int id, boolean isSelected) {
+            View view = getView(id);
+            view.setSelected(isSelected);
+            return this;
+        }
     }
 
 
 /*******************为Adapter暴露添加元素的方法************************/
 
-    /**这里是Adapter方法
+    /**这里是Adapter的方法
      * 目前可暴露的方法有：
      * 1、添加一个item（默认在队列末端）
      * 2、在制定位置添加 一个tiem
+     * 3、添加全部item（默认在队列末端）
+     * 4、在制定位置添加全部item
      */
 
     //添加 一个item（默认位置为列表末端）
@@ -312,13 +322,28 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
         list.add(obj);
         notifyDataSetChanged();
     }
-
     //在制定位置添加 一个item
     public void add(int position, T obj) {
         if (list == null) {
             list = new ArrayList<>();
         }
         list.add(position, obj);
+        notifyDataSetChanged();
+    }
+    //一次性添加全部item
+    public void addAll(ArrayList<T> arrayList) {
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        list.addAll(arrayList);
+        notifyDataSetChanged();
+    }
+    //在制定位置上添加全部item
+    public void addAll(int position, ArrayList<T> arrayList) {
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        list.addAll(position, arrayList);
         notifyDataSetChanged();
     }
 
@@ -332,7 +357,6 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
 
 
 /*************************抽象方法*****************************/
-
     /**抽象方法，
      * 1、为不同蜡yout设置不同的数据
      * 2、实现暴露的方法

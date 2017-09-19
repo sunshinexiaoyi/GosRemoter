@@ -106,9 +106,9 @@ public class InfoHudViewHolder {
 
         float bytes_per_sec = ((float) bytes) * 1000.f / elapsed_milli;
         if (bytes_per_sec >= 1000 * 1000) {
-            return String.format(Locale.US, "%.2f MB/s", ((float) bytes_per_sec) / 1000 / 1000);
+            return String.format(Locale.US, "%.2f MB/s", bytes_per_sec / 1000 / 1000);
         } else if (bytes_per_sec >= 1000) {
-            return String.format(Locale.US, "%.1f KB/s", ((float) bytes_per_sec) / 1000);
+            return String.format(Locale.US, "%.1f KB/s", bytes_per_sec / 1000);
         } else {
             return String.format(Locale.US, "%d B/s", (long) bytes_per_sec);
         }

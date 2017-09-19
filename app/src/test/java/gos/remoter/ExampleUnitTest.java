@@ -230,7 +230,7 @@ public class ExampleUnitTest {
         int position = 0;
         Random random = new Random();
         //int dateCount = random.nextInt(25) + 1;//1~26之间的随机数
-        for(int i=1;i<6;i++){
+        for(int i=0;i<5;i++){
             Date date = new Date();
             int startDate = index +i;
             date.setDate(String.format("2017-08-%d",startDate));

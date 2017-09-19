@@ -69,14 +69,10 @@ public class EpgActivity extends Activity {
     private class TvNameSelected implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-            progItemAdapter.clear();//清除上一次的节目信息列表
-            tvDateAdapter.clear();//清除上一次节目日期列表
-            if (expandableTimes != null) {
-                expandableTimes.clear();//清除全部的日期的数据
-            }
 
             Log.e("列表被选择事件的消息", "选择了第" + pos + "个节目，向服务器请求获取第" + pos + "个节目的EPG信息");
             getSelectEpgInfo(progInfo.get(pos).getIndex());//获取第pos个节目的EPG信息
+
             tvIndex = progInfo.get(pos).getIndex();//保存频道pos
 
             TextView textName = (TextView) view.findViewById(R.id.epg_TVName);
@@ -216,10 +212,16 @@ public class EpgActivity extends Activity {
         progInfo = DataParse.getProgramList(data);//得到节目总信息
         Log.e("处理频道列表数据部分的消息", "节目数目是：" + progInfo.size());
         tvNameAdapter.addAll(progInfo);//将所有频道名添加到频道列表
-        getSelectEpgInfo(progInfo.get(0).getIndex());//获取第0个节目信息首先被显示在列表中
+        //getSelectEpgInfo(progInfo.get(0).getIndex());//获取第0个节目信息首先被显示在列表中
     }
     //节目信息处理
     private void makeProgramData(String data) {
+        progItemAdapter.clear();//清除上一次的节目信息列表
+        tvDateAdapter.clear();//清除上一次节目日期列表
+        if (expandableTimes != null) {
+            expandableTimes.clear();//清除全部的日期的数据
+        }
+
         progDate = DataParse.getEpgProgram(data).getDateArray();//得到日期所有信息
         tvDateAdapter.addAll(progDate);//将所有日期添加到日期下拉列表
 
@@ -278,6 +280,7 @@ public class EpgActivity extends Activity {
     }
     //设置TitleBar
     public void setTitleBar() {
+        new ImmersionLayout(this).setImmersion();
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);//标题栏
         titleBar.setTextTitle(R.string.epg_title);
         titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
@@ -289,9 +292,7 @@ public class EpgActivity extends Activity {
     }
     //初始化适配器
     public void init_adapter() {
-        new ImmersionLayout(this).setImmersion();
-        TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-        titleBar.setTextTitle(R.string.epg_title);
+
         Context context = EpgActivity.this;
         final ListView progListView = (ListView) findViewById(R.id.epg_mainProgList);
         final Spinner tvNameSpinner = (Spinner) findViewById(R.id.epg_mainTVName);

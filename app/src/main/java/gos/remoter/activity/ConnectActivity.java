@@ -79,8 +79,8 @@ public class ConnectActivity extends Activity {
         super.onStop();
         EventManager.unregister(this);
         TAG = null;
-        Log.e("消息", "ConnectACT死掉了");
-        finish();
+        //Log.e("消息", "ConnectACT死掉了");
+        //finish();
         System.gc();
     }
 

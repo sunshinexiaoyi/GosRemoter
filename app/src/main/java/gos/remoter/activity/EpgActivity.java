@@ -121,24 +121,25 @@ public class EpgActivity extends Activity {
             eventType = Integer.parseInt(expandableTimes.get(holder.getItemPosition()).getTime().getEventType());
             temp = eventType;
             if (eventType == 0) {
-                Log.e("消息", "这个item无设置状态，此时eventType是" + eventType);//本身为无状态，点亮点击到的按钮，并将简单按钮亮起
                 holder.setBtnSelected(view.getId(), true);//点亮被选择的按钮
                 holder.setBackgroundResource(R.id.epg_simple_sBtn, sBtnDraw.get(sBtnDraw.indexOfValue(view.getId())));//将简单按钮亮起
                 getType(view);//更新ventType
+                Log.e("消息", "这个item无设置状态，点击前eventType是" + temp + "，点击后改变为" + eventType);//本身为无状态，点亮点击到的按钮，并将简单按钮亮起
             } else {
                 if ((view.getId() == btnSelected.get(eventType)) || (view.getId() == R.id.epg_simple_sBtn)) {
-                    Log.e("消息", "点中已经被按下的按钮，此时eventType是" + eventType);//点中的按钮为已选择的按钮或者简单按钮，清零设置状态
+
                     holder.setBtnSelected(view.getId(), false);//取消按下
                     holder.setBackgroundResource(R.id.epg_simple_sBtn, sBtnDraw.get(0));//隐藏简单按钮
                     eventType = 0;
                     expandableTimes.get(holder.getItemPosition()).getTime().setEventType(Integer.toString(eventType));//改变按钮状态
                     progItemAdapter.notifyDataSetChanged();
+                    Log.e("消息", "这个item无设置状态，点击前eventType是" + temp + "，点击后改变为" + eventType);//点中的按钮为已选择的按钮或者简单按钮，清零设置状态
                 } else {
-                    Log.e("消息", "点中灰色按钮，此时eventType是" + eventType);//点中没有按下的按钮，则熄灭已经按下的按钮，点亮被点中的按钮，改变简单按钮
                     holder.setBtnSelected(btnSelected.get(eventType), false);//熄灭被点亮的按钮
                     holder.setBtnSelected(view.getId(), true);//点亮被点中的按钮
                     holder.setBackgroundResource(R.id.epg_simple_sBtn, sBtnDraw.get(eventType));//改变简单按钮
                     getType(view);//更新ventType
+                    Log.e("消息", "这个item无设置状态，点击前eventType是" + temp + "，点击后改变为" + eventType);//点中没有按下的按钮，则熄灭已经按下的按钮，点亮被点中的按钮，改变简单按钮
                 }
             }
             //将改变后的eventType发送给服务器
@@ -153,7 +154,7 @@ public class EpgActivity extends Activity {
                         Thread.sleep(600);
                     } catch (InterruptedException sleepError) {Log.e("线程中", "睡眠异常");}
                     if (isUndo) {
-                        Log.e("线程中消息", "不知怎么的，服务器不允许更改，回滚设置状态");
+                        Log.e("检测服务器回应的线程中消息", "不知怎么的，服务器不允许更改，回滚设置状态为" + temp);
                         expandableTimes.get(holder.getItemPosition()).getTime().setEventType(Integer.toString(temp));//改变按钮状态
                         handler.post(new Runnable() {
                             @Override
@@ -174,7 +175,6 @@ public class EpgActivity extends Activity {
                     break;
                 }
             }
-            Log.e("消息", "eventType为" + eventType);
         }
     }
 
@@ -245,12 +245,10 @@ public class EpgActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_epg);
-        System.gc();
         EventManager.register(this);//注册EventManager
         ACTCollector.add(this);//将ACT添加到列表
         handler = new Handler();
-        setTitleBar();//设置标题栏
-        init_adapter();//设置适配器
+        init();//初始化
     }
     @Override
     public void onDestroy() {
@@ -271,11 +269,12 @@ public class EpgActivity extends Activity {
         progItemAdapter = null;
         tvNameAdapter = null;
         tvDateAdapter = null;
-        System.gc();//有效，一般重启两次epgACT之后会回收20MB内存，总占用内存大概在91M左右
+        System.gc();//有效，一般重启两次epgACT之后会回收内存
         Log.e("消息", "将EPGACT从ACT列表中移除，取消注册event，EPGACT已经死亡");//告知取消注册event//告知EPGACT被杀死
     }
     //设置TitleBar
     public void setTitleBar() {
+        new ImmersionLayout(this).setImmersion();
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);//标题栏
         titleBar.setTextTitle(R.string.epg_title);
         titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
@@ -286,10 +285,8 @@ public class EpgActivity extends Activity {
         });
     }
     //初始化适配器
-    public void init_adapter() {
-        new ImmersionLayout(this).setImmersion();
-        TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-        titleBar.setTextTitle(R.string.epg_title);
+    public void init() {
+        setTitleBar();//设置标题栏
         Context context = EpgActivity.this;
         final ListView progListView = (ListView) findViewById(R.id.epg_mainProgList);
         final Spinner tvNameSpinner = (Spinner) findViewById(R.id.epg_mainTVName);
@@ -302,7 +299,7 @@ public class EpgActivity extends Activity {
         sBtnDraw.put(3, R.drawable.epg_simple_recbtn_once);
         sBtnDraw.put(4, R.drawable.epg_simple_recbtn_cycle);
 
-        btnSelected = new SparseIntArray();
+        btnSelected = new SparseIntArray();//与设置状态序号同步
         btnSelected.put(1, R.id.epg_full_recBtnOnce);
         btnSelected.put(2, R.id.epg_full_recBtnCycle);
         btnSelected.put(3, R.id.epg_full_watchBtnOnce);
@@ -332,7 +329,6 @@ public class EpgActivity extends Activity {
             @Override
             public void bindView(Holder holder, Program obj) {
                 holder.setText(R.id.epg_TVName, obj.getName());
-
                 holder.setItemSelectListener(tvNameSpinner, new TvNameSelected());//设置列表被选择监听
             }
         };
@@ -340,7 +336,6 @@ public class EpgActivity extends Activity {
             @Override
             public void bindView(Holder holder, Date obj) {
                 holder.setText(R.id.epg_TVDate, obj.getDate());
-
                 holder.setItemSelectListener(tvDateSpinner, new TvDateSelected());//监听日期列表被选择事件
             }
         };
@@ -359,7 +354,6 @@ public class EpgActivity extends Activity {
         }
     }
         private void itemFold(Epg_myAdapter.Holder holder, ExpandableTime obj) {
-        //判断是否被展开
         //Log.e("消息", "此时bindView判断是否展开设置，展开状态为" + obj.isExpand());
         if (obj.isExpand()) {//被展开，则显示详细设置，隐藏sBtn，将文字全部展示
             holder.setVISIBLE(R.id.epg_full_ProgSetting);

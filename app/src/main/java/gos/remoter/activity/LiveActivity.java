@@ -1,162 +1,193 @@
 package gos.remoter.activity;
 
-import android.app.Activity;
-import android.content.res.Configuration;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
-
-import com.player.widget.PlayStateParams;
-import com.player.widget.PlayerView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import gos.remoter.R;
+import gos.remoter.adapter.LiverClassifyListAdapter;
+import gos.remoter.data.Program;
+import gos.remoter.data.Respond;
+import gos.remoter.define.DataParse;
 import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
-import gos.remoter.event.MsgKey;
+import gos.remoter.fragment.LiveFragment;
+import gos.remoter.tool.ImmersionLayout;
+import gos.remoter.view.TitleBarNew;
 
-import static gos.remoter.define.CommandType.*;   //导入静态命令集
+import static gos.remoter.define.CommandType.*;
 
+public class LiveActivity extends FragmentActivity implements AdapterView.OnItemClickListener{
+    private  final String TAG = this.getClass().getSimpleName();
 
-public class LiveActivity extends Activity {
-    private PlayerView mVideoView;
+    private ListView mListView;
+    private String[] programType;
+    private LiverClassifyListAdapter mListAdapter;
+    public static int selectPosition = 0;//选择的节目类型
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRecviveEvent(EventMsg msg) {
-        if (EventMode.IN == msg.getEventMode()) {//对内
-            switch (msg.getCommand()) {
-                case COM_SYS_FINISH_LIVE:
-                    delayFinish(3000, getResources().getString(R.string.switch_freq));
-                    break;
-                case COM_SYS_HEARTBEAT_STOP:
-                    delayFinish(0, getResources().getString(R.string.heartbeat_stop));
-                    break;
-                default:
-                    String s = new String("hh");
-                    s.length();
-                    break;
-            }
-        }
-    }
+    //Fragment资源
+    private LiveFragment liveFragment;
+    FragmentTransaction fragmentTransaction;
+    private int[] image;
+
+    private HashMap<Integer,ArrayList<Program>> typeList = new HashMap<>();//保存分类的节目列表
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.live_player);
-        initPlayerView();
-        startPlay();
-
+        setContentView(R.layout.activity_liver);
         EventManager.register(this);
+        initView();
+        initData();
     }
 
+    void initView(){
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mVideoView != null) {
-            mVideoView.onPause();
-        }
-    }
+        new ImmersionLayout(this).setImmersion();
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mVideoView != null) {
-            mVideoView.onResume();
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mVideoView != null) {
-            mVideoView.onDestroy();
-        }
-        EventManager.unregister(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mVideoView != null && mVideoView.onBackPressed()) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mVideoView.onConfigurationChanged(newConfig);
-        Log.i("live","onConfigurationChanged");
-    }
-
-    /**
-     * 播放视频
-     *
-     * @param s 视频流地址
-     */
-    private void playVideo(String s) {
-        if (s != null) {
-            mVideoView.setLivePlay(true);
-            mVideoView.setPlaySource(s);
-            mVideoView.startPlay();
-        }
-    }
-
-    /**
-     * 初始化播放器布局
-     */
-    protected void initPlayerView() {
-        mVideoView = new PlayerView(this);
-        mVideoView.setScaleType(PlayStateParams.fitparent);
-        mVideoView.forbidTouch(false);
-        mVideoView.hideMenu(true);
-        mVideoView.hideRotation(true);
-        mVideoView.enableOrientationEventListener();
-        //mVideoView.setOnlyFullScreen(true);
-    }
-
-    private void startPlay(){
-        Bundle bundle = getIntent().getExtras();
-        String url = bundle.getString(MsgKey.url);
-        playVideo(url);
-    }
-
-    /**
-     * @param delay 延时多少毫秒结束
-     * @param info  打印提示信息
-     */
-    private void delayFinish(long delay,String info ){
-        if(delay <0){
-            Log.e("delayFinish","delay <0");
-            return;
-        }
-        Log.e("delayFinish","delay "+delay);
-        if(null != info){
-            Toast.makeText(this,info, Toast.LENGTH_SHORT).show();
-        }
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        /*标题栏*/
+        TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
+        titleBar.setTextTitle(R.string.live_title);
+        titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
             @Override
-            public void run() {
-                Log.e("delayFinish","finish");
+            public void onClick(View v) {
                 finish();
             }
-        },delay);
+        });
+
+        //分类列表
+        mListView = (ListView) findViewById(R.id.live_classify_list);
+        programType = getResources().getStringArray(R.array.program_type);
+        mListAdapter = new LiverClassifyListAdapter(this, programType);
+        mListView.setAdapter(mListAdapter);
+        mListView.setOnItemClickListener(this);
+
+        //图片资源
+        image = new int[]{R.drawable.liver_tele_image, R.drawable.liver_movies_image, R.drawable.liver_variety_image,
+                R.drawable.liver_children_image, R.drawable.liver_news_image, R.drawable.liver_movies_image,
+                R.drawable.liver_movies_image, R.drawable.liver_movies_image, R.drawable.liver_movies_image, R.drawable.liver_movies_image};
+    }
+
+    private void initData() {
+        initFragment();
+        getProgramList();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        //拿到当前位置
+        selectPosition = position;
+        Log.e("onItemClick", "点击第: " + selectPosition + " 项");
+
+        //即时刷新adapter
+        mListAdapter.notifyDataSetChanged();
+        updateFragment(position);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventManager.unregister(this);
+
+    }
+
+    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
+    public void onReceiveEvent(EventMsg msg){
+        if(msg.getEventMode() == EventMode.OUT)
+            return;
+
+        switch (msg.getCommand()){
+            case COM_LIVE_SET_PROGRAM_LIST:
+                ArrayList<Program> programList = DataParse.getProgramList(msg.getData());
+                Log.i(TAG,msg.getData());
+                classify(programList);
+                updateFragment(selectPosition);//默认设置选择的节目类型
+                break;
+
+            case COM_SYSTEM_RESPOND:    //回应
+                Respond respond = DataParse.getRespond(msg.getData());
+                switch (respond.getCommand()){
+                    case COM_CONNECT_DETACH:
+                        if(respond.getFlag()){
+                            //  detach();
+                        }
+                        break;
+                    case COM_CONNECT_ATTACH:
+                        if(respond.getFlag()){
+                            //attach();
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    /**
+     * 初始化节目列表的fragment
+     */
+    public void initFragment() {
+        //创建MyFragment对象
+        liveFragment = new LiveFragment();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.liver_fragment, liveFragment);
+        fragmentTransaction.commit();
+    }
+
+    /**
+     * 将指定类型的节目更新到列表
+     * @param type  指定类型
+     */
+    public void updateFragment(int type){
+        if(!typeList.containsKey(type)){//类型节目不存在
+            String errorInfo = getResources().getString(R.string.live_not_found_program);
+            Toast.makeText(this, errorInfo, Toast.LENGTH_SHORT).show();
+            liveFragment.updateUi(programType[type], image[type],new ArrayList<Program>());//发送空节目数据
+
+            return;
+        }
+
+        liveFragment.updateUi(programType[type], image[type],typeList.get(type));
     }
 
 
+    //节目分类
+    public void classify( ArrayList<Program> programs) {
+        for(Program p:programs){
+            Integer type = p.getType();
+
+            if(!typeList.containsKey(type)){ //判断是否存在该类型的key
+                typeList.put(type,new ArrayList<Program>());    //添加该类型
+            }
+            typeList.get(type).add(p);  //添加该类型节目
+        }
+    }
 
 
+    /**
+     * 获取节目列表
+     */
+    private void getProgramList(){
+        Log.i(TAG,"获取节目列表:");
+        //errorMaskView.setLoadingStatus();
+        EventManager.send(COM_LIVE_GET_PROGRAM_LIST,"", EventMode.OUT);
+    }
 }

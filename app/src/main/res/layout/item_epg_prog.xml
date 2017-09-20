@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/epg_progItem"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants">
+
+    <!--缩略信息-->
+    <TextView
+        android:id="@+id/epg_progName"
+        android:text="TRRRRRRRC News"
+        android:textSize="@dimen/epg_info_title"
+        android:textColor="@color/epg_blackTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="12dp" />
+    <TextView
+        android:id="@+id/epg_progTime"
+        android:text="9:00-10:00"
+        android:textSize="@dimen/epg_info_title"
+        android:textColor="@color/epg_littleBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:id="@+id/epg_shortDesc"
+        android:layout_width="210dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="6dp"
+        android:text="There are somethingmesfgfr …"
+        android:textColor="@color/epg_littleBlack"
+        android:textSize="@dimen/epg_info_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/epg_progName"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1" />
+
+    <Button
+        android:id="@+id/epg_simple_sBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/epg_simple_recbtn_cycle"
+        android:focusable="false"
+        app:layout_constraintBottom_toTopOf="@+id/epg_full_ProgSetting"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/epg_progTime"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_conversion_absoluteHeight="30dp"
+        tools:layout_conversion_absoluteWidth="30dp"
+        tools:layout_conversion_absoluteX="336dp"
+        tools:layout_conversion_absoluteY="30dp" />
+
+
+    <!--详细设置-->
+    <!--底线-->
+    <ImageView
+        android:id="@+id/epg_line"
+        android:src="@color/epg_littleBlack"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/epg_full_ProgSetting"
+        app:layout_constraintTop_toBottomOf="@+id/epg_full_ProgSetting"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/epg_full_ProgSetting"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginTop="3dp" />
+
+    <RelativeLayout
+        android:id="@+id/epg_full_ProgSetting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/epg_shortDesc"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
+        <!--预定录制-->
+        <ImageView
+            android:id="@+id/epg_recordImg"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="1dp"
+            android:src="@drawable/epg_watchimg" />
+
+        <TextView
+            android:id="@+id/epg_recordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/epg_recordImg"
+            android:text="@string/epg_Reservation_record"
+            android:textColor="@color/epg_littleBlack"
+            android:textSize="@dimen/epg_info_set_title" />
+
+        <Button
+            android:id="@+id/epg_full_recBtnOnce"
+            android:layout_width="70dp"
+            android:layout_height="39dp"
+            android:layout_below="@id/epg_recordImg"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/epg_full_lbtn_selector"
+            android:focusable="false"
+            android:paddingBottom="1dp"
+            android:paddingLeft="9dp"
+            android:text="@string/epg_progSettingBtnText_Once"
+            android:textAllCaps="false"
+            android:textSize="@dimen/epg_info_button_text" />
+
+        <Button
+            android:id="@+id/epg_full_recBtnCycle"
+            android:layout_width="70dp"
+            android:layout_height="39dp"
+            android:layout_below="@id/epg_recordImg"
+            android:layout_toRightOf="@id/epg_full_recBtnOnce"
+            android:background="@drawable/epg_full_rbtn_selector"
+            android:focusable="false"
+            android:paddingBottom="1dp"
+            android:paddingRight="17dp"
+            android:text="@string/epg_progSettingBtnText_Days"
+            android:textAllCaps="false"
+            android:textSize="@dimen/epg_info_button_text" />
+
+        <!--预定观看-->
+        <Button
+            android:id="@+id/epg_watchImg"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@id/epg_full_recBtnOnce"
+            android:background="@drawable/epg_recordimg" />
+
+        <TextView
+            android:id="@+id/epg_watchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/epg_full_recBtnOnce"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/epg_watchImg"
+            android:text="@string/epg_Scheduled_to_watch"
+            android:textColor="@color/epg_littleBlack"
+            android:textSize="@dimen/epg_info_set_title" />
+
+        <Button
+            android:id="@+id/epg_full_watchBtnOnce"
+            android:layout_width="70dp"
+            android:layout_height="39dp"
+            android:layout_below="@id/epg_watchImg"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/epg_full_lbtn_selector"
+            android:focusable="false"
+            android:paddingBottom="1dp"
+            android:paddingLeft="9dp"
+            android:text="@string/epg_progSettingBtnText_Once"
+            android:textAllCaps="false"
+            android:textSize="@dimen/epg_info_button_text" />
+
+        <Button
+            android:id="@+id/epg_full_watchBtnCycle"
+            android:layout_width="70dp"
+            android:layout_height="39dp"
+            android:layout_below="@id/epg_watchImg"
+            android:layout_toRightOf="@id/epg_full_recBtnOnce"
+            android:background="@drawable/epg_full_rbtn_selector"
+            android:focusable="false"
+            android:paddingBottom="1dp"
+            android:paddingRight="17dp"
+            android:text="@string/epg_progSettingBtnText_Days"
+            android:textAllCaps="false"
+            android:textSize="@dimen/epg_info_button_text" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

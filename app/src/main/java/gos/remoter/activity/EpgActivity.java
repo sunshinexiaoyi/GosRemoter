@@ -22,11 +22,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -69,10 +67,14 @@ public class EpgActivity extends Activity {
     private class TvNameSelected implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+            progItemAdapter.clear();//清除上一次的节目信息列表
+            tvDateAdapter.clear();//清除上一次节目日期列表
+            if (expandableTimes != null) {
+                expandableTimes.clear();//清除全部的日期的数据
+            }
 
             Log.e("列表被选择事件的消息", "选择了第" + pos + "个节目，向服务器请求获取第" + pos + "个节目的EPG信息");
             getSelectEpgInfo(progInfo.get(pos).getIndex());//获取第pos个节目的EPG信息
-
             tvIndex = progInfo.get(pos).getIndex();//保存频道pos
 
             TextView textName = (TextView) view.findViewById(R.id.epg_TVName);
@@ -212,16 +214,10 @@ public class EpgActivity extends Activity {
         progInfo = DataParse.getProgramList(data);//得到节目总信息
         Log.e("处理频道列表数据部分的消息", "节目数目是：" + progInfo.size());
         tvNameAdapter.addAll(progInfo);//将所有频道名添加到频道列表
-        //getSelectEpgInfo(progInfo.get(0).getIndex());//获取第0个节目信息首先被显示在列表中
+        getSelectEpgInfo(progInfo.get(0).getIndex());//获取第0个节目信息首先被显示在列表中
     }
     //节目信息处理
     private void makeProgramData(String data) {
-        progItemAdapter.clear();//清除上一次的节目信息列表
-        tvDateAdapter.clear();//清除上一次节目日期列表
-        if (expandableTimes != null) {
-            expandableTimes.clear();//清除全部的日期的数据
-        }
-
         progDate = DataParse.getEpgProgram(data).getDateArray();//得到日期所有信息
         tvDateAdapter.addAll(progDate);//将所有日期添加到日期下拉列表
 
@@ -248,7 +244,7 @@ public class EpgActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.epg_main);
+        setContentView(R.layout.activity_epg);
         System.gc();
         EventManager.register(this);//注册EventManager
         ACTCollector.add(this);//将ACT添加到列表
@@ -261,7 +257,7 @@ public class EpgActivity extends Activity {
         ACTCollector.remove(ACTCollector.getByName(EpgActivity.this));//通过名字获得ACT所在列表位置并移除
         super.onDestroy();
         EventManager.unregister(this);//取消注册event接收器
-        setContentView(R.layout.activity_base);
+        setContentView(R.layout.activity_null);
         progInfo.clear();
         progDate.clear();
         progTime.clear();
@@ -280,7 +276,6 @@ public class EpgActivity extends Activity {
     }
     //设置TitleBar
     public void setTitleBar() {
-        new ImmersionLayout(this).setImmersion();
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);//标题栏
         titleBar.setTextTitle(R.string.epg_title);
         titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
@@ -292,7 +287,9 @@ public class EpgActivity extends Activity {
     }
     //初始化适配器
     public void init_adapter() {
-
+        new ImmersionLayout(this).setImmersion();
+        TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
+        titleBar.setTextTitle(R.string.epg_title);
         Context context = EpgActivity.this;
         final ListView progListView = (ListView) findViewById(R.id.epg_mainProgList);
         final Spinner tvNameSpinner = (Spinner) findViewById(R.id.epg_mainTVName);
@@ -312,7 +309,7 @@ public class EpgActivity extends Activity {
         btnSelected.put(4, R.id.epg_full_watchBtnCycle);
 
         //初始化适配器：ExpandableTime中包含：一个item的信息和设置是否被展开标志
-        progItemAdapter = new Epg_myAdapter<ExpandableTime>(context, R.layout.epg_progitem) {
+        progItemAdapter = new Epg_myAdapter<ExpandableTime>(context, R.layout.item_epg_prog) {
             @Override
             public void bindView(Holder holder, ExpandableTime obj) {
                 Time time = obj.getTime();
@@ -331,7 +328,7 @@ public class EpgActivity extends Activity {
                 }
             }
         };
-        tvNameAdapter = new Epg_myAdapter<Program>(context, R.layout.epg_spinner_tvname) {
+        tvNameAdapter = new Epg_myAdapter<Program>(context, R.layout.item_epg_spinner_tvname) {
             @Override
             public void bindView(Holder holder, Program obj) {
                 holder.setText(R.id.epg_TVName, obj.getName());
@@ -339,7 +336,7 @@ public class EpgActivity extends Activity {
                 holder.setItemSelectListener(tvNameSpinner, new TvNameSelected());//设置列表被选择监听
             }
         };
-        tvDateAdapter = new Epg_myAdapter<Date>(context, R.layout.epg_spinner_tvdate) {
+        tvDateAdapter = new Epg_myAdapter<Date>(context, R.layout.item_epg_spinner_tvdate) {
             @Override
             public void bindView(Holder holder, Date obj) {
                 holder.setText(R.id.epg_TVDate, obj.getDate());
@@ -363,12 +360,11 @@ public class EpgActivity extends Activity {
     }
         private void itemFold(Epg_myAdapter.Holder holder, ExpandableTime obj) {
         //判断是否被展开
-        Log.e("消息", "此时bindView判断是否展开设置，展开状态为" + obj.isExpand());
+        //Log.e("消息", "此时bindView判断是否展开设置，展开状态为" + obj.isExpand());
         if (obj.isExpand()) {//被展开，则显示详细设置，隐藏sBtn，将文字全部展示
             holder.setVISIBLE(R.id.epg_full_ProgSetting);
             holder.setGONE(R.id.epg_simple_sBtn);
             holder.setTextNormal(R.id.epg_shortDesc);
-            holder.setTextHeight(R.id.epg_shortDesc, ViewGroup.LayoutParams.WRAP_CONTENT);
         } else {//被折叠，则隐藏详细设置，显示sBtn，将文字缩略
             holder.getView(R.id.epg_full_ProgSetting).setVisibility(View.GONE);
             holder.getView(R.id.epg_simple_sBtn).setVisibility(View.VISIBLE);

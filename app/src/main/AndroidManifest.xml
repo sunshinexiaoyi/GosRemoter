@@ -20,7 +20,7 @@
     <application
         android:name=".define.SystemInfo"
         android:allowBackup="true"
-        android:icon="@drawable/gospell_icon_indonesia"
+        android:icon="@drawable/gospell_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -35,16 +35,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.MainActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-
-            <!-- 键盘会覆盖屏幕,避免屏幕整体上移 -->
-            <!-- 主页面只允许竖屏，遥控器显示不允许横屏 -->
-
-        </activity>
 
         <service
             android:name=".service.NetService"
@@ -52,7 +42,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".activity.LiveActivity"
+            android:name=".activity.PlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance" /> <!-- 非重启Activity的横竖屏切换 -->
 
@@ -78,7 +68,7 @@
             android:name=".activity.EpgActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name=".activity.LiverActivity"
+            android:name=".activity.LiveActivity"
             android:launchMode="singleInstance" />
         <activity
             android:name=".activity.ProgramActivity"

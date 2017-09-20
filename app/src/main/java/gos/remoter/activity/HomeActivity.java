@@ -19,7 +19,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import gos.remoter.R;
-import gos.remoter.adapter.Epg_myAdapter;
 import gos.remoter.adapter.ReuseAdapter;
 import gos.remoter.data.GridActivity;
 import gos.remoter.data.Respond;
@@ -40,7 +39,7 @@ public class HomeActivity extends Activity {
     AlertDialog logoutAlert;
     long firstTime;//保存第一次按退出键的时间
 
-    ReuseAdapter<GridActivity> gridAdapter = new ReuseAdapter<GridActivity>(R.layout.item_grid_icon) {
+    ReuseAdapter<GridActivity> gridAdapter = new ReuseAdapter<GridActivity>(R.layout.item_home_grid) {
         @Override
         public void bindView(ViewHolder holder, GridActivity obj) {
 
@@ -145,7 +144,7 @@ public class HomeActivity extends Activity {
         gridAdapter.add(new GridActivity(RemoterActivity.class,R.drawable.home_micontro,R.string.home_remoter));
         gridAdapter.add(new GridActivity(ProgramActivity.class,R.drawable.home_programlist,R.string.home_program_list));
         gridAdapter.add(new GridActivity(EpgActivity.class,R.drawable.home_epg,R.string.home_epg));
-        gridAdapter.add(new GridActivity(LiverActivity.class,R.drawable.home_live,R.string.home_live));
+        gridAdapter.add(new GridActivity(LiveActivity.class,R.drawable.home_live,R.string.home_live));
         gridAdapter.add(new GridActivity(null,R.drawable.home_more,R.string.home_more));
 
 

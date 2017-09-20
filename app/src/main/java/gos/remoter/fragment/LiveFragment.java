@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -30,14 +29,11 @@ import gos.remoter.data.Program;
 import gos.remoter.data.ProgramUrl;
 import gos.remoter.data.Respond;
 import gos.remoter.define.DataParse;
-import gos.remoter.define.SystemInfo;
-import gos.remoter.enumkey.SystemState;
 import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMsg;
 import gos.remoter.event.MsgKey;
 import gos.remoter.event.EventMode;
 import gos.remoter.view.ErrorMaskView;
-import gos.remoter.view.TitleBar;
 import gos.remoter.activity.*;
 
 import static gos.remoter.define.CommandType.*;   //导入静态命令集
@@ -128,7 +124,7 @@ public class LiveFragment extends Fragment {
                              Bundle savedInstanceState) {
         if(null == rootView){
 
-            rootView   = inflater.inflate(R.layout.fragment_liver, container, false);
+            rootView   = inflater.inflate(R.layout.fragment_live, container, false);
             initLayout(rootView);
             initData();
 
@@ -288,7 +284,7 @@ public class LiveFragment extends Fragment {
 
     private void startPlayByUrl(String url){
         Log.i(TAG,"url:"+url);
-        Intent intent = new Intent(context,LiveActivity.class);
+        Intent intent = new Intent(context,PlayerActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(MsgKey.url,url);
         intent.putExtras(bundle);

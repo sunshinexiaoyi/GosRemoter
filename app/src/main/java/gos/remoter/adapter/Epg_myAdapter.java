@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import gos.remoter.R;
@@ -244,23 +246,30 @@ public abstract class Epg_myAdapter<T> extends BaseAdapter {
             View view = getView(id);
             view.setVisibility(View.GONE);
         }
+
         //5、显示控件
         public void setVISIBLE(int id) {
             View view = getView(id);
             view.setVisibility(View.VISIBLE);
         }
 
-        //6、设置文本过长时显示模式
+        //6、设置文本过长时缩略显示
         public void setTextMarquee(int id) {
             View view = getView(id);
+            view.getLayoutParams().width = 526;
             ((TextView)view).setEllipsize(TextUtils.TruncateAt.END);//省略号
             ((TextView)view).setSingleLine(true);
         }
-        //7、取消文本过长处理状态
+
+        //7、使文本尽可能地显示
         public void setTextNormal(int id) {
             View view = getView(id);
             ((TextView)view).setEllipsize(null);
             ((TextView)view).setSingleLine(false);
+            view.getLayoutParams().height = WindowManager.LayoutParams.WRAP_CONTENT;
+            view.getLayoutParams().width = WindowManager.LayoutParams.MATCH_PARENT;
+            //Log.e("消息:高度", ((TextView)view).getHeight() + " ");
+            //Log.e("消息:宽度", ((TextView)view).getWidth() + " ");
         }
 
         //8、设置背景，包括Button， ImageButton，但不包括ImageView

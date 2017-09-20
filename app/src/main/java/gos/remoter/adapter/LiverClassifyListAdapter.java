@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import gos.remoter.R;
-import gos.remoter.activity.LiverActivity;
+import gos.remoter.activity.LiveActivity;
 
 /**
  * Created by djk on 2017/9/12.
@@ -51,7 +51,7 @@ public class LiverClassifyListAdapter extends BaseAdapter {
         TextView tv = (TextView) convertView.findViewById(R.id.live_classify_list_item_id);
         mPosition = position;
         tv.setText(strings[position]);
-        if (position == LiverActivity.selectPosition) {
+        if (position == LiveActivity.selectPosition) {
             tv.setBackgroundResource(R.drawable.liver_checked);
             tv.setTextColor(Color.parseColor("#3490DB"));
             tv.setTextSize(18);

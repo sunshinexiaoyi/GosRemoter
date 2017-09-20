@@ -71,6 +71,9 @@ public class ConnectActivity extends Activity {
     protected void onDestroy() {
         EventManager.unregister(this);
         ACTCollector.remove(ACTCollector.getByName(this));//从收集器移除
+        if(ACTCollector.isEmpty()){
+            sendExitSystem();
+        }
         Log.e(TAG,"销毁");
         super.onDestroy();
     }
@@ -85,6 +88,9 @@ public class ConnectActivity extends Activity {
             switch (msg.getCommand()){
                 case COM_NET_ENABLE:
                     sendFindDevice();
+                    break;
+                case COM_NET_DISABLE:
+                    deviceAdapter.clear();
                     break;
                 case COM_SYS_HEARTBEAT_STOP: {
                     break;

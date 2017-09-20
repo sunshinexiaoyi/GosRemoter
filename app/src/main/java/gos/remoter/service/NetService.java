@@ -42,6 +42,10 @@ public class NetService extends Service {
     private int heartbeatInterval = 1000; //设置心跳包超时时间为10s
 
     private boolean receiveFlag = true;// 接收运行标志
+    private boolean wifiEnableingFlag = false;// wifi开启标志
+
+
+    private Thread netReceiveThread;
 
     private BroadcastReceiver wifiChangedReceiver = new BroadcastReceiver(){//wifi改变接收器
         @Override
@@ -50,20 +54,41 @@ public class NetService extends Service {
             Log.e("WIFI状态", "wifiState:" + wifiState);
             switch (wifiState) {
                 case WifiManager.WIFI_STATE_DISABLED:
-                    Log.e("WIFI状态", "wifiState:WIFI_STATE_DISABLED");
-                    enableWifi();
+                    Log.e("WIFI状态", "wifi 无法使用");
+                    sendNetDisable();
+                    if(null != netReceiveThread){
+                        Log.e("netReceiveThread", "null != netReceiveThread");
+                        stopReceiver();
+                    }
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            enableWifi();
+                        }
+                    }).start();
                     break;
                 case WifiManager.WIFI_STATE_DISABLING:
                     Log.e("WIFI状态", "wifiState:WIFI_STATE_DISABLING");
                     break;
                 case WifiManager.WIFI_STATE_ENABLED:
-
-                    startReceiver();
-
                     Log.e("WIFI状态", "wifi 已经打开");
+
+                    if(wifiEnableingFlag){//如果是重新启动，延时在开启服务
+                       new Timer().schedule(new TimerTask() {
+                           @Override
+                           public void run() {
+                               Log.e("WIFI状态", "如果是重新启动，延时在开启服务");
+                               startReceiver();
+                           }
+                       },3000);
+                    }else {
+                        startReceiver();
+                    }
+                    wifiEnableingFlag = false;
                     break;
                 case WifiManager.WIFI_STATE_ENABLING:
-                    Log.e("WIFI状态", "wifiState:WIFI_STATE_ENABLING");
+                    wifiEnableingFlag = true;
+                    Log.e("WIFI状态", "wifi 正在打开");
                     break;
                 case WifiManager.WIFI_STATE_UNKNOWN:
                     Log.e("WIFI状态", "wifiState:WIFI_STATE_UNKNOWN");
@@ -184,8 +209,9 @@ public class NetService extends Service {
 
     /*网络部分*/
     void startReceiver(){
-
-        new Thread(new Runnable() {
+        Log.i(TAG,"startReceiver");
+        receiveFlag = true;
+        netReceiveThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -200,29 +226,30 @@ public class NetService extends Service {
                             parseDataPackage(dataPackage);
                         }else {
                             Log.e(TAG,"null != dataPackage");
+                            stopReceiver();
                         }
                     }
 
-                }catch (UnknownHostException e){
+                } catch (InterruptedException e){
                     e.printStackTrace();
-                }catch (SocketException e){
+                }
+                catch (Exception e){
                     e.printStackTrace();
-                }catch (IOException e){
-                    e.printStackTrace();
-                    stopReceiver();
+                    //destroyNetService();
                 }finally {
+                    Log.e(TAG,"finally");
                     netReceiver.close();
-                    Log.e(TAG,"接收线程finally");
                 }
             }
-        }).start();
+        });
+        netReceiveThread.start();
 
     }
 
     private void enableWifi(){
+        Log.i(TAG,"请求开启wifi");
         WifiManager wifiMng = (WifiManager)(getApplicationContext().getSystemService(Context.WIFI_SERVICE));
         wifiMng.setWifiEnabled(true);   //启动wifi
-        Log.i("wifi","启动wifi");
     }
 
     /**
@@ -247,13 +274,14 @@ public class NetService extends Service {
 
     private void stopReceiver(){
         receiveFlag = false;
+        netReceiveThread.interrupt();
+        netReceiver.close();
         Log.e(TAG,"停止网络接收线程");
     }
 
     private void destroyNetService(){
         Log.i(TAG,"destroyNetService");
         stopReceiver();
-
         stopSelf();
     }
 

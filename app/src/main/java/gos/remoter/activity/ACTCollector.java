@@ -53,6 +53,7 @@ public class ACTCollector {
     }
 
     public static boolean isEmpty(){
+        Log.e(TAG,"isEmpty："+(actList.size()==0));
         return (actList.size()==0);
     }
 }

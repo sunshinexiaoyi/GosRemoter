@@ -58,7 +58,7 @@ public class HomeActivity extends Activity {
             switch (msg.getCommand()){
                 case COM_SYSTEM_RESPOND:    //回应
                     Respond respond = DataParse.getRespond(msg.getData());
-                    parseRespond(respond);
+
                     break;
                 case COM_SYS_EXIT:
                     finish();
@@ -69,20 +69,6 @@ public class HomeActivity extends Activity {
         }
     }
 
-    private void parseRespond(Respond respond){
-        switch (respond.getCommand()){
-            case COM_CONNECT_DETACH:
-                if(respond.getFlag()){
-                    detach();
-                }else{
-                    Log.i(TAG,"断开连接失败");
-                }
-                break;
-
-            default:
-                break;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +189,7 @@ public class HomeActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         sendDetachDevice();
+                        restartConnect();
                     }
                 }).create();
     }
@@ -220,16 +207,12 @@ public class HomeActivity extends Activity {
     private void sendDetachDevice(){
         if(SystemState.ATTACH == SystemInfo.getInstance().getState()) {
             Log.e(TAG,"发送断开与服务器的连接");
+            SystemInfo.getInstance().setState(SystemState.DETACH);
+
             EventManager.send(COM_CONNECT_DETACH, "", EventMode.OUT);
         }
     }
 
-    private void detach(){
-        if(SystemState.EXIT != SystemInfo.getInstance().getState()) {
-            SystemInfo.getInstance().setState(SystemState.DETACH);
-            restartConnect();
-        }
-    }
 
     void exitSystem(){
         if(SystemState.ATTACH == SystemInfo.getInstance().getState()) {

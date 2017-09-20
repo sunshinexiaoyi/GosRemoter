@@ -52,7 +52,7 @@ public  class NetProtocol{
 
         public UdpUnicastSocket(){}
 
-        public UdpUnicastSocket(String ip,int port, SocketType type) throws SocketException,UnknownHostException
+        public UdpUnicastSocket(String ip,int port, SocketType type) throws Exception
         {
             ipAddress = InetAddress.getByName(ip);
 
@@ -120,6 +120,10 @@ public  class NetProtocol{
                 byte[] data = new byte[receiveLen];//定义头部
                 DatagramPacket packet= new DatagramPacket(data,data.length,ipAddress,port);
                 socket.receive(packet);
+                if(packet.getLength() ==0){
+                    throw new IOException("udp接收长度为0");
+                }
+
                 dataPackage = new DataPackage(Arrays.copyOf(packet.getData(), packet.getLength()));
 
             }catch (DataPackageException e) {
@@ -132,7 +136,11 @@ public  class NetProtocol{
 
         public void close()
         {
-            this.socket.close();
+            if(null != socket){
+                Log.e("网络","释放网络");
+                socket.close();
+                socket = null;
+            }
         }
 
 

@@ -65,7 +65,7 @@ interface CommandIn{
     byte COM_SYS_REMOTE_ID = 106;     //遥控器id
 
     byte COM_NET_ENABLE = 107;
-    byte COM_NET_DISABLE = 10;
+    byte COM_NET_DISABLE = 108;
 
 }
 

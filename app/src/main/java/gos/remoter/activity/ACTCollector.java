@@ -51,4 +51,8 @@ public class ACTCollector {
             Log.e(TAG, "ACT" + i + "：" + actList.get(i));
         }
     }
+
+    public static boolean isEmpty(){
+        return (actList.size()==0);
+    }
 }

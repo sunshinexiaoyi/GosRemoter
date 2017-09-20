@@ -17,6 +17,7 @@ import java.util.TimerTask;
 import gos.remoter.R;
 import gos.remoter.service.NetService;
 import gos.remoter.tool.ImmersionLayout;
+import gos.remoter.tool.SystemClear;
 
 public class InitActivity extends AppCompatActivity{
     private String TAG = this.getClass().getSimpleName();
@@ -25,6 +26,7 @@ public class InitActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
         view = findViewById(R.id.init);
@@ -34,27 +36,14 @@ public class InitActivity extends AppCompatActivity{
         actionBar = getSupportActionBar();
         actionBar.hide();
 
-        startService();
         startConnectActivity();
         //finish();
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         ACTCollector.remove(ACTCollector.getByName(InitActivity.this));//从收集器移除
-        setContentView(R.layout.activity_base);
-        Log.e("消息", "InitACT死掉了");
-        BitmapDrawable bd = (BitmapDrawable)view.getBackground();
-        view.setBackgroundResource(0);
-        bd.setCallback(null);
-        bd.getBitmap().recycle();;
-        TAG = null;
-        actionBar = null;
-        view = null;
-        bd = null;
-        System.gc();
-        Log.e("消息", "回收完成111111");
+        super.onDestroy();
     }
 
     void initView(){
@@ -62,11 +51,6 @@ public class InitActivity extends AppCompatActivity{
 
     }
 
-    void startService(){
-        //start NetService
-        Intent intent = new Intent(this, NetService.class);
-        startService(intent);
-    }
 
     void startConnectActivity(){
         Timer timer = new Timer();
@@ -77,7 +61,6 @@ public class InitActivity extends AppCompatActivity{
                 Intent intent = new Intent(InitActivity.this,ConnectActivity.class);
                 startActivity(intent);
 
-                Log.i(TAG,"start netService");
                 finish();
             }
         },1000);

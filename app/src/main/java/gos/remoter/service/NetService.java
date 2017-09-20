@@ -1,8 +1,10 @@
 package gos.remoter.service;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
@@ -13,6 +15,10 @@ import com.alibaba.fastjson.JSON;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,17 +37,48 @@ public class NetService extends Service {
     public static NetProtocol.UdpUnicastSocket netSender = null;
     public static NetProtocol.UdpUnicastSocket netReceiver = null;
 
-    private Timer wifiTimer = null;
-    private Timer serverTimer = null;
-
-    private String localIP;
-    private String deviceIP;
 
     private HeartbeatPacket heartbeatPacket = null;
     private int heartbeatInterval = 1000; //设置心跳包超时时间为10s
 
+    private boolean receiveFlag = true;// 接收运行标志
+
+    private BroadcastReceiver wifiChangedReceiver = new BroadcastReceiver(){//wifi改变接收器
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, -1);
+            Log.e("WIFI状态", "wifiState:" + wifiState);
+            switch (wifiState) {
+                case WifiManager.WIFI_STATE_DISABLED:
+                    Log.e("WIFI状态", "wifiState:WIFI_STATE_DISABLED");
+                    enableWifi();
+                    break;
+                case WifiManager.WIFI_STATE_DISABLING:
+                    Log.e("WIFI状态", "wifiState:WIFI_STATE_DISABLING");
+                    break;
+                case WifiManager.WIFI_STATE_ENABLED:
+
+                    startReceiver();
+
+                    Log.e("WIFI状态", "wifi 已经打开");
+                    break;
+                case WifiManager.WIFI_STATE_ENABLING:
+                    Log.e("WIFI状态", "wifiState:WIFI_STATE_ENABLING");
+                    break;
+                case WifiManager.WIFI_STATE_UNKNOWN:
+                    Log.e("WIFI状态", "wifiState:WIFI_STATE_UNKNOWN");
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    };
+
+
     public NetService() {
     }
+
 
     /**
      * 接收内部模块事件
@@ -56,7 +93,7 @@ public class NetService extends Service {
 
         if(EventMode.OUT == msg.getEventMode()){//对外
             DataPackage dataPackage = new DataPackage();
-            dataPackage.command = msg.getCommand();
+            dataPackage.setCommand( msg.getCommand());
             dataPackage.setData(msg.getData());
 
             switch (dataPackage.getCommand())
@@ -101,9 +138,9 @@ public class NetService extends Service {
         super.onCreate();
 
         EventManager.register(this);//订阅
+        registerWifiReceiver();
         initHeartbeatPacket();
         initNetServer();
-
     }
 
     @Override
@@ -111,40 +148,22 @@ public class NetService extends Service {
         Log.e(TAG,"网络服务销毁");
         super.onDestroy();
         EventManager.unregister(this);//取消订阅
+        unregisterWifiReceiver();
+
     }
 
     void initNetServer(){
-        initWifi();
+        //initWifi();
     }
 
-    void initWifi (){
-        wifiTimer = new Timer();
+    private void registerWifiReceiver(){
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(wifiChangedReceiver,filter);
+    }
 
-        wifiTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                WifiManager wifiMng = (WifiManager)(getApplicationContext().getSystemService(Context.WIFI_SERVICE));
-                int wifiState = wifiMng.getWifiState();
-
-                switch (wifiState){
-                    case WifiManager.WIFI_STATE_ENABLED:
-                        Log.i(TAG,"wifi 已经打开");
-                        WifiInfo wifiInfo = wifiMng.getConnectionInfo();
-                        localIP = getLocalIP(wifiInfo);
-                        if(null != localIP){
-                            wifiTimer.cancel();
-                            startServer();
-                        }
-                        break;
-                    case WifiManager.WIFI_STATE_DISABLED:
-                        Log.i(TAG,"wifi 未开启!尝试启动");
-                        wifiMng.setWifiEnabled(true);   //启动wifi
-                        break;
-                    default:
-                        break;
-                }
-            }
-        },0,3000);
+    private void unregisterWifiReceiver(){
+        unregisterReceiver(wifiChangedReceiver);
     }
 
 
@@ -162,28 +181,80 @@ public class NetService extends Service {
         EventManager.send(COM_SYS_HEARTBEAT_STOP,"", EventMode.IN);
     }
 
-    void startServer(){
-        try {
-            netReceiver = new NetProtocol.UdpUnicastSocket(localIP,NetProtocol.receivePort,NetProtocol.SocketType.RECEIVE);
-            Log.i(TAG,"本地IP:"+netReceiver.getAddress());
-            Log.i(TAG,"本地port:"+netReceiver.getPort());
-            serverTimer = new Timer();
-            serverTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    byte[] recvData = netReceiver.receive();
-                    try {
-                       // Log.i(TAG,DataPackage.getFormatStr(recvData));
-                        DataPackage dataPackage = new DataPackage(recvData);
-                        parseDataPackage(dataPackage);
-                    }catch (Exception e){
-                        e.printStackTrace();
+
+    /*网络部分*/
+    void startReceiver(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    netReceiver = new NetProtocol.UdpUnicastSocket(getWifiIp(),NetProtocol.receivePort,NetProtocol.SocketType.RECEIVE);
+                    Log.i(TAG,"本地IP:"+netReceiver.getAddress());
+                    Log.i(TAG,"本地port:"+netReceiver.getPort());
+                    sendNetEnable();
+
+                    while (receiveFlag){
+                        DataPackage dataPackage = netReceiver.receivePackage();
+                        if(null != dataPackage){
+                            parseDataPackage(dataPackage);
+                        }else {
+                            Log.e(TAG,"null != dataPackage");
+                        }
                     }
+
+                }catch (UnknownHostException e){
+                    e.printStackTrace();
+                }catch (SocketException e){
+                    e.printStackTrace();
+                }catch (IOException e){
+                    e.printStackTrace();
+                    stopReceiver();
+                }finally {
+                    netReceiver.close();
+                    Log.e(TAG,"接收线程finally");
                 }
-            },0,50);
-        }catch (Exception e){
-            e.printStackTrace();
+            }
+        }).start();
+
+    }
+
+    private void enableWifi(){
+        WifiManager wifiMng = (WifiManager)(getApplicationContext().getSystemService(Context.WIFI_SERVICE));
+        wifiMng.setWifiEnabled(true);   //启动wifi
+        Log.i("wifi","启动wifi");
+    }
+
+    /**
+     * 获取wifi ip
+     * @return
+     */
+    private String getWifiIp(){
+        WifiManager wifiMng = (WifiManager) (getApplicationContext().getSystemService(Context.WIFI_SERVICE));
+        WifiInfo wifiInfo = wifiMng.getConnectionInfo();
+        return getLocalIP(wifiInfo);
+    }
+
+
+    private String getLocalIP( WifiInfo wifiInfo) {
+        int ipAddress = wifiInfo.getIpAddress();
+        if (0 == ipAddress) {
+            return null;
         }
+        return  ((ipAddress & 0xff)+"."+(ipAddress>>8 & 0xff)+"."
+                +(ipAddress>>16 & 0xff)+"."+(ipAddress>>24 & 0xff));
+    }
+
+    private void stopReceiver(){
+        receiveFlag = false;
+        Log.e(TAG,"停止网络接收线程");
+    }
+
+    private void destroyNetService(){
+        Log.i(TAG,"destroyNetService");
+        stopReceiver();
+
+        stopSelf();
     }
 
 
@@ -204,8 +275,7 @@ public class NetService extends Service {
                     break;
                 case COM_CONNECT_ATTACH:
                     Log.i(TAG,"连接设备");
-                    //开启心跳包
-                    heartbeatPacket.start();
+                    heartbeatPacket.start();//开启心跳包
                     break;
                 default:
                     break;
@@ -238,21 +308,11 @@ public class NetService extends Service {
         EventManager.send(COM_SYSTEM_RESPOND, JSON.toJSONString(respond), EventMode.OUT);
     }
 
-    private String getLocalIP( WifiInfo wifiInfo) {
-        int ipAddress = wifiInfo.getIpAddress();
-        if (0 == ipAddress) {
-            return null;
-        }
-        return  ((ipAddress & 0xff)+"."+(ipAddress>>8 & 0xff)+"."
-                +(ipAddress>>16 & 0xff)+"."+(ipAddress>>24 & 0xff));
+    private void sendNetEnable(){
+        EventManager.send(COM_NET_ENABLE,"", EventMode.IN);
     }
-
-    private void destroyNetService(){
-        Log.i(TAG,"destroyNetService");
-        serverTimer.cancel();
-        netReceiver.close();
-
-        stopSelf();
+    private void sendNetDisable(){
+        EventManager.send(COM_NET_DISABLE,"", EventMode.IN);
     }
-
 }
+

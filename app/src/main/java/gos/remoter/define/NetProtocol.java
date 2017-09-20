@@ -23,6 +23,8 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 
+import gos.remoter.exception.DataPackageException;
+
 
 public  class NetProtocol{
     public static final int sendPort = 4321;
@@ -46,15 +48,14 @@ public  class NetProtocol{
         public int port;
         private DatagramSocket socket;
         private SocketType type;
+        private int receiveLen = 1024*50;
 
+        public UdpUnicastSocket(){}
 
-        public UdpUnicastSocket(String IP, int port, SocketType type) throws Exception{
-            try {
-                this.ipAddress = InetAddress.getByName(IP);
-            }catch (UnknownHostException e) {
-                e.printStackTrace();
-                throw new Exception("InetAddress.getByName(IP) failed");
-            }
+        public UdpUnicastSocket(String ip,int port, SocketType type) throws SocketException,UnknownHostException
+        {
+            ipAddress = InetAddress.getByName(ip);
+
             this.port = port;
             this.type = type;
 
@@ -65,6 +66,7 @@ public  class NetProtocol{
                 this.socket = new DatagramSocket(this.port, this.ipAddress);
 
             }
+
         }
 
         public SocketType getType() {
@@ -80,18 +82,26 @@ public  class NetProtocol{
         }
 
         public void send(byte data[]) {
-            //Log.i("test__send",String.format("ip:%s,port:%d",getAddress(),port));
             DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
             try {
                 socket.send(packet);
-                SystemClock.sleep(100);
-            }catch (Exception e) {
+
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void send(DatagramPacket packet){
+            try {
+                socket.send(packet);
+
+            }catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         public byte [] receive() {
-            byte receiveData[] = new byte[1024 *100];
+            byte receiveData[] = new byte[receiveLen];
             DatagramPacket packet = new DatagramPacket(receiveData, receiveData.length, ipAddress, port);
             try {
                 socket.receive(packet);
@@ -100,6 +110,24 @@ public  class NetProtocol{
                 e.printStackTrace();
             }
             return null;
+        }
+
+        public DataPackage receivePackage() throws IOException{
+            DataPackage dataPackage = null;
+
+            try {
+                //接收头部
+                byte[] data = new byte[receiveLen];//定义头部
+                DatagramPacket packet= new DatagramPacket(data,data.length,ipAddress,port);
+                socket.receive(packet);
+                dataPackage = new DataPackage(Arrays.copyOf(packet.getData(), packet.getLength()));
+
+            }catch (DataPackageException e) {
+                e.printStackTrace();
+            }finally {
+                return dataPackage;
+
+            }
         }
 
         public void close()

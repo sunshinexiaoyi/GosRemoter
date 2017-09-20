@@ -14,6 +14,8 @@
 
     <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
+
     <!-- 自动聚焦权限 -->
     <application
         android:name=".define.SystemInfo"

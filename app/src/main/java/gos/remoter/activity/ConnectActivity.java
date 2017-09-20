@@ -4,13 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.SoundPool;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -18,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -40,6 +33,7 @@ import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
 import gos.remoter.service.NetService;
 import gos.remoter.tool.ImmersionLayout;
+import gos.remoter.tool.SystemClear;
 import gos.remoter.view.TitleBarNew;
 
 import static gos.remoter.define.CommandType.*;
@@ -73,38 +67,12 @@ public class ConnectActivity extends Activity {
         EventManager.register(this);
     }
 
-    //！！！
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventManager.unregister(this);
-        TAG = null;
-        //Log.e("消息", "ConnectACT死掉了");
-        //finish();
-        System.gc();
-    }
-
     @Override
     protected void onDestroy() {
-        //sendExitSystem();
+        EventManager.unregister(this);
+        ACTCollector.remove(ACTCollector.getByName(this));//从收集器移除
+        Log.e(TAG,"销毁");
         super.onDestroy();
-        ACTCollector.remove(ACTCollector.getByName(ConnectActivity.this));//从收集器移除
-        setContentView(R.layout.activity_base);
-        Log.e("消息", "ConnectACT死掉了");
-        BitmapDrawable bd1 = (BitmapDrawable)view.getBackground();
-        view.setBackgroundResource(0);
-        bd1.setCallback(null);
-        bd1.getBitmap().recycle();
-        view = null;
-
-        BitmapDrawable bd2 = (BitmapDrawable)deviceSpinner.getBackground();
-        deviceSpinner.setBackgroundResource(0);
-        bd2.setCallback(null);
-        bd2.getBitmap().recycle();
-        deviceSpinner = null;
-        deviceAdapter = null;
-        System.gc();
-        Log.e("消息", "回收完成");
     }
 
     /**
@@ -115,6 +83,9 @@ public class ConnectActivity extends Activity {
     public void onRecviveEvent(EventMsg msg){
         if(EventMode.IN == msg.getEventMode()){  //对内
             switch (msg.getCommand()){
+                case COM_NET_ENABLE:
+                    sendFindDevice();
+                    break;
                 case COM_SYS_HEARTBEAT_STOP: {
                     break;
                 }
@@ -200,9 +171,10 @@ public class ConnectActivity extends Activity {
     }
 
     private void initData(){
-        getDevice();
+        startService();
+        sendFindDevice();
     }
-    private void getDevice(){
+    private void sendFindDevice(){
         EventManager.send(COM_CONNECT_GET_DEVICE,"", EventMode.OUT);
     }
 
@@ -273,6 +245,7 @@ public class ConnectActivity extends Activity {
         //设置系统状态为已连接
         SystemInfo.getInstance().setState(SystemState.ATTACH);
         startHomeActivity();
+        finish();
     }
 
     private void detach(){
@@ -282,7 +255,6 @@ public class ConnectActivity extends Activity {
         //设置系统状态为断开连接
         SystemInfo.getInstance().setState(SystemState.DETACH);
     }
-
 
     private void attachDevice(Device device){
         Toast.makeText(this, getResources().getString(R.string.connect_try_connect), Toast.LENGTH_SHORT).show();
@@ -306,7 +278,6 @@ public class ConnectActivity extends Activity {
     }
 
 
-
     void startHomeActivity(){
         Intent intent = new Intent(this,HomeActivity.class);
         startActivity(intent);
@@ -321,6 +292,12 @@ public class ConnectActivity extends Activity {
             Log.e(TAG,"退出系统");
             EventManager.send(COM_SYS_EXIT,"",EventMode.IN);
         }
+    }
+
+    void startService(){
+        //start NetService
+        Intent intent = new Intent(this, NetService.class);
+        startService(intent);
     }
 
 }

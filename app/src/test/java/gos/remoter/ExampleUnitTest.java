@@ -24,6 +24,7 @@ import gos.remoter.data.Time;
 import gos.remoter.define.DataPackage;
 import gos.remoter.define.NetProtocol;
 import gos.remoter.define.*;
+import gos.remoter.tool.SystemClear;
 
 import static gos.remoter.define.CommandType.*;   //导入静态命令集
 
@@ -46,6 +47,21 @@ public class ExampleUnitTest {
     ArrayList<EpgProgram> epgPrograms = createEpgPrograms(15);
     @Test
     public void addition_isCorrect() throws Exception {
+        /*DataPackage dataPackage = new DataPackage(COM_CONNECT_ATTACH,"hehe");
+        System.out.println(dataPackage.getCommand());
+        System.out.println(dataPackage.getCrc());
+        System.out.println(dataPackage.getData());
+        byte[] send = dataPackage.toByte();
+        System.out.println(DataPackage.getFormatStr(send));
+
+        DataPackage recv = new DataPackage(send);
+        System.out.println(recv.getCommand());
+        System.out.println(recv.getCrc());
+        System.out.println(recv.getData());
+        System.out.println(recv.getDataLen());
+
+        System.out.println(DataPackage.getFormatStr(recv.toByte()));*/
+
         startServer();
         //test();
     }
@@ -80,9 +96,9 @@ public class ExampleUnitTest {
                     InetAddress address = packet.getAddress();
 
                     DatagramPacket packet2 = new DatagramPacket(sendData, sendData.length, address, NetProtocol.receivePort);
-                   /* System.out.println("客户端配置");
+                    System.out.println("客户端配置");
                     System.out.println("ip:"+address.getHostAddress());
-                    System.out.println("port:"+packet2.getPort());*/
+                    System.out.println("port:"+packet2.getPort());
                     socket.send(packet2);
                 }
 
@@ -112,7 +128,7 @@ public class ExampleUnitTest {
                 System.out.println("心跳包");
                 try{
                     Thread.sleep(1000);
-                    dataPackage.command = COM_SYSTEM_HEARTBEAT_PACKET;
+                    dataPackage.setCommand(COM_SYSTEM_HEARTBEAT_PACKET);
                 }catch (Exception e){
                     e.printStackTrace();}
                 break;    //
@@ -120,7 +136,7 @@ public class ExampleUnitTest {
             /* 连接模块命令*/
             case COM_CONNECT_GET_DEVICE:
                 System.out.println("查找设备");
-                dataPackage.command = COM_CONNECT_SET_DEVICE;
+                dataPackage.setCommand(COM_CONNECT_SET_DEVICE);
 
                 Device device = new Device(local.getHostAddress(),"ff:ee:34:63:23","2017");
                 sendData = JSON.toJSONString(device);
@@ -142,13 +158,13 @@ public class ExampleUnitTest {
              /* 直播模块命令 */
             case COM_LIVE_GET_PROGRAM_LIST :
                 System.out.println("获取节目列表");
-                dataPackage.command = COM_LIVE_SET_PROGRAM_LIST;
+                dataPackage.setCommand(COM_LIVE_SET_PROGRAM_LIST);
 
                 sendData = JSON.toJSONString(getProgramList());
                 break; //
             case COM_LIVE_GET_PROGRAM_URL :
                 //String testUrl ="
-                dataPackage.command = COM_LIVE_SET_PROGRAM_URL;
+                dataPackage.setCommand(COM_LIVE_SET_PROGRAM_URL) ;
                 IndexClass indexClass = JSON.parseObject(dataPackage.getData(),IndexClass.class);
                 int index = indexClass.getIndex();
                 System.out.println("获取节目url  index:"+index);
@@ -202,6 +218,8 @@ public class ExampleUnitTest {
         }
         System.out.println(sendData);
         dataPackage.setData(sendData);
+        System.out.println("getDataLen"+dataPackage.getDataLen());
+
         return dataPackage.toByte();
     }
 

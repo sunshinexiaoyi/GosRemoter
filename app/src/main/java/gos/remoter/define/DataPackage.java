@@ -4,101 +4,85 @@ import android.util.Log;
 
 import java.util.Arrays;
 
+import gos.remoter.exception.DataPackageException;
+
 /**
- * 将字节数据转化成数据包
+ * 完整数据包
  * Created by wuxy on 2017/7/6.
  */
 
 public class DataPackage extends PackageHead{
+    final String TAG = this.getClass().getSimpleName();
 
-    public String data = null;
-    public int testCrc = 2017;
+    public static final int headLen = 11;   //头部长度
+    public String data = null;//数据段
 
-    public  byte[] byteData =  new byte[1024*10];
+    public int testCrc = 2017;//默认crc值
 
     public DataPackage(){}
 
-    public DataPackage(byte[] inputData)throws Exception{
+    public DataPackage(byte[] inputData)throws DataPackageException{
         toDataPackage(inputData);
     }
 
-    @Override
-    public String toString() {
-        try {
-            return new String(toByte());
-        }catch (Exception e){
-            e.printStackTrace();}
-        return null;
+    public DataPackage(byte command, String data){
+        setCommand(command);
+        setData(data);
     }
 
     /**
-     * @return  将数据包转化成byte[]
-     * @throws Exception
+     * 设置长度
+     * @param data
      */
-    public byte[] toByte()throws Exception{
-
-        int i = 0;
-        //command
-        byteData[i++] = command;
-        byteData[i++] = receive;
-
-        //crc
-        i += intToByte(crc,byteData,i);
-
-        //encrypt
-        byteData[i++] = encrypt;
-
-        //datalen
-        i += intToByte(dataLen,byteData,i);
-
-        //data
-        if(null !=data){
-            byte[] byteSrc = data.getBytes("utf-8");
-            System.arraycopy(byteSrc,0,byteData,i,byteSrc.length);
-            i += byteSrc.length;
-
-        }
-        byteData = Arrays.copyOf(byteData,i);
-
-        return byteData;
-    }
-
-    /**
-     * 将输入的byte数组转化成数据包
-     * @param srcByte 输入byte数组
-     */
-    public void toDataPackage(byte[] srcByte) throws Exception{
-        int i = 0;
-        this.command = srcByte[i++];
-        this.receive = srcByte[i++];
-        try {
-            this.crc = byteToInt(srcByte,i);
-            i += 4;
-            if(!crcCheckout(this.crc)) {
-                throw new Exception("crcCheckout is faield");
-            }
-            this.encrypt = srcByte[i++];
-
-            this.dataLen = byteToInt(srcByte,i);
-            i += 4;
-
-            this.data = new String(Arrays.copyOfRange(srcByte,i,srcByte.length));
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new Exception("toDataPackage is faield");
-
-        }
-    }
-
     public void setData(String data){
         if(null != data){
             this.data = data;
-            this.dataLen = data.length();
+            setDataLen(data.getBytes().length);
         }
+    }
+
+    /**
+     * 不设置长度
+     * @param data
+     */
+    public void setData(byte[] data) {
+        this.data = new String(data);
     }
 
     public String getData(){
         return data;
+    }
+
+    @Override
+    public String toString() {
+        return    "命令:"+ getCommand()
+                 +"CRC:"+ getCrc()
+                 +"数据长度:"+getDataLen()
+                 +"数据:"+getData();
+
+    }
+    
+    public void toDataPackage(byte[] data) throws DataPackageException{
+        if(data.length >= headLen){
+            int p = 0;
+
+            setCommand(data[p++]);
+            setReceive(data[p++]);
+            setCrc(byteToInt(data,p,4));
+            p +=4;
+
+            if(!crcCheckout(getCrc())){
+                throw new DataPackageException("crc校验出错!"+"当前crc:"+getCrc());
+            }
+
+            setEncrypt(data[p++]);
+            setDataLen(byteToInt(data,p,4));
+
+            setData(Arrays.copyOfRange(data,headLen,data.length));
+
+        }else {
+            throw new DataPackageException("数据长度小于"+headLen+"!当前数据长度:"+data.length);
+        }
     }
 
     public static String getFormatStr(byte[] byteData){
@@ -116,38 +100,64 @@ public class DataPackage extends PackageHead{
     }
 
     /**
-     * @param srcByte   源数组
-     * @return  返回转化的int
-     * @throws Exception
+     * 将对象转化成byte[]
+     * @return  byte[]
      */
-    private int byteToInt(byte[] srcByte,int fromIndex) throws Exception{
-        if(srcByte.length < 4){
-            throw new Exception("byte[].length < int length");
+    public byte[] toByte(){
+        byte[] sendData = new byte[headLen+getDataLen()];
+        int p = 0;
+
+        sendData[p++] = getCommand();
+        sendData[p++] = getReceive();
+
+        p += intToByte(sendData,p,4,testCrc);
+        sendData[p++] = getEncrypt();
+
+        p += intToByte(sendData,p,4,getDataLen());
+
+        if (null != getData()) {
+            byte[] data = getData().getBytes();
+            System.arraycopy(data,0, sendData,p,data.length);
         }
-        return  (srcByte[fromIndex++]&0xff)|
-                ((srcByte[fromIndex++]&0xff)<<8)|
-                ((srcByte[fromIndex++]&0xff)<<16)|
-                ((srcByte[fromIndex++]&0xff)<<24);
+
+        return sendData;
     }
 
     /**
-     * @param srcInt    要转化的int型
-     * @param desByte   目标数组
-     * @param fromIndex 从指定索引开始(包含该索引位置)
-     * @throws Exception
-     * @return  索引偏移数
+     * 将byte数组转化成int类型 小端模式 低地址低位
+     * @param srcBytes  输入数组
+     * @param from  开始索引 包括该适索引
+     * @param len   长度  <=4
+     * @return  -1 失败 否则成功
      */
-    private int intToByte(int srcInt,byte[] desByte,int fromIndex) throws Exception{
-        if(desByte.length < fromIndex + 4){
-            throw new Exception("desByte.length < fromIndex + 4");
+    private int byteToInt(byte[] srcBytes,int from,int len){
+        int num = 0;
+        if(4 < len){
+            return -1;
         }
 
-        desByte[fromIndex++] = (byte)(srcInt&0xff);
-        desByte[fromIndex++] = (byte)((srcInt>>8)&0xff);
-        desByte[fromIndex++] = (byte)((srcInt>>16)&0xff);
-        desByte[fromIndex++] = (byte)((srcInt>>24)&0xff);
+        for(int i=0;i<len;i++){
 
-        return 4;
+            num |= (srcBytes[from+i]&0xff)<<(Byte.SIZE*i);
+        }
+
+        return num;
+    }
+
+    /**
+     * 将int转为byte数组
+     * @param desBytes  目的数组
+     * @param from  开始索引 包括该适索引
+     * @param len   长度 小于4
+     * @param srcInt    源int
+     * @return  数组索引偏移长度
+     */
+    private int intToByte(byte[] desBytes,int from,int len,int srcInt){
+        int i = 0;
+        for(;i<len;i++){
+            desBytes[from+i] = (byte)((srcInt>>(Byte.SIZE*i))&0xff);
+        }
+        return i;
     }
 
     /**
@@ -164,12 +174,15 @@ public class DataPackage extends PackageHead{
 
 }
 
+/**
+ * 数据头部
+ */
 class PackageHead{
-    public byte command = 0;//命令类型
-    public byte receive = 0;//预留
-    public int crc = 2017;  //crc校验值
-    public byte encrypt = 0; //data加密类型0:不加密  1:rsa加密  2:aes加密
-    public int dataLen = 0; //数据长度
+    private byte command = 0;//命令类型  1byte
+    private byte receive = 0;//预留        1byte
+    private int crc = 2017;  //crc校验值    2byte
+    private byte encrypt = 0; //data加密类型0:不加密  1:rsa加密  2:aes加密  1byte
+    private int dataLen = 0; //数据长度  4byte
 
     public byte getCommand(){
         return command;

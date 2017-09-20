@@ -15,6 +15,9 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import gos.remoter.R;
 import gos.remoter.adapter.Epg_myAdapter;
 import gos.remoter.adapter.ReuseAdapter;
@@ -96,9 +99,16 @@ public class HomeActivity extends Activity {
     protected void onDestroy() {
         Log.e(TAG,"销毁");
         sendDetachDevice();
-        super.onDestroy();
-        EventManager.unregister(this);
 
+
+        ACTCollector.remove(ACTCollector.getByName(this));//从收集器移除
+        if(ACTCollector.isEmpty()){
+            sendExitSystem();
+        }
+
+
+        EventManager.unregister(this);
+        super.onDestroy();
     }
 
 
@@ -159,9 +169,24 @@ public class HomeActivity extends Activity {
     }
 
     void restartConnect(){
+        Log.e(TAG,"重启连接界面");
         Intent intent = new Intent(this,ConnectActivity.class);
         startActivity(intent);
-        finish();
+        delayFinish();
+    }
+
+
+    /**
+     * 延时500 毫秒关闭
+     */
+    void delayFinish(){
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                finish();
+
+            }
+        },500);
     }
 
     void initLogoutAlert(){

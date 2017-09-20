@@ -252,23 +252,11 @@ public class EpgActivity extends Activity {
     }
     @Override
     public void onDestroy() {
-        ACTCollector.remove(ACTCollector.getByName(EpgActivity.this));//通过名字获得ACT所在列表位置并移除
+        ACTCollector.remove(this);//通过名字获得ACT所在列表位置并移除
         super.onDestroy();
         EventManager.unregister(this);//取消注册event接收器
         setContentView(R.layout.activity_null);
-        progInfo.clear();
-        progDate.clear();
-        progTime.clear();
-        expandableTimes.clear();
-        isUndo = false;
-        datePos = 0;
-        tvIndex = 0;
-        handler = null;
-        sBtnDraw = null;
-        btnSelected = null;
-        progItemAdapter = null;
-        tvNameAdapter = null;
-        tvDateAdapter = null;
+
         System.gc();//有效，一般重启两次epgACT之后会回收内存
         Log.e("消息", "将EPGACT从ACT列表中移除，取消注册event，EPGACT已经死亡");//告知取消注册event//告知EPGACT被杀死
     }

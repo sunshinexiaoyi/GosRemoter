@@ -1,6 +1,7 @@
 package gos.remoter.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import java.util.LinkedList;
 
@@ -22,6 +23,7 @@ public class ACTCollector {
     }
     //添加ACT
     public static void add(Activity activity) {
+        Log.i(TAG,"添加+"+activity.getClass().getSimpleName());
         actList.add(activity);
     }
     //结束某个ACT
@@ -41,6 +43,17 @@ public class ACTCollector {
     public static void remove(int index) {
         actList.remove(index);
     }
+
+
+    public static void remove(Activity activity) {
+        Log.i(TAG,"移除-"+activity.getClass().getSimpleName());
+        actList.remove(getByName(activity));
+        if(actList.size()==0){
+            Log.i(TAG," System.gc()");
+            System.gc();
+        }
+    }
+
     //移除全部
     public static void removeAll() {
         actList.removeAll(actList);

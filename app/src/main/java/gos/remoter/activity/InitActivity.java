@@ -42,7 +42,7 @@ public class InitActivity extends AppCompatActivity{
 
     @Override
     public void onDestroy() {
-        ACTCollector.remove(ACTCollector.getByName(InitActivity.this));//从收集器移除
+        ACTCollector.remove(this);//从收集器移除
         super.onDestroy();
     }
 

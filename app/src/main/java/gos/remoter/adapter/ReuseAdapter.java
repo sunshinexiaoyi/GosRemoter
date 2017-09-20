@@ -108,6 +108,13 @@ public abstract class ReuseAdapter<T> extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public boolean exist(T data){
+        if (mData != null) {
+            return mData.contains(data);
+        }
+        return false;
+    }
+
 
     public static class ViewHolder {
 

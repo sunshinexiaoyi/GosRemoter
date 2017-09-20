@@ -61,7 +61,6 @@ public class ConnectActivity extends Activity {
         System.gc();
         view = findViewById(R.id.connect);
         ACTCollector.add(this);//添加到收集器
-
         initView();
         initData();
         EventManager.register(this);
@@ -70,7 +69,7 @@ public class ConnectActivity extends Activity {
     @Override
     protected void onDestroy() {
         EventManager.unregister(this);
-        ACTCollector.remove(ACTCollector.getByName(this));//从收集器移除
+        ACTCollector.remove(this);//从收集器移除
         if(ACTCollector.isEmpty()){
             sendExitSystem();
         }
@@ -232,9 +231,11 @@ public class ConnectActivity extends Activity {
                     try{
                         Device retDevice =  DataParse.getDevice(retData);
                         System.out.println(JSON.toJSONString(retDevice));
-                        /*if(checkDevice(retDevice)){
-                            attachDevice(retDevice);
-                        }*/
+                        if(!deviceAdapter.exist(retDevice)){//不存在则添加
+                            deviceAdapter.add(retDevice);
+                        }
+                        Log.i(TAG,"扫码连接设备");
+                        attachDevice(retDevice);
                     }catch (com.alibaba.fastjson.JSONException e){
                         e.printStackTrace();
                         Toast.makeText(this, getResources().getString(R.string.scan_data_parse_error), Toast.LENGTH_SHORT).show();

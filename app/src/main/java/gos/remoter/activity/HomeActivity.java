@@ -86,7 +86,7 @@ public class HomeActivity extends Activity {
         sendDetachDevice();
 
 
-        ACTCollector.remove(ACTCollector.getByName(this));//从收集器移除
+        ACTCollector.remove(this);//从收集器移除
         if(ACTCollector.isEmpty()){
             sendExitSystem();
         }

@@ -174,6 +174,7 @@ public class ConnectActivity extends Activity {
                 if(null != selectDevice){
                   attachDevice(selectDevice);
                 }
+
             }
         });
 
@@ -202,6 +203,7 @@ public class ConnectActivity extends Activity {
      */
     private void sendFindDevice(){
         EventManager.send(COM_CONNECT_GET_DEVICE,"", EventMode.OUT);
+//        checkDevice(new Device("192.168.100.113", "", ""));
     }
 
     /**

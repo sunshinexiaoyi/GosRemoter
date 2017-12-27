@@ -18,8 +18,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -82,10 +80,9 @@ public class HomeActivity extends Activity {
                     // 执行滑动到下一个页面
                     if (isRunning) {
                         if(ads == null && viewPager.getCurrentItem() == imageList.size() -1) {
-                            Log.e(TAG, viewPager.getCurrentItem() + "--imageList---CurrentItem--000000");
                             viewPager.setCurrentItem(0, false);
                         } else if(ads != null && viewPager.getCurrentItem() == ads.length -1) {
-                            Log.e(TAG, viewPager.getCurrentItem() + "--ads----CurrentItem--000000");
+//                            Log.e(TAG, viewPager.getCurrentItem() + "--ads----CurrentItem--000000");
                             viewPager.setCurrentItem(0, false);
                         } else {
                             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
@@ -281,7 +278,7 @@ public class HomeActivity extends Activity {
             public void onPageSelected(int position) {
                 // 实现无限制循环播放
                 if(ads != null && ads.length > 1) {
-                    Log.e(TAG, position + "ads--position--000000");
+//                    Log.e(TAG, position + "ads--position--000000");
                     position %= ads.length;
                     curPosition = position;
                 } else if(imageList.size() > 1) {
@@ -373,7 +370,7 @@ public class HomeActivity extends Activity {
     private String[] parseAdDate(String data) {
         adList = new ArrayList<>();
         adList = DataParse.getAdList(data);
-        Log.e(TAG,"adList:\n"+ JSON.toJSONString(adList));
+//        Log.e(TAG,"adList:\n"+ JSON.toJSONString(adList));
         int i = 0;
         ads = new String[adList.size()];
         for(Advertisement ad : adList) {

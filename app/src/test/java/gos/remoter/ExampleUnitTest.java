@@ -46,8 +46,8 @@ public class ExampleUnitTest {
     String[] testAD = new String[] {
             "http://www.china859.com/wp-content/uploads/2016/12/u183311803263910969fm23gp0.jpg",
             "http://www.fjsen.com/images/attachement/jpg/site1/2011-12-30/201445196985487017.jpg",
-//            "http://img1.gtimg.com/ent/pics/hv1/125/211/939/61112405.jpg",
-//            "http://ia.hebradio.com/outimages/2017/05/24/2017052492426300.jpg",
+            "http://img1.gtimg.com/ent/pics/hv1/125/211/939/61112405.jpg",
+            "http://ia.hebradio.com/outimages/2017/05/24/2017052492426300.jpg",
             "http://y2.ifengimg.com/cmpp/2015/09/11/11/8f42f45f-8bd4-4e7c-b75b-2e912037170c_size26_w554_h311.jpg"
     };
 

@@ -136,8 +136,9 @@ public  class NetProtocol{
 
         public void close()
         {
+            Log.e("app clear","执行网络关闭函数");
             if(null != socket){
-                Log.e("网络","释放网络");
+                Log.e("app clear","---网络关闭成功---");
                 socket.close();
                 socket = null;
             }

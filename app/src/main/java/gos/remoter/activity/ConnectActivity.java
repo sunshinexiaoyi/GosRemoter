@@ -201,7 +201,8 @@ public class ConnectActivity extends Activity {
      * 发送查找设备
      */
     private void sendFindDevice(){
-        EventManager.send(COM_CONNECT_GET_DEVICE,"", EventMode.OUT);
+        Log.i(TAG,"发送粘性事件 获取设备");
+        EventManager.sendSticky(COM_CONNECT_GET_DEVICE,"", EventMode.OUT);
     }
 
     /**
@@ -346,23 +347,11 @@ public class ConnectActivity extends Activity {
 
     private void attachDevice(Device device){
         Toast.makeText(this, getResources().getString(R.string.connect_try_connect), Toast.LENGTH_SHORT).show();
-        try {
-            if(null != NetService.netSender){//如果发送套接字不为空，则关闭
-                NetService.netSender.close();
-                NetService.netSender = null;
-            }
-            NetService.netSender = new NetProtocol.UdpUnicastSocket(device.getIp(), NetProtocol.sendPort, NetProtocol.SocketType.SEND);
-            System.out.println("发送");
-            System.out.println("port:"+NetService.netSender.getPort());
-            System.out.println("ip:"+NetService.netSender.getAddress());
-            String data = JSON.toJSONString(device);
-            EventManager.send(COM_CONNECT_ATTACH,data, EventMode.OUT);
-            //设置服务器设备信息
-            SystemInfo.getInstance().setService(device);
+        String data = JSON.toJSONString(device);
+        EventManager.send(COM_CONNECT_ATTACH,data, EventMode.OUT);
+        //设置服务器设备信息
+        SystemInfo.getInstance().setService(device);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     //断开与服务器的连接

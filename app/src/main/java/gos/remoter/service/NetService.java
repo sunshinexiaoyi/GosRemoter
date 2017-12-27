@@ -1,7 +1,6 @@
 package gos.remoter.service;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,9 +14,7 @@ import com.alibaba.fastjson.JSON;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
+import gos.remoter.data.Device;
 import gos.remoter.data.Respond;
 import gos.remoter.define.DataPackage;
 import gos.remoter.define.DataParse;
@@ -25,6 +22,7 @@ import gos.remoter.define.NetProtocol;
 import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
+import gos.remoter.exception.DataPackageException;
 import gos.remoter.heartbeat.HeartbeatPacket;
 import gos.remoter.heartbeat.HeartbeatStop;
 
@@ -41,8 +39,10 @@ import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
 
 public class NetService extends Service {
     private  final String TAG = this.getClass().getSimpleName();
-    public static NetProtocol.UdpUnicastSocket netSender = null;
-    public static NetProtocol.UdpUnicastSocket netReceiver = null;
+    //public static NetProtocol.UdpUnicastSocket netSender = null;
+    //public static NetProtocol.UdpUnicastSocket netReceiver = null;
+
+    UdpUtil udpUtil = new UdpUtil();
 
 
     private HeartbeatPacket heartbeatPacket = null;
@@ -52,70 +52,12 @@ public class NetService extends Service {
     private boolean wifiEnableingFlag = false;// wifi开启标志
 
 
-    private Thread netReceiveThread = null;
-
-    private BroadcastReceiver wifiChangedReceiver = new BroadcastReceiver(){//wifi改变接收器
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, -1);
-            Log.e("WIFI状态", "wifiState:" + wifiState);
-            switch (wifiState) {
-                case WifiManager.WIFI_STATE_DISABLED:
-                    Log.e("WIFI状态", "wifi 无法使用");
-                    sendNetDisable();
-                    if(null != netReceiveThread){
-                        Log.e("netReceiveThread", "null != netReceiveThread");
-                        stopReceiver();
-                    }
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            enableWifi();
-                        }
-                    }).start();
-                    break;
-                case WifiManager.WIFI_STATE_DISABLING:
-                    //Wi-Fi 开始禁用，如果操作成功，状态为WIFI_STATE_DISABLED
-                    wifiEnableingFlag = false;
-                    Log.e("WIFI状态", "wifiState:WIFI_STATE_DISABLING");
-                    break;
-                case WifiManager.WIFI_STATE_ENABLED:
-                    Log.e("WIFI状态", "wifi 已经打开");
-
-                    if(! wifiEnableingFlag){//如果是重新启动，延时开启服务，避免识别错误
-                        new Timer().schedule(new TimerTask() {
-                           @Override
-                           public void run() {
-                               Log.e("WIFI状态", "如果是重新启动，延时在开启服务");
-                               startReceiver();
-                           }
-                       },2000);
-                    }else {
-                        startReceiver();
-                    }
-                    wifiEnableingFlag = true;
-                    break;
-                case WifiManager.WIFI_STATE_ENABLING:
-                    //Wi-Fi 开始启用，如果成功，状态为WIFI_STATE_ENABLED.
-                    Log.e("WIFI状态", "wifi 正在打开");
-                    break;
-                case WifiManager.WIFI_STATE_UNKNOWN:
-                    //Wi-Fi 未知状态，在启用或禁用过程产生错误导致
-                    Log.e("WIFI状态", "wifiState:WIFI_STATE_UNKNOWN");
-                    break;
-                default:
-                    break;
-            }
-
-        }
-    };
-
     /**
      * 接收内部模块事件
      * udp发送给盒子端
      * @param msg    接收的信息
      */
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    @Subscribe(threadMode = ThreadMode.BACKGROUND,sticky = true)
     public void onRecviveEvent(EventMsg msg){
         Log.i(TAG,"发送模式:"+msg.getEventMode());
         Log.i(TAG,"发送命令:"+msg.getCommand());
@@ -130,25 +72,39 @@ public class NetService extends Service {
             {
                 case COM_CONNECT_GET_DEVICE:    //获取设备，发送udp广播
                     Log.i(TAG,"command:"+"获取设备，发送udp广播");
-                    try {
-                        NetProtocol.UdpUnicastSocket broadSender = new NetProtocol.UdpUnicastSocket("255.255.255.255", NetProtocol.sendPort,NetProtocol.SocketType.SEND);
-                        broadSender.send(dataPackage.toByte());
 
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+                   final byte[] data = dataPackage.toByte();
+                   new Thread(new Runnable() {
+                       @Override
+                       public void run() {
+                           /*如果发送尚未准备 延时后发送*/
+                           if(!udpUtil.sendPrepared())
+                           {
+                               try {
+                                   Thread.sleep(100);
+                                   Log.i(TAG,"如果发送尚未准备 延时后发送");
+                               } catch (InterruptedException e) {
+                                   e.printStackTrace();
+                               }
+                           }
+                           udpUtil.setSendPara("255.255.255.255", NetProtocol.sendPort);
+                           udpUtil.send(data);
+                       }
+                   }).start();
+
                     break;
+                case COM_CONNECT_ATTACH:
+                    Log.i(TAG,"设备连接设置");
+                    Device device = DataParse.getDevice(dataPackage.getData());
+                    udpUtil.setSendPara(device.getIp(), NetProtocol.sendPort);
                 default:
-                    if (null != netSender) {
-                        try{
-                            netSender.send(dataPackage.toByte());
-                        }catch (Exception e){e.printStackTrace();}
-                    }
+                    udpUtil.send(dataPackage.toByte());
                     break;
             }
         }else if(EventMode.IN == msg.getEventMode()){//对内
             switch (msg.getCommand()){
                 case COM_SYS_EXIT://退出
+                    Log.e(TAG,"接收到系统退出命令");
                     destroyNetService();
                     break;
                 default:
@@ -167,6 +123,7 @@ public class NetService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        initNet();
         EventManager.register(this);//订阅
         registerWifiReceiver();
         initHeartbeatPacket();
@@ -187,14 +144,14 @@ public class NetService extends Service {
     private void registerWifiReceiver(){
         IntentFilter filter = new IntentFilter();
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        registerReceiver(wifiChangedReceiver,filter);
+        //registerReceiver(wifiChangedReceiver,filter);
     }
 
     /**
      * 注销广播
      */
     private void unregisterWifiReceiver(){
-        unregisterReceiver(wifiChangedReceiver);
+        //unregisterReceiver(wifiChangedReceiver);
     }
 
 
@@ -220,45 +177,34 @@ public class NetService extends Service {
     }
 
 
-    /**
-     * 网络部分
-     * 接收服务器的响应，并对其解析
-     */
-    void startReceiver(){
-        Log.i(TAG,"startReceiver");
-        receiveFlag = true;
-        netReceiveThread = new Thread(new Runnable() {
+    private void initNet(){
+        Log.i(TAG,"初始化网络");
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    netReceiver = new NetProtocol.UdpUnicastSocket(getWifiIp(),NetProtocol.receivePort,NetProtocol.SocketType.RECEIVE);
-                    Log.i(TAG,"本地IP:"+netReceiver.getAddress());
-                    Log.i(TAG,"本地port:"+netReceiver.getPort());
+                String ip = getWifiIp();
+                if(null == ip){
+                    Log.e(TAG,"本地ip为空");
+                    return;
 
-                    sendNetEnable();
-                    while (receiveFlag){//一直接收处理
-                        DataPackage dataPackage = netReceiver.receivePackage();
-                        if(null != dataPackage){
+                }
+                udpUtil.receive(ip, NetProtocol.receivePort, new NetCallback() {
+                    @Override
+                    public void recv(byte[] data) {
+                        try {
+                            DataPackage dataPackage = new DataPackage(data);
                             parseDataPackage(dataPackage);
-                        }else {
-                            Log.e(TAG,"null != dataPackage");
-                            stopReceiver();
+
+                        } catch (DataPackageException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (InterruptedException e){
-                    e.printStackTrace();
-                } catch (Exception e){
-                    e.printStackTrace();
-                    //destroyNetService();
-                }/*finally {
-                    Log.e(TAG,"finally");
-                    netReceiver.close();
-                }*/
-            }
-        });
-        netReceiveThread.start();
+                });
 
+            }
+        }).start();
     }
+
 
     private void enableWifi(){
         Log.i(TAG,"请求开启wifi");
@@ -285,6 +231,7 @@ public class NetService extends Service {
     private String getLocalIP( WifiInfo wifiInfo) {
         int ipAddress = wifiInfo.getIpAddress();
         if (0 == ipAddress) {
+            Log.e(TAG,"0 == ipAddress");
             return null;
         }
         return  ((ipAddress & 0xff)+"."+(ipAddress>>8 & 0xff)+"."
@@ -292,14 +239,11 @@ public class NetService extends Service {
     }
 
     private void stopReceiver(){
-        receiveFlag = false;
-        netReceiveThread.interrupt();//
-        netReceiver.close();
-        Log.e(TAG,"停止网络接收线程");
+        udpUtil.stopReceive();
     }
 
     private void destroyNetService(){
-        Log.i(TAG,"destroyNetService");
+        Log.e(TAG,"1.销毁网络服务");
         stopReceiver();
         stopSelf();//Stop the service
     }
@@ -372,5 +316,7 @@ public class NetService extends Service {
     private void sendNetDisable(){
         EventManager.send(COM_NET_DISABLE,"", EventMode.IN);
     }
+
+
 }
 

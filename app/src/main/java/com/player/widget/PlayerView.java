@@ -1633,6 +1633,7 @@ public class PlayerView {
 
     /**
      * 界面方向改变是刷新界面
+     * 改变播放器布局的高宽
      */
     private void doOnConfigurationChanged(final boolean portrait) {
         if (videoView != null && !isOnlyFullScreen) {
@@ -1640,13 +1641,29 @@ public class PlayerView {
                 @Override
                 public void run() {
                     tryFullScreen(!portrait);
+                    int height = 0;
                     if (portrait) {
-                        query.id(R.id.app_video_box).height(initHeight, false);
+//                        height = initHeight;
+                        int heightPixels = mActivity.getResources().getDisplayMetrics().heightPixels;
+                        int widthPixels = mActivity.getResources().getDisplayMetrics().widthPixels;
+                        height = Math.min(heightPixels,widthPixels);
+                        //query.id(R.id.app_video_box).height(initHeight, false);
                     } else {
                         int heightPixels = mActivity.getResources().getDisplayMetrics().heightPixels;
                         int widthPixels = mActivity.getResources().getDisplayMetrics().widthPixels;
-                        query.id(R.id.app_video_box).height(Math.min(heightPixels, widthPixels), false);
+                        height = Math.min(heightPixels,widthPixels);
+                        //query.id(R.id.app_video_box).height(Math.min(heightPixels, widthPixels), false);
                     }
+                    //根据id查找布局view
+                    LayoutQuery videoBox = query.id(R.id.app_video_box);
+                    videoBox.height(height, false);
+                    Log.i("播放器旋转","initHeight:"+initHeight);
+
+                    /*设置父容器大小,大小同步*/
+                    View parent = (View)videoBox.getView().getParent();
+                    videoBox.setView(parent);
+                    videoBox.height(height, false);
+
                     updateFullScreenButton();
                 }
             });
@@ -2082,6 +2099,10 @@ public class PlayerView {
         }
     }
 
+    /**
+     * 设置视频播放比例
+     * @param rate
+     */
     public void setScreenRate(int rate) {
         int width = 0;
         int height = 0;

@@ -282,6 +282,10 @@ public class LiveFragment extends Fragment {
 
 
 
+/**
+     * 跳转播放，传值
+     * @param url
+     */
     private void startPlayByUrl(String url){
         Log.i(TAG,"url:"+url);
         Intent intent = new Intent(context,PlayerActivity.class);

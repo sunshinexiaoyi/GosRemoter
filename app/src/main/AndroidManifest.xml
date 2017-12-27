@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="gos.remoter"
-    android:versionName="2.1.0"
-    android:versionCode="1"
+    android:versionName = "2.1.0"
+    android:versionCode = "1"
     >
-
+    <!--获取WiFi状态-->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!--获取网络状态-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
@@ -49,7 +51,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance" /> <!-- 非重启Activity的横竖屏切换 -->
 
-
         <!-- 隐藏键盘 -->
         <!-- 全屏 -->
         <activity
@@ -63,13 +64,23 @@
             android:launchMode="singleInstance" />
         <activity
             android:name=".activity.HomeActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance" >
+
+        </activity>
+        <activity
+            android:name=".activity.LiveListActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+        </activity>
         <activity
             android:name=".activity.RemoterActivity"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance">
+        </activity>
         <activity
             android:name=".activity.EpgActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance" >
+
+        </activity>
         <activity
             android:name=".activity.LiveActivity"
             android:launchMode="singleInstance" />
@@ -77,5 +88,4 @@
             android:name=".activity.ProgramActivity"
             android:launchMode="singleInstance" />
     </application>
-
 </manifest>

@@ -15,22 +15,29 @@ import com.alibaba.fastjson.JSON;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import gos.remoter.data.Respond;
-import gos.remoter.define.*;
+import gos.remoter.define.DataPackage;
+import gos.remoter.define.DataParse;
+import gos.remoter.define.NetProtocol;
 import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
 import gos.remoter.heartbeat.HeartbeatPacket;
 import gos.remoter.heartbeat.HeartbeatStop;
 
-import static gos.remoter.define.CommandType.*;   //导入静态命令集
+import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
+import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
+import static gos.remoter.define.CommandType.COM_CONNECT_GET_DEVICE;
+import static gos.remoter.define.CommandType.COM_LIVE_STOP_PROGRAM;
+import static gos.remoter.define.CommandType.COM_NET_DISABLE;
+import static gos.remoter.define.CommandType.COM_NET_ENABLE;
+import static gos.remoter.define.CommandType.COM_SYSTEM_HEARTBEAT_PACKET;
+import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
+import static gos.remoter.define.CommandType.COM_SYS_EXIT;
+import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
 
 public class NetService extends Service {
     private  final String TAG = this.getClass().getSimpleName();
@@ -39,13 +46,13 @@ public class NetService extends Service {
 
 
     private HeartbeatPacket heartbeatPacket = null;
-    private int heartbeatInterval = 1000; //设置心跳包超时时间为10s
+    private int heartbeatInterval = 10000; //设置心跳包超时时间为10s
 
     private boolean receiveFlag = true;// 接收运行标志
     private boolean wifiEnableingFlag = false;// wifi开启标志
 
 
-    private Thread netReceiveThread;
+    private Thread netReceiveThread = null;
 
     private BroadcastReceiver wifiChangedReceiver = new BroadcastReceiver(){//wifi改变接收器
         @Override
@@ -68,29 +75,32 @@ public class NetService extends Service {
                     }).start();
                     break;
                 case WifiManager.WIFI_STATE_DISABLING:
+                    //Wi-Fi 开始禁用，如果操作成功，状态为WIFI_STATE_DISABLED
+                    wifiEnableingFlag = false;
                     Log.e("WIFI状态", "wifiState:WIFI_STATE_DISABLING");
                     break;
                 case WifiManager.WIFI_STATE_ENABLED:
                     Log.e("WIFI状态", "wifi 已经打开");
 
-                    if(wifiEnableingFlag){//如果是重新启动，延时在开启服务
-                       new Timer().schedule(new TimerTask() {
+                    if(! wifiEnableingFlag){//如果是重新启动，延时开启服务，避免识别错误
+                        new Timer().schedule(new TimerTask() {
                            @Override
                            public void run() {
                                Log.e("WIFI状态", "如果是重新启动，延时在开启服务");
                                startReceiver();
                            }
-                       },3000);
+                       },2000);
                     }else {
                         startReceiver();
                     }
-                    wifiEnableingFlag = false;
+                    wifiEnableingFlag = true;
                     break;
                 case WifiManager.WIFI_STATE_ENABLING:
-                    wifiEnableingFlag = true;
+                    //Wi-Fi 开始启用，如果成功，状态为WIFI_STATE_ENABLED.
                     Log.e("WIFI状态", "wifi 正在打开");
                     break;
                 case WifiManager.WIFI_STATE_UNKNOWN:
+                    //Wi-Fi 未知状态，在启用或禁用过程产生错误导致
                     Log.e("WIFI状态", "wifiState:WIFI_STATE_UNKNOWN");
                     break;
                 default:
@@ -99,11 +109,6 @@ public class NetService extends Service {
 
         }
     };
-
-
-    public NetService() {
-    }
-
 
     /**
      * 接收内部模块事件
@@ -165,7 +170,6 @@ public class NetService extends Service {
         EventManager.register(this);//订阅
         registerWifiReceiver();
         initHeartbeatPacket();
-        initNetServer();
     }
 
     @Override
@@ -177,21 +181,26 @@ public class NetService extends Service {
 
     }
 
-    void initNetServer(){
-        //initWifi();
-    }
-
+    /**
+     * 动态注册广播
+     */
     private void registerWifiReceiver(){
         IntentFilter filter = new IntentFilter();
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         registerReceiver(wifiChangedReceiver,filter);
     }
 
+    /**
+     * 注销广播
+     */
     private void unregisterWifiReceiver(){
         unregisterReceiver(wifiChangedReceiver);
     }
 
 
+    /**
+     * 初始化，等到触发时执行，停止心跳包
+     */
     private void initHeartbeatPacket(){
         heartbeatPacket = new HeartbeatPacket(new HeartbeatStop(){
             @Override
@@ -201,13 +210,20 @@ public class NetService extends Service {
         },heartbeatInterval);
     }
 
+    /**
+     * 心跳包停止
+     * 转发给内部组件，进行通知
+     */
     void sendHeartbeatStop(){
         Log.i(TAG,"sendHeartbeat");
         EventManager.send(COM_SYS_HEARTBEAT_STOP,"", EventMode.IN);
     }
 
 
-    /*网络部分*/
+    /**
+     * 网络部分
+     * 接收服务器的响应，并对其解析
+     */
     void startReceiver(){
         Log.i(TAG,"startReceiver");
         receiveFlag = true;
@@ -218,9 +234,9 @@ public class NetService extends Service {
                     netReceiver = new NetProtocol.UdpUnicastSocket(getWifiIp(),NetProtocol.receivePort,NetProtocol.SocketType.RECEIVE);
                     Log.i(TAG,"本地IP:"+netReceiver.getAddress());
                     Log.i(TAG,"本地port:"+netReceiver.getPort());
-                    sendNetEnable();
 
-                    while (receiveFlag){
+                    sendNetEnable();
+                    while (receiveFlag){//一直接收处理
                         DataPackage dataPackage = netReceiver.receivePackage();
                         if(null != dataPackage){
                             parseDataPackage(dataPackage);
@@ -229,17 +245,15 @@ public class NetService extends Service {
                             stopReceiver();
                         }
                     }
-
                 } catch (InterruptedException e){
                     e.printStackTrace();
-                }
-                catch (Exception e){
+                } catch (Exception e){
                     e.printStackTrace();
                     //destroyNetService();
-                }finally {
+                }/*finally {
                     Log.e(TAG,"finally");
                     netReceiver.close();
-                }
+                }*/
             }
         });
         netReceiveThread.start();
@@ -253,7 +267,7 @@ public class NetService extends Service {
     }
 
     /**
-     * 获取wifi ip
+     * wifi  获取路由器分配给设备的ipz
      * @return
      */
     private String getWifiIp(){
@@ -263,6 +277,11 @@ public class NetService extends Service {
     }
 
 
+    /**
+     * ip判断
+     * @param wifiInfo
+     * @return
+     */
     private String getLocalIP( WifiInfo wifiInfo) {
         int ipAddress = wifiInfo.getIpAddress();
         if (0 == ipAddress) {
@@ -274,7 +293,7 @@ public class NetService extends Service {
 
     private void stopReceiver(){
         receiveFlag = false;
-        netReceiveThread.interrupt();
+        netReceiveThread.interrupt();//
         netReceiver.close();
         Log.e(TAG,"停止网络接收线程");
     }
@@ -282,12 +301,19 @@ public class NetService extends Service {
     private void destroyNetService(){
         Log.i(TAG,"destroyNetService");
         stopReceiver();
-        stopSelf();
+        stopSelf();//Stop the service
     }
 
 
     /**
      * 解析包数据
+     * 服务器响应命令类型：
+     *    1.应答，不携带data，回应手机已收到请求
+     *    2.“心跳包”，确保手机与服务器保持连接状态
+     *    3.包含data的应答，如发送“查找设备”的应答，其返回设备信息，如“获取节目”的应答
+     *   1,3 类型命令下的dataPackage都需要转发给组件——IN；
+     *   2，3 需要给服务器应答,已收到dataPackage
+     *
      * @param dataPackage
      */
     private void parseDataPackage(DataPackage dataPackage){
@@ -310,7 +336,7 @@ public class NetService extends Service {
             }
             postDataPackage(dataPackage, EventMode.IN);
         } else if(COM_SYSTEM_HEARTBEAT_PACKET == dataPackage.getCommand()){//心跳包
-            heartbeatPacket.recover();
+            heartbeatPacket.recover();//保持连接状态
             sendRespond(dataPackage);
         }else{
             postDataPackage(dataPackage, EventMode.IN);
@@ -336,9 +362,13 @@ public class NetService extends Service {
         EventManager.send(COM_SYSTEM_RESPOND, JSON.toJSONString(respond), EventMode.OUT);
     }
 
+    /**
+     * 转发wifi状态
+     */
     private void sendNetEnable(){
         EventManager.send(COM_NET_ENABLE,"", EventMode.IN);
     }
+
     private void sendNetDisable(){
         EventManager.send(COM_NET_DISABLE,"", EventMode.IN);
     }

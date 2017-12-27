@@ -14,7 +14,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import gos.remoter.R;
 import gos.remoter.adapter.LiverClassifyListAdapter;

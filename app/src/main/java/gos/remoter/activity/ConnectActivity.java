@@ -3,16 +3,18 @@ package gos.remoter.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -24,7 +26,9 @@ import gos.remoter.R;
 import gos.remoter.adapter.ReuseAdapter;
 import gos.remoter.data.Device;
 import gos.remoter.data.Respond;
+import gos.remoter.define.CommandType;
 import gos.remoter.define.DataParse;
+import gos.remoter.define.InputCheck;
 import gos.remoter.define.NetProtocol;
 import gos.remoter.define.SystemInfo;
 import gos.remoter.enumkey.SystemState;
@@ -33,10 +37,17 @@ import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
 import gos.remoter.service.NetService;
 import gos.remoter.tool.ImmersionLayout;
-import gos.remoter.tool.SystemClear;
 import gos.remoter.view.TitleBarNew;
 
-import static gos.remoter.define.CommandType.*;
+import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
+import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
+import static gos.remoter.define.CommandType.COM_CONNECT_GET_DEVICE;
+import static gos.remoter.define.CommandType.COM_CONNECT_SET_DEVICE;
+import static gos.remoter.define.CommandType.COM_NET_DISABLE;
+import static gos.remoter.define.CommandType.COM_NET_ENABLE;
+import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
+import static gos.remoter.define.CommandType.COM_SYS_EXIT;
+import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
 
 public class ConnectActivity extends Activity {
     private String TAG = this.getClass().getSimpleName();
@@ -52,12 +63,14 @@ public class ConnectActivity extends Activity {
 
     private Spinner deviceSpinner;
     private Device selectDevice;
+    private TextView textVersionName;
     View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
+
         System.gc();
         view = findViewById(R.id.connect);
         ACTCollector.add(this);//添加到收集器
@@ -92,15 +105,19 @@ public class ConnectActivity extends Activity {
                     deviceAdapter.clear();
                     break;
                 case COM_SYS_HEARTBEAT_STOP: {
+                    detach();
                     break;
                 }
                 case COM_CONNECT_SET_DEVICE: {
+                    Log.e(TAG, msg.getData());
                     Device device = DataParse.getDevice(msg.getData());
-                    deviceAdapter.add(device);
+                    checkDevice(device);
+                    //deviceAdapter.add(device);
                     break;
                 }
                 case COM_SYS_EXIT: {
                     //系统退出时，断开连接
+                    detachDevice();
                     finish();
                     break;
                 }
@@ -109,7 +126,7 @@ public class ConnectActivity extends Activity {
                     switch (respond.getCommand()) {
                         case COM_CONNECT_DETACH:
                             if (respond.getFlag()) {
-
+                                detach();
                             } else {
                                 Log.i(TAG, "断开连接失败");
                             }
@@ -117,7 +134,6 @@ public class ConnectActivity extends Activity {
                         case COM_CONNECT_ATTACH:
                             if (respond.getFlag()) {
                                 attach();
-
                             } else {
                                 Log.i(TAG, "连接设备失败");
                             }
@@ -141,13 +157,13 @@ public class ConnectActivity extends Activity {
         //标题栏
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
         titleBar.setNullBackground();
-        titleBar.setTextTitle(R.string.connect_title);
+        titleBar.setTextTitle(R.string.homeTitle);
 
         titleBar.setImageRight(R.drawable.connect_scan, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startScan();
-                Toast.makeText(ConnectActivity.this, "open scan", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ConnectActivity.this, "open scan", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -155,13 +171,13 @@ public class ConnectActivity extends Activity {
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if(null != selectDevice){
                   attachDevice(selectDevice);
                 }
             }
         });
 
+        textVersionName = (TextView) findViewById(R.id.versionName);
         deviceSpinner = (Spinner)findViewById(R.id.deviceSpinner);
         deviceSpinner.setAdapter(deviceAdapter);
         deviceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -176,22 +192,59 @@ public class ConnectActivity extends Activity {
     }
 
     private void initData(){
+        getPackageVersionName();
         startService();
         sendFindDevice();
     }
+
+    /**
+     * 发送查找设备
+     */
     private void sendFindDevice(){
         EventManager.send(COM_CONNECT_GET_DEVICE,"", EventMode.OUT);
     }
 
+    /**
+     * 先判断是否已经打开权限，如果权限已经打开，则直接跳转；否则申请相应权限,
+     * 点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
+     * 扫描完了之后跳回界面
+     *
+     * 6.0之前的系统使用checkPermission()和checkSelfPermission()方法判断相机权限，
+     * 只是判断清单文件中是否注册过此类权限，用户的操作是获取不到的
+     */
     private void startScan(){
-        //点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
-        //扫描完了之后调到该界面
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+        //ContextCompat.checkSelfPermission(ConnectActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        if (cameraIsCanUse()){
             jumpToScan();
         }else {
-            //requestPermissions(new String[]{Manifest.permission.CAMERA},PERMISSION_CAMERA);
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},1);
+            //设置权限
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},PERMISSION_CAMERA);
         }
+    }
+
+    /**
+     * 判断相机权限
+     *  返回true 表示可以使用  返回false表示不可以使用
+     */
+    public boolean cameraIsCanUse() {
+        boolean isCanUse = true;
+        Camera mCamera = null;
+        try {
+            mCamera = Camera.open();
+            Camera.Parameters mParameters = mCamera.getParameters(); //针对魅族手机
+            mCamera.setParameters(mParameters);
+            } catch (Exception e) {
+            isCanUse = false;
+        }
+        if (mCamera != null) {
+            try {
+                mCamera.release();
+                } catch (Exception e) {
+                 e.printStackTrace();
+                 return isCanUse;
+            }
+        }
+        return isCanUse;
     }
 
     private void jumpToScan(){
@@ -202,14 +255,23 @@ public class ConnectActivity extends Activity {
         startActivityForResult(intent, SCANNING_GREQUEST_CODE);
     }
 
+    /**
+     * 相机权限请求
+     * 用户选择允许或拒绝后，会回调onRequestPermissionsResult()
+     * @param requestCode  请求码
+     * @param permissions   权限
+     * @param grantResults  授权结果
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.i(TAG,"权限开启结果");
         switch(requestCode){
             case  PERMISSION_CAMERA ://如果用户取消，permissions可能为null.
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {  //同意
+                //grantResults[0] == PackageManager.PERMISSION_GRANTED
+                if(cameraIsCanUse() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        ) {  //同意
                     jumpToScan();
-                }else{//拒绝
+                } else{//拒绝
                     Toast.makeText(this,getResources().getString(R.string.allow_camera_permission), Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -231,11 +293,13 @@ public class ConnectActivity extends Activity {
                     try{
                         Device retDevice =  DataParse.getDevice(retData);
                         System.out.println(JSON.toJSONString(retDevice));
-                        if(!deviceAdapter.exist(retDevice)){//不存在则添加
-                            deviceAdapter.add(retDevice);
+                        if(checkDevice(retDevice)) {
+                            attachDevice(retDevice);
                         }
+                       /* if(!deviceAdapter.exist(retDevice)){//不存在则添加
+                            deviceAdapter.add(retDevice);
+                        }*/
                         Log.i(TAG,"扫码连接设备");
-                        attachDevice(retDevice);
                     }catch (com.alibaba.fastjson.JSONException e){
                         e.printStackTrace();
                         Toast.makeText(this, getResources().getString(R.string.scan_data_parse_error), Toast.LENGTH_SHORT).show();
@@ -245,12 +309,29 @@ public class ConnectActivity extends Activity {
         }
     }
 
-    private void attach(){
+    /**
+     * 检查输入设备信息的格式是否正确
+     * 并添加
+     * @param inDevice  输入设备
+     * @return  true正确 false错误
+     */
+    private boolean checkDevice(Device inDevice){
+        String ip = inDevice.getIp();
+        if((InputCheck.isboolIp(ip))){
+            if(!deviceAdapter.exist(inDevice)){//不存在则添加
+                deviceAdapter.add(inDevice);
+            }
+            return true;
+        }
+        return false;
+    }
 
+    private void attach(){
         Toast.makeText(this,getResources().getString(R.string.connect_attach), Toast.LENGTH_SHORT).show();
 
         //设置系统状态为已连接
         SystemInfo.getInstance().setState(SystemState.ATTACH);
+
         startHomeActivity();
         finish();
     }
@@ -284,12 +365,17 @@ public class ConnectActivity extends Activity {
         }
     }
 
+    //断开与服务器的连接
+    private void detachDevice(){
+        if(SystemState.ATTACH == SystemInfo.getInstance().getState()) {
+            EventManager.send(CommandType.COM_CONNECT_DETACH, "", EventMode.OUT);
+        }
+    }
 
     void startHomeActivity(){
         Intent intent = new Intent(this,HomeActivity.class);
         startActivity(intent);
     }
-
 
     /**
      * 退出系统
@@ -305,6 +391,22 @@ public class ConnectActivity extends Activity {
         //start NetService
         Intent intent = new Intent(this, NetService.class);
         startService(intent);
+    }
+
+    /**
+     * 获取软件版本名称
+     */
+    public void getPackageVersionName() {
+        PackageManager manager = getBaseContext().getPackageManager();
+        String versionName = "";
+        try {
+            PackageInfo info = manager.getPackageInfo(getBaseContext().getPackageName(), 0);
+            versionName = info.versionName;//info.versionCode
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        Log.e("versionName-------", versionName);
+        textVersionName.setText("EditionV " + versionName);
     }
 
 }

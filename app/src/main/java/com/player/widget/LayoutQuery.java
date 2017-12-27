@@ -52,6 +52,14 @@ public class LayoutQuery {
         this.activity = activity;
     }
 
+    public View getView(){
+        return view;
+    }
+
+    public void setView(View view) {
+        this.view = view;
+    }
+
     public LayoutQuery id(int id) {
         if (rootView == null) {
             view = activity.findViewById(id);

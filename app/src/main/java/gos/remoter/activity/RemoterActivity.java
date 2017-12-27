@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -11,64 +13,144 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.HashMap;
+
 import gos.remoter.R;
 import gos.remoter.adapter.RemoterSetting;
+import gos.remoter.data.IndexClass;
+import gos.remoter.data.Respond;
+import gos.remoter.define.CommandType;
+import gos.remoter.define.DataParse;
+import gos.remoter.define.SystemInfo;
+import gos.remoter.enumkey.SystemState;
+import gos.remoter.event.EventManager;
+import gos.remoter.event.EventMode;
+import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
 
-public class RemoterActivity extends Activity implements OnClickListener {
+import static gos.remoter.R.id.remoteSet;
+import static gos.remoter.define.CommandType.*;
+import static gos.remoter.define.KeyValue.*;
 
+public class RemoterActivity extends Activity {
 
-    private ImageView remoteBack;
-    private ImageView remoteOnOff;
-    private ImageView remoteMute;
+    private String TAG = this.getClass().getSimpleName();
     private Button remoteNumber;
-    private Button remoteMenu;
-    private Button remoteFav;
-    private Button remotePvr;
-    private Button remoteExit;
     private TitleBarNew titleBar;
-    private RemoterSetting remoterSetting;
-
-    private Button numberOne;
-    private Button numberTwo;
-    private Button numberThree;
-    private Button numberFour;
-    private Button numberFive;
-    private Button numberSix;
-    private Button numberSeven;
-    private Button numberEight;
-    private Button numberNine;
-    private Button numberBack;
-    private Button numberZero;
-    private Button numberOk;
+    private RemoterSetting remoterSet;
 
     private View viewNumber;
     private AlertDialog alertDialog = null;
     private AlertDialog.Builder builder = null;
 
+    public float density;// 屏幕密度（0.75 / 1.0 / 1.5 / 2.0）
+    public int densityDpi;// 屏幕密度DPI（120 / 160 / 240 / 320）
+
+    HashMap<Integer,Integer> keysMap = new HashMap();
+    private boolean isLongKey = false;  //是否长按
+    private enum KeyStatus {
+        NORMAL, //正常调台
+        LONG,  // 长按
+        UP    //取消长按
+    }
+
+    /**
+     * 接收内部事件
+     * @param msg   接收的消息
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRecviveEvent(EventMsg msg){
+        if(EventMode.IN == msg.getEventMode()){  //对内
+            switch (msg.getCommand()){
+                case COM_SYS_HEARTBEAT_STOP:
+                    detach();
+                    break;
+                case CommandType.COM_SYS_REMOTE_ID:
+                    IndexClass IndexClass = DataParse.getIndexClass(msg.getData());
+                    sendRemoteKey(IndexClass.getIndex(),KeyStatus.NORMAL);
+                    break;
+                case COM_SYSTEM_RESPOND:{    //回应
+                    Respond respond = DataParse.getRespond(msg.getData());
+                    switch (respond.getCommand()) {
+                        case COM_CONNECT_DETACH:
+                            if (respond.getFlag()) {
+                                detach();
+                            } else {
+                                Log.i(TAG, "断开连接失败");
+                            }
+                            break;
+                        case COM_CONNECT_ATTACH:
+                            if (respond.getFlag()) {
+                                //attach();
+                            } else {
+                                Log.i(TAG, "连接设备失败");
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case COM_SYS_EXIT:
+                    finish();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remoter);
-        initTitle();
-        initView();
 
-        builder = new AlertDialog.Builder(this);
-        viewNumber = LayoutInflater.from(this).inflate(R.layout.remoter_number_dialog, null, false);
-        builder.setView(viewNumber);
-        builder.setCancelable(true);
-        alertDialog = builder.create();
-        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        initNumber();
+        initLayout();
+        ACTCollector.add(this);//添加到收集器
+        EventManager.register(this);
 
     }
 
-    void initTitle(){
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        ACTCollector.remove(this);//从收集器移除
+        EventManager.unregister(this);
+    }
+
+    /*@Override
+    public boolean onLongClick(View view) {
+        if (sendRemoteKey(view.getId(), KeyStatus.LONG)) {
+            isLongKey = true;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+            if(isLongKey) {
+                isLongKey = false;
+                if (sendRemoteKey(view.getId(), KeyStatus.UP)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }*/
+
+    void initLayout(){
         new ImmersionLayout(this).setImmersion();
 
         /*标题栏*/
@@ -89,86 +171,132 @@ public class RemoterActivity extends Activity implements OnClickListener {
 
             }
         });
-    }
 
-    private void initView() {
-        remoteBack = (ImageView) findViewById(R.id.remoteBack);
-        remoteOnOff = (ImageView) findViewById(R.id.remoteOnOff);
-        remoteMute = (ImageView) findViewById(R.id.remoteMute);
+        initCustomLayout();
         remoteNumber = (Button) findViewById(R.id.remoteNumber);
-        remoteMenu = (Button) findViewById(R.id.remoteMenu);
-        remoteFav = (Button) findViewById(R.id.remoteFav);
-        remotePvr = (Button) findViewById(R.id.remotePvr);
-        remoteExit = (Button) findViewById(R.id.remoteExit);
-        remoterSetting = (RemoterSetting) findViewById(R.id.remoteSet);
-
-        remoteBack.setOnClickListener(this);
-        remoteOnOff.setOnClickListener(this);
-        remoteMute.setOnClickListener(this);
-        remoteNumber.setOnClickListener(this);
-        remoteMenu.setOnClickListener(this);
-        remoteFav.setOnClickListener(this);
-        remotePvr.setOnClickListener(this);
-        remoteExit.setOnClickListener(this);
+        remoteNumber.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.show();
+            }
+        });
+        initNumberLayout();
+        initViewValue();
 
     }
 
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.remoteBack:
-                break;
-            case R.id.remoteOnOff:
-                break;
-            case R.id.remoteMute:
-                break;
-            case R.id.remoteNumber:
-                //initPopWindows(view);
-                alertDialog.show();
+    /**
+     * 方向键,
+     */
+    private void initCustomLayout() {
 
-                break;
-            case R.id.remoteMenu:
-                break;
-            case R.id.remoteFav:
-                break;
-            case R.id.remotePvr:
-                break;
-            case R.id.remoteExit:
-                break;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int displayWidth = displayMetrics.widthPixels;//屏幕宽度（像素）
+        int displayHeight = displayMetrics.heightPixels;
+        density = displayMetrics.density; // 屏幕密度
+        densityDpi = displayMetrics.densityDpi;
+        Log.e(TAG, displayWidth + "--" + displayHeight + "宽高");
+        Log.e(TAG, density + "--" + densityDpi + "密度");
 
-            case R.id.numberOne:
-                Toast.makeText(this, "反应", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.numberTwo:
-                break;
-            case R.id.numberThree:
-                break;
-            case R.id.numberFour:
-                break;
-            case R.id.numberFive:
-                break;
-            case R.id.numberSix:
-                break;
-            case R.id.numberSeven:
-                break;
-            case R.id.numberEight:
-                break;
-            case R.id.numberNine:
-                break;
-            case R.id.numberZero:
-                break;
-            case R.id.numberBack:
-                break;
-            case R.id.numberOk:
+        remoterSet = (RemoterSetting) findViewById(remoteSet);
+        remoterSet.setKeyValue(KEYVALUE_UP, KEYVALUE_DOWN, KEYVALUE_LEFT, KEYVALUE_RIGHT, KEYVALUE_OK);
+        remoterSet.setOnTouchListener(new RemoterSetting.onTouchListener() {
+            @Override
+            public void click(int keyValue) {
+                sendKeyValue(keyValue, KeyStatus.NORMAL);
+            }
 
-                break;
+            @Override
+            public void longClick(final int keyValue) {
+                runOnUiThread(new Runnable() {//更新到ui线程
+                    @Override
+                    public void run() {
+                        sendKeyValue(keyValue, KeyStatus.LONG);
+                    }
+                });
+            }
+
+            @Override
+            public void cancelLong(int keyValue) {
+                sendKeyValue(keyValue, KeyStatus.UP);
+            }
+        });
+    }
+
+    private void initNumberLayout() {
+        builder = new AlertDialog.Builder(this);
+        viewNumber = LayoutInflater.from(this).inflate(R.layout.remoter_number_dialog, null, false);
+        builder.setView(viewNumber);
+        builder.setCancelable(true);
+        alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    }
+
+    private void initViewValue() {
+
+        keysMap.put(R.id.remoteBack, KEYVALUE_BACK);
+        keysMap.put(R.id.remoteOnOff, KEYVALUE_POWER);
+        keysMap.put(R.id.remoteMute, KEYVALUE_MUTE);
+
+        keysMap.put(R.id.remoteMenu, KEYVALUE_MENUE);
+        keysMap.put(R.id.remoteFav, KEYVALUE_FAV);
+        keysMap.put(R.id.remotePvr, KEYVALUE_PVR);
+        keysMap.put(R.id.remoteExit, KEYVALUE_EXIT);
+        //keysMap.put(R.id.info, KEYVALUE_INFO);
+
+        //设置popupWindow/dialog里的按钮的事件
+        keysMap.put(R.id.numberOne, KEYVALUE_1);
+        keysMap.put(R.id.numberTwo, KEYVALUE_2);
+        keysMap.put(R.id.numberThree, KEYVALUE_3);
+        keysMap.put(R.id.numberFour, KEYVALUE_4);
+        keysMap.put(R.id.numberFive, KEYVALUE_5);
+        keysMap.put(R.id.numberSix, KEYVALUE_6);
+        keysMap.put(R.id.numberSeven, KEYVALUE_7);
+        keysMap.put(R.id.numberEight, KEYVALUE_8);
+        keysMap.put(R.id.numberNine, KEYVALUE_9);
+        keysMap.put(R.id.numberBack, KEYVALUE_BACK);
+        keysMap.put(R.id.numberZero, KEYVALUE_0);
+        keysMap.put(R.id.numberTv, KEYVALUE_FUNC1);
+
+    }
+
+    /**
+     * 判断id对应键值是否存在，Y：发送遥控器键值
+     * @param id
+     * @param keyStatus
+     * @return
+     */
+    public boolean sendRemoteKey(int id, KeyStatus keyStatus) {
+        int keyValue = -1;
+        Integer key = new Integer(id);
+        if(keysMap.containsKey(key))
+        {
+            keyValue = keysMap.get(key);
+        }
+        if (-1 != keyValue) {
+            sendKeyValue(keyValue, keyStatus);
+        }
+        return false;
+    }
+
+    public boolean sendKeyValue(int keyValue, KeyStatus keyStatus) {
+        Log.i("fragment_remote","keyValue:" + keyValue);
+        IndexClass indexClass = new IndexClass(keyValue);
+        if(keyStatus == KeyStatus.LONG) {
+            EventManager.send(CommandType.COM_REMOTE_SET_LONG_KEY, JSON.toJSONString(indexClass), EventMode.OUT);
+        }else if(keyStatus == KeyStatus.UP){
+            EventManager.send(CommandType.COM_REMOTE_SET_KEY_UP, JSON.toJSONString(indexClass), EventMode.OUT);
+        }else{
+            EventManager.send(CommandType.COM_REMOTE_SET_KEY, JSON.toJSONString(indexClass), EventMode.OUT);
         }
 
+        return true;
     }
 
     // PopupWindow(悬浮框)
     private void initPopWindows(View view) {
         viewNumber = LayoutInflater.from(this).inflate(R.layout.remoter_number_dialog, null, false);
-        initNumber();
 
         //1.构造一个PopupWindow，参数依次是加载的View，宽高
         final PopupWindow popWindow = new PopupWindow(viewNumber,
@@ -191,33 +319,19 @@ public class RemoterActivity extends Activity implements OnClickListener {
        // popWindow.dismiss();
     }
 
-    private void initNumber() {
-        numberOne = (Button) viewNumber.findViewById(R.id.numberOne);
-        numberTwo = (Button) viewNumber.findViewById(R.id.numberTwo);
-        numberThree = (Button) viewNumber.findViewById(R.id.numberThree);
-        numberFour = (Button) viewNumber.findViewById(R.id.numberFour);
-        numberFive = (Button) viewNumber.findViewById(R.id.numberFive);
-        numberSix = (Button) viewNumber.findViewById(R.id.numberSix);
-        numberSeven = (Button) viewNumber.findViewById(R.id.numberSeven);
-        numberEight = (Button) viewNumber.findViewById(R.id.numberEight);
-        numberNine = (Button) viewNumber.findViewById(R.id.numberNine);
-        numberZero = (Button) viewNumber.findViewById(R.id.numberZero);
-        numberBack = (Button) viewNumber.findViewById(R.id.numberBack);
-        numberOk = (Button) viewNumber.findViewById(R.id.numberOk);
+    private void detach(){
+        Log.i(TAG,"断开连接成功");
+        Toast.makeText(this,getResources().getString(R.string.connect_detach), Toast.LENGTH_SHORT).show();
 
-        //设置popupWindow里的按钮的事件
-        numberOne.setOnClickListener(this);
-        numberTwo.setOnClickListener(this);
-        numberThree.setOnClickListener(this);
-        numberFour.setOnClickListener(this);
-        numberFive.setOnClickListener(this);
-        numberSix.setOnClickListener(this);
-        numberSeven.setOnClickListener(this);
-        numberEight.setOnClickListener(this);
-        numberNine.setOnClickListener(this);
-        numberZero.setOnClickListener(this);
-        numberBack.setOnClickListener(this);
-        numberOk.setOnClickListener(this);
+        //设置系统状态为断开连接
+        SystemInfo.getInstance().setState(SystemState.DETACH);
+    }
+
+	//查找对应id，
+    public void remoterFuncOnClick(View source) {
+        Log.i("remoterFuncOnClick","onclick.............");
+        IndexClass indexClass = new IndexClass(source.getId());
+        EventManager.send(CommandType.COM_SYS_REMOTE_ID, JSON.toJSONString(indexClass),EventMode.IN);
     }
 
 }

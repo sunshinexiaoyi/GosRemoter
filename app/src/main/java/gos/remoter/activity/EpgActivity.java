@@ -1,5 +1,24 @@
 package gos.remoter.activity;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.util.SparseIntArray;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+
 import com.alibaba.fastjson.JSON;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+
 import gos.remoter.R;
 import gos.remoter.adapter.Epg_myAdapter;
 import gos.remoter.data.Date;
@@ -15,24 +34,13 @@ import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
-import static gos.remoter.define.CommandType.*;   //导入静态命令集
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.util.SparseIntArray;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import java.util.ArrayList;
+import static gos.remoter.define.CommandType.COM_EPG_GET_INFORM_LIST;
+import static gos.remoter.define.CommandType.COM_EPG_SET_INFORM_LIST;
+import static gos.remoter.define.CommandType.COM_EPG_SET_RESERVE;
+import static gos.remoter.define.CommandType.COM_LIVE_GET_PROGRAM_LIST;
+import static gos.remoter.define.CommandType.COM_LIVE_SET_PROGRAM_LIST;
+import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
 
 public class EpgActivity extends Activity {
     private Epg_myAdapter progItemAdapter = null;
@@ -190,7 +198,7 @@ public class EpgActivity extends Activity {
                 makeProgramList(msg.getData());
                 break;
             }
-            case COM_EPG_SET_SELECT_PROGRAM: {//收到节目epg信息
+            case COM_EPG_SET_INFORM_LIST: {//收到节目epg信息
                 makeProgramData(msg.getData());
                 break;
             }
@@ -233,7 +241,7 @@ public class EpgActivity extends Activity {
     }
     private void getSelectEpgInfo(int index){
         IndexClass indexClass = new IndexClass(index);
-        EventManager.send(COM_EPG_GET_SELECT_PROGRAM, JSON.toJSONString(indexClass), EventMode.OUT);//获取选中的节目epg信息
+        EventManager.send(COM_EPG_GET_INFORM_LIST, JSON.toJSONString(indexClass), EventMode.OUT);//获取选中的节目epg信息
     }
     private void sendReserveSet(ReserveEventSend reserveSet){
         EventManager.send(COM_EPG_SET_RESERVE,JSON.toJSONString(reserveSet), EventMode.OUT);//发送预定事件设置

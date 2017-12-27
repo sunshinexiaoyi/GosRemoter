@@ -6,7 +6,7 @@
 package gos.remoter.define;
 
 public class KeyValue {
-    public static final int KEYVALUE_POWER = 0;
+    public static final int KEYVALUE_POWER = 0;//开关机键
 
     public static final int KEYVALUE_1 = 1;
     public static final int KEYVALUE_2 = 2;
@@ -19,7 +19,7 @@ public class KeyValue {
     public static final int KEYVALUE_8 = 8;
 
     public static final int KEYVALUE_9 = 9;
-    public static final int KEYVALUE_FUNC1 = 10; //func1:*+
+    public static final int KEYVALUE_FUNC1 = 10; //func1:TV/R
     public static final int KEYVALUE_0 = 11;
     public static final int KEYVALUE_EXIT = 12; //exit
 
@@ -58,7 +58,7 @@ public class KeyValue {
     public static final int KEYVALUE_STOP = 39;
     public static final int KEYVALUE_NEXT = 40;
 
-    public static final int KEYVALUE_MUTE = 41;
+    public static final int KEYVALUE_MUTE = 41;//������
     public static final int KEYVALUE_SET = 42;
     public static final int KEYVALUE_GOTO = 43;
     public static final int KEYVALUE_STORE = 44;
@@ -67,6 +67,8 @@ public class KeyValue {
     public static final int KEYVALUE_GREEN = 46; //green
     public static final int KEYVALUE_YELLOW = 47; //yellow
     public static final int KEYVALUE_BLUE = 48;  //blue
+
     public static final int KEYVALUE_EXCITE = 49;
     public static final int KEYVALUE_HELP = 50;
+
 }

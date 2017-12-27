@@ -17,7 +17,6 @@
         android:paddingTop="27dp"
         android:paddingBottom="27dp"
         android:background="@drawable/remoter_number_dialog"
-
         >
 
         <TableRow
@@ -34,6 +33,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_one"
                 android:textSize="27sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item" />
 
@@ -45,6 +45,7 @@
                 android:text="@string/remoter_two"
                 android:layout_marginLeft="10dp"
                 android:textSize="27sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
 
@@ -56,6 +57,7 @@
                 android:text="@string/remoter_three"
                 android:layout_marginLeft="10dp"
                 android:textSize="27sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
         </TableRow>
@@ -74,6 +76,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_four"
                 android:textSize="27sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
 
@@ -85,6 +88,7 @@
                 android:text="@string/remoter_five"
                 android:layout_marginLeft="10dp"
                 android:textSize="27sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
 
@@ -96,6 +100,7 @@
                 android:text="@string/remoter_six"
                 android:textSize="27sp"
                 android:layout_marginLeft="10dp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
         </TableRow>
@@ -114,6 +119,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_seven"
                 android:textSize="27sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
 
@@ -125,6 +131,7 @@
                 android:text="@string/remoter_eight"
                 android:layout_marginLeft="10dp"
                 android:textSize="27sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
 
@@ -136,6 +143,7 @@
                 android:text="@string/remoter_nine"
                 android:layout_marginLeft="10dp"
                 android:textSize="27sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
         </TableRow>
@@ -154,6 +162,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_back"
                 android:textSize="23sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
 
@@ -165,17 +174,19 @@
                 android:text="@string/remoter_zero"
                 android:layout_marginLeft="10dp"
                 android:textSize="27sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
 
             <Button
-                android:id="@+id/numberOk"
+                android:id="@+id/numberTv"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/remoter_ok"
+                android:text="@string/remoter_tv"
                 android:layout_marginLeft="10dp"
                 android:textSize="23sp"
+                android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
         </TableRow>

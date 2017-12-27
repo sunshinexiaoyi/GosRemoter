@@ -1,13 +1,12 @@
 package gos.remoter.tool;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
-import android.view.WindowManager;
 
-/**沉浸式布局
+/**
+ * 沉浸式布局
  * Created by wuxy on 2017/9/7.
  */
 

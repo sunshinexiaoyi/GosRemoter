@@ -26,24 +26,44 @@ interface CommandOut{
     byte COM_CONNECT_DETACH = 13;     //分离
 
     /* 直播模块命令 */
-    byte COM_LIVE_GET_PROGRAM_LIST = 20; //获取节目列表
-    byte COM_LIVE_SET_PROGRAM_LIST = 21; //设置节目列表
+    byte COM_LIVE_GET_PROGRAM_LIST = 20; //获取直播节目列表
+    byte COM_LIVE_SET_PROGRAM_LIST = 21; //设置直播节目列表
 
-    byte COM_LIVE_GET_PROGRAM_URL = 22;  //获取节目url
-    byte COM_LIVE_SET_PROGRAM_URL = 23;  //设置节目url
+    byte COM_LIVE_GET_PROGRAM_URL = 22;  //获取直播节目url
+    byte COM_LIVE_SET_PROGRAM_URL = 23;  //设置直播节目url
 
-    byte COM_LIVE_STOP_PROGRAM = 24;     //停止节目
-    byte COM_LIVE_UPDATE_PROGRAM_LIST = 25; //更新节目列表
+    byte COM_LIVE_STOP_PROGRAM = 24;     //停止直播节目
+    byte COM_LIVE_UPDATE_PROGRAM_LIST = 25; //更新直播节目列表
 
     /* 遥控器模块命令 */
     byte COM_REMOTE_SET_KEY = 30; //发送遥控器键值
+	byte COM_REMOTE_SET_LONG_KEY = 31; //发送遥控器长按键值
+    byte COM_REMOTE_SET_KEY_UP = 32; //发送遥控器长按松开的键值
 
-    /* EPG 模块命令 */
-    byte COM_EPG_GET_SELECT_PROGRAM = 40;//获取选择的节目epg信息
-    byte COM_EPG_SET_SELECT_PROGRAM = 41;
+    /* EPG模块命令 */
+    byte COM_EPG_GET_INFORM_LIST = 40;//获取节目epg信息列表
+    byte COM_EPG_SET_INFORM_LIST = 41;//设置节目epg信息列表
 
     byte COM_EPG_SET_RESERVE = 42;   //设置epg预定事件
-    byte COM_EPG_CLASH_RESERVE = 42; //epg预定事件冲突
+    byte COM_EPG_CLASH_RESERVE = 43; //epg预定事件冲突
+
+    /* 定时开关机模块命令 */
+    byte COM_TIME_SET_ON = 50; //设置定时开机
+    byte COM_TIME_SET_OFF = 51; //设置定时关机
+
+    /* 邮件模块命令 */
+    byte COM_EMAIL_GET_EMAIL_INFORM = 60;//获取邮件信息
+    byte COM_EMAIL_SET_EMAIL_INFORM = 61;//设置邮件信息
+
+    /* 节目列表模块命令 */
+    byte COM_PROGRAM_GET_All_LIST = 70; //获取所有节目列表 
+    byte COM_PROGRAM_SET_All_LIST = 71; //设置所有节目列表
+    byte COM_PROGRAM_STB_SWITCH = 72;   //切换播放节目
+    byte COM_PROGRAM_UPDATE_ALL_LIST = 73;//更新所有节目列表
+
+    /* 广告模块命令 */
+    byte COM_GET_AD = 80; //获取广告
+    byte COM_SET_AD = 81; //设置广告
 
 }
 
@@ -60,12 +80,12 @@ interface CommandIn{
 
     byte COM_SYS_HEARTBEAT_STOP = 104;     //心跳停止
 
-    byte COM_SYS_FINISH_LIVE = 105;     //接收直播
+    byte COM_SYS_FINISH_LIVE = 105;     //结束直播
 
     byte COM_SYS_REMOTE_ID = 106;     //遥控器id
 
-    byte COM_NET_ENABLE = 107;
-    byte COM_NET_DISABLE = 108;
+    byte COM_NET_ENABLE = 107;         //无线网络可用，已打开
+    byte COM_NET_DISABLE = 108;        //无线网络不可用
 
 }
 

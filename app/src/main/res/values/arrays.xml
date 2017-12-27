@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="program_type"><!--节目类型-->
-        <item>电视剧</item>
-        <item>电影</item>
-        <item>综艺</item>
-        <item>少儿</item>
-        <item>新闻</item>
-        <item>娱乐</item>
-        <item>动漫</item>
-        <item>纪录片</item>
-        <item>财经</item>
-        <item>教育</item>
+        <item>teleplay</item>
+        <item>movie</item>
+        <item>variety</item>
+        <item>children</item>
+        <item>news</item>
+        <item>recreation</item>
+        <item>cartoon</item>
+        <item>documentary</item>
+        <item>finance</item>
+        <item>education</item>
     </array>
 </resources>

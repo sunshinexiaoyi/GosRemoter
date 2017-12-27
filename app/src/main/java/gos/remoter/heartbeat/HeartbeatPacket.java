@@ -11,8 +11,7 @@ import java.util.TimerTask;
  */
 
 
-public class HeartbeatPacket implements HeartbeatStop
-{
+public class HeartbeatPacket implements HeartbeatStop {
     private final  String TAG = this.getClass().getSimpleName();
 
     private HeartbeatStop heartbeatStop = null; //心跳停止回调事件

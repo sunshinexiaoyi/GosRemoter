@@ -2,6 +2,8 @@ package gos.remoter.data;
 
 /**
  * Created by wuxy on 2017/7/7.
+ *
+ * 对指定命令的应答，返回值判断命令是否成功
  */
 
 public class Respond extends Reserve{

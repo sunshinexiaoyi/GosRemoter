@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/home_bg"
+    tools:context="gos.remoter.activity.LiveListActivity"
+    tools:layout_editor_absoluteY="0dp"
+    tools:layout_editor_absoluteX="0dp"
+    android:layout_centerHorizontal="true">
+
+    <include
+        android:id="@+id/app_box"
+        layout="@layout/live_player"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintDimensionRatio="4:2.7"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="3dp"
+        android:gravity="center"
+        android:background="@color/home_grid_bg"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_box"
+        >
+
+        <gos.remoter.view.ErrorMaskView
+            android:id="@+id/maskView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:clickable="true"
+            android:visibility="gone" />
+
+        <ListView
+            android:id="@+id/programList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="visible"
+            />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
+

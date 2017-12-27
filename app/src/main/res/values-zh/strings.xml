@@ -1,35 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Gos Remoter</string>
+    <string name="app_name">高斯遥控</string>
 
     <!--主页-->
-    <string name="home_remoter">Remoter</string>
-    <string name="home_live">Live</string>
-    <string name="home_program_list">ProgramList</string>
+    <string name="home_remoter">遥控器</string>
+    <string name="home_live">直播</string>
+    <string name="home_program_list">节目列表</string>
     <string name="home_epg">EPG</string>
-    <string name="home_edit_program">Edit Programmes</string>
-    <string name="home_timing">Timing Switch</string>
-    <string name="home_email">Email</string>
-    <string name="home_setting">Setting</string>
-    <string name="home_help">Help</string>
-    <string name="home_info">This feature is not yet open, please look!</string>
-    <string name="home_alert_title">Info</string>
-    <string name="home_alert_msg">Are you sure quit the Application？</string>
-    <string name="home_alert_negative">cancel</string>
-    <string name="home_alert_positive">confirm</string>
-    <string name="exit2">Click again to exit</string>
+    <string name="home_edit_program">节目编辑</string>
+    <string name="home_timing">定时开关</string>
+    <string name="home_email">邮件</string>
+    <string name="home_setting">设置</string>
+    <string name="home_help">帮助</string>
+    <string name="home_info">该功能尚未开放,敬请期待!</string>
+    <string name="home_alert_title">提示</string>
+    <string name="home_alert_msg">你确定要退出应用吗？</string>
+    <string name="home_alert_negative">取消</string>
+    <string name="home_alert_positive">确认</string>
+    <string name="exit2">再按一次退出应用</string>
 
     <!--节目列表-->
     <string name="program_lcn">LCN</string>
-    <string name="program_name">Name</string>
-    <string name="program_title">ProgramList</string>
-    <string name="clickRefresh">Click to fresh</string>
-    <string name="empty_list">No data</string>
-    <string name="netError">Network connection error</string>
-    <string name="loading">Loading…</string>
+    <string name="program_name">节目名</string>
+    <string name="program_title">节目列表</string>
+    <string name="clickRefresh">点击刷新</string>
+    <string name="empty_list">网络连接错误</string>
+    <string name="netError">加载中…</string>
+    <string name="loading">暂无数据</string>
 
     <!--遥控器-->
-    <string name="remoter_title">Remoter</string>
+    <string name="remoter_title">遥控器</string>
     <string name="remoter_number">123</string>
     <string name="remoter_menu">Menu</string>
     <string name="remoter_fav">Fav</string>
@@ -50,57 +49,57 @@
 
     <!--EPG-->
     <string name="epg_title">EPG</string>
-    <string name="epg_Reservation_record">Reservation record</string>
-    <string name="epg_Scheduled_to_watch">Scheduled to watch</string>
-    <string name="epg_progSettingBtnText_Once">Once</string>
-    <string name="epg_progSettingBtnText_Days">Days</string>
+    <string name="epg_Reservation_record">预订录制</string>
+    <string name="epg_Scheduled_to_watch">预订观看</string>
+    <string name="epg_progSettingBtnText_Once">一天</string>
+    <string name="epg_progSettingBtnText_Days">每天</string>
     <string name="epg_test">核心是重写BaseExpandableListAdpter，其实和之前写的普通的BaseAdapter是类似的， 但是BaseExpandableListAdpter则分成了两部分：组和子列表，具体看代码你就知道了！</string>
 
     <!--直播-->
-    <string name="live_title">Live</string>
-    <string name="live_not_found_program">There is no this type of program there is no this type of program!</string>
-    <string name="tab_menu_remote">Remote</string>
-    <string name="tab_menu_live">Live</string>
-    <string name="tab_menu_connect">Connect</string>
+    <string name="live_title">直播</string>
+    <string name="live_not_found_program">不存在该类型的节目</string>
+    <string name="tab_menu_remote">遥控器</string>
+    <string name="tab_menu_live">直播</string>
+    <string name="tab_menu_connect">连接</string>
     <string name="tab_menu_epg">EPG</string>
-    <string name="mask_stop_loading">stop loading</string>
+    <string name="mask_stop_loading">停止加载</string>
 
     <!--退出弹出框-->
-    <string name="exit_dialog_title">System Info</string>
-    <string name="exit_dialog_content">Are you sure to exit?</string>
-    <string name="exit_dialog_cancel">cancel</string>
-    <string name="exit_dialog_confirm">confirm</string>
+    <string name="exit_dialog_title">系统信息</string>
+    <string name="exit_dialog_content">你确定要退出吗?</string>
+    <string name="exit_dialog_cancel">取消</string>
+    <string name="exit_dialog_confirm">确定</string>
 
-    <!--服务器连接界面设置 -->
-    <string name = "connect_set_server">Set the address of the server</string>
-    <string name = "connect_edit_server_address">Please enter the address of the server</string>
-    <string name = "connect_confirm">CONNECT</string>
-    <string name = "connect_hint">address can not null</string>
-    <string name = "connect_format">Address format error, please enter again</string>
-    <string name = "connect_attach">Device is connected</string>
-    <string name = "connect_detach">Device has been disconnected</string>
-    <string name = "connect_detach_hint">detach the device</string>
-    <string name = "connect_try_connect">Try to connect device...</string>
-    
+    <!--服务器连接界面设置-->
+    <string name="connect_set_server">设置服务器地址</string>
+    <string name="connect_edit_server_address">请输入服务器地址</string>
+    <string name="connect_confirm">连 接</string>
+    <string name="connect_hint">地址不能为空</string>
+    <string name="connect_format">地址格式错误,请重新输入</string>
+    <string name="connect_attach">设备已连接</string>
+    <string name="connect_detach">设备已断开</string>
+    <string name="connect_detach_hint">断开连接</string>
+    <string name="connect_try_connect">尝试连接设备...</string>
+
     <!--主页-->
-    <string name="homeTitle">GOSPELL</string>
-    <string name="homeExit">exit</string>
+    <string name="homeTitle">高斯贝尔</string>
+    <string name="homeExit">退出</string>
 
     <!--扫码-->
-    <string name="ret">back</string>
-    <string name="scan_title">Scanning</string>
+    <string name="scan_title">扫一扫</string>
+    <string name="ret">返回</string>
     <string name="menu_settings">Settings</string>
-    <string name="scan_text">Insert the qr code into the box and scan automatically</string>
-    <string name="scan_data_parse_error">Data analytical data parsing anomaly</string>
-    <string name="allow_camera_permission">Please allow camera permissions</string>
+    <string name="scan_text">将二维码放入框内即可自动扫描</string>
+    <string name="scan_data_parse_error">数据解析异常</string>
+    <string name="allow_camera_permission">请允许开启照相机权限</string>
 
     <!--播放器部分-->
-    <string name="small_problem">player small problem</string>
-    <string name="not_support">player not support</string>
+    <string name="small_problem">播放器出现了一点问题</string>
+    <string name="not_support">播放器不支持</string>
     <string name="pref_key_enable_background_play">pref.enable_background_play</string>
     <string name="pref_key_player">pref.player</string>
-    <string name="switch_freq">Switch frequency point, is nearing the end of the current live</string>
-    <string name="heartbeat_stop">With the server lost</string>
+    <string name="switch_freq">主频点已切换，即将结束当前直播</string>
+    <string name="heartbeat_stop">与服务器失联</string>
 
     <string name="VideoView_error_text_invalid_progressive_playback">Invalid progressive playback</string>
     <string name="VideoView_error_text_unknown">Unknown</string>
@@ -155,14 +154,16 @@
     <string name="seek_load_cost">seek_load_cost</string>
     <string name="tcp_speed">tcp_speed</string>
     <string name="bit_rate">bit_rate</string>
-    
-    <!-- 直播部分 -->
-    <string name="jump_connect">There is no connection, please connect</string>
-    <string name="jump">Click to connect</string>
+
+    <!-- 直播部分-->
+    <string name="jump_connect">尚未连接，请连接</string>
+    <string name="jump">点击连接</string>
     <string name="pref_key_using_media_codec">pref.using_media_codec</string>
     <string name="pref_key_using_media_codec_auto_rotate">pref.using_media_codec_auto_rotate</string>
     <string name="pref_key_media_codec_handle_resolution_change">pref.media_codec_handle_resolution_change</string>
     <string name="pref_key_pixel_format">pref.pixel_format</string>
+
+    <!-- -->
     <string name="pref_key_using_opensl_es">pref.using_opensl_es</string>
     <string name="pref_key_enable_no_view">pref.enable_no_view</string>
     <string name="pref_key_enable_surface_view">pref.enable_surface_view</string>
@@ -174,5 +175,4 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_epg">EPGActivity</string>
-
 </resources>

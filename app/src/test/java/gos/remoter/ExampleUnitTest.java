@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import gos.remoter.data.Advertisement;
 import gos.remoter.data.Date;
 import gos.remoter.data.Device;
 import gos.remoter.data.EpgProgram;
@@ -24,7 +25,6 @@ import gos.remoter.data.Time;
 import gos.remoter.define.DataPackage;
 import gos.remoter.define.NetProtocol;
 import gos.remoter.define.*;
-import gos.remoter.tool.SystemClear;
 
 import static gos.remoter.define.CommandType.*;   //导入静态命令集
 
@@ -41,6 +41,14 @@ public class ExampleUnitTest {
     "http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8" ,
     "http://playertest.longtailvideo.com/adaptive/oceans_aes/oceans_aes.m3u8" ,
     "http://playertest.longtailvideo.com/adaptive/captions/playlist.m3u8",
+    };
+
+    String[] testAD = new String[] {
+            "http://www.china859.com/wp-content/uploads/2016/12/u183311803263910969fm23gp0.jpg",
+            "http://www.fjsen.com/images/attachement/jpg/site1/2011-12-30/201445196985487017.jpg",
+//            "http://img1.gtimg.com/ent/pics/hv1/125/211/939/61112405.jpg",
+//            "http://ia.hebradio.com/outimages/2017/05/24/2017052492426300.jpg",
+            "http://y2.ifengimg.com/cmpp/2015/09/11/11/8f42f45f-8bd4-4e7c-b75b-2e912037170c_size26_w554_h311.jpg"
     };
 
     InetAddress local =null;
@@ -154,7 +162,18 @@ public class ExampleUnitTest {
                 dataPackage.setCommand(COM_SYSTEM_RESPOND);
                 sendData = JSON.toJSONString(respond);
                 break;    //
+            /*广告信息*/
+            case COM_GET_AD:
+                System.out.println("获取广告列表");
+                dataPackage.setCommand(COM_SET_AD);
+                ArrayList<Advertisement> advertisements = new ArrayList<>();
+                for(int i = 0; i < testAD.length; i++) {
+                    Advertisement advertisement = new Advertisement(testAD[i]);
+                    advertisements.add(advertisement);
+                }
+                sendData = JSON.toJSONString(advertisements);
 
+                break;
              /* 直播模块命令 */
             case COM_LIVE_GET_PROGRAM_LIST :
                 System.out.println("获取节目列表");
@@ -169,11 +188,8 @@ public class ExampleUnitTest {
                 int index = indexClass.getIndex();
                 System.out.println("获取节目url  index:"+index);
 
-
                 ProgramUrl programUrl = new ProgramUrl(index,testUrl[0]);
                 sendData = JSON.toJSONString(programUrl);
-
-
                 break; //
 
             case COM_LIVE_STOP_PROGRAM :
@@ -183,10 +199,10 @@ public class ExampleUnitTest {
                 sendData = JSON.toJSONString(respond);
                 break;   //
 
-            case COM_EPG_GET_SELECT_PROGRAM:
+            case COM_EPG_GET_INFORM_LIST:
                 System.out.println("获取节目epg");
                 IndexClass indexClass1 = DataParse.getIndexClass(dataPackage.getData());
-                dataPackage.setCommand(COM_EPG_SET_SELECT_PROGRAM);
+                dataPackage.setCommand(COM_EPG_SET_INFORM_LIST);
                 sendData = JSON.toJSONString(epgPrograms.get(indexClass1.getIndex()) );
                 break;
             case COM_EPG_SET_RESERVE:

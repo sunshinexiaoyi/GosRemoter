@@ -12,10 +12,10 @@ import android.widget.TextView;
 import gos.remoter.R;
 
 public class ErrorMaskView extends RelativeLayout implements View.OnClickListener {
-    private static final int STATUS_EMPTY = 1;
-    private static final int STATUS_ERROR = 3;
-    private static final int STATUS_GONE = 0;
-    private static final int STATUS_LOADING = 2;
+    private static final int STATUS_EMPTY = 1;  //节目列表为空
+    private static final int STATUS_ERROR = 3;  //获取信息错误
+    private static final int STATUS_GONE = 0;  //
+    private static final int STATUS_LOADING = 2; //加载中
     private Context mContext;
     private ImageView mIconImage;
     private LinearLayout mProgressLayout;
@@ -43,10 +43,13 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
         initView(paramContext);
     }
 
+    /**
+     * 隐藏整个view
+     */
     private void hide() {
         if (getVisibility() != View.GONE)
             setVisibility(View.GONE);
-        this.mStatus = 0;
+        this.mStatus = STATUS_GONE;
     }
 
     private void initView(Context paramContext) {
@@ -55,8 +58,8 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
         this.mTextLayout = ((LinearLayout) findViewById(R.id.textLayout));
         this.mIconImage = ((ImageView) findViewById(R.id.icon));
         this.mTitleText = ((TextView) findViewById(R.id.title));
-        this.mSubTitleText = ((TextView) findViewById(R.id.subTitle));
-        this.mRetryTitleText = ((TextView) findViewById(R.id.retryTitle));
+        this.mSubTitleText = ((TextView) findViewById(R.id.subTitle));//
+        this.mRetryTitleText = ((TextView) findViewById(R.id.retryTitle));//刷新
         this.mProgressLayout = ((LinearLayout) findViewById(R.id.progressLayout));
         this.mProgressText = ((TextView) findViewById(R.id.progressTitle));
         this.stopLoading = (TextView)findViewById(R.id.stopLoading);
@@ -115,6 +118,10 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
         this.mStatus = STATUS_EMPTY;
     }
 
+    /**
+     * 暂无数据
+     * @param paramString
+     */
     public void setEmptyStatus(String paramString) {
         show();
         this.mProgressLayout.setVisibility(View.GONE);
@@ -163,6 +170,10 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
         setLoadingStatus(this.mContext.getString(paramInt));
     }
 
+    /**
+     * 加载节目
+     * @param paramString
+     */
     public void setLoadingStatus(String paramString) {
         show();
         this.mTextLayout.setVisibility(View.GONE);
@@ -182,6 +193,11 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
         setOnRetry(-1,paramOnClickListener);
     }
 
+    /**
+     * 点击刷新，点击连接
+     * @param paramInt
+     * @param paramOnClickListener
+     */
     public void setOnRetry(int paramInt,View.OnClickListener paramOnClickListener) {
         paramInt = paramInt==-1?R.string.clickRefresh:paramInt;
         this.mRetryTitleText.setText(paramInt);

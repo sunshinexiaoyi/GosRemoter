@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
 
+import gos.remoter.data.Advertisement;
 import gos.remoter.data.Device;
 import gos.remoter.data.EpgProgram;
 import gos.remoter.data.IndexClass;
@@ -26,6 +27,9 @@ public class DataParse {
         return (ArrayList<Program>)JSON.parseArray(data,Program.class);
     }
 
+    public static ArrayList<Advertisement> getAdList(String data){
+        return (ArrayList<Advertisement>)JSON.parseArray(data,Advertisement.class);
+    }
     public static Device getDevice(String data){
         return JSON.parseObject(data,Device.class);
     }

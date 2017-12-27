@@ -22,7 +22,7 @@
 
     <color name="remoter_hint">#b9cefa</color>
     <color name="colorPrimary">#22A7FF</color>
-    <color name="colorPrimaryDark">#22A7FF</color>
+    <color name="colorPrimaryDark">#1E6FCB</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="bg_topbar">#FF4081</color>

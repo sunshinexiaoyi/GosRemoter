@@ -101,7 +101,7 @@ public class RemoterSetting extends View {
             width = getMeasuredLength(widthMeasureSpec, true);
             height = getMeasuredLength(heightMeasureSpec, false);
             num = Math.abs(width - height);
-            Log.e(TAG, num + " num");
+//            Log.e(TAG, num + " num");
 
             width = Math.min(height, width);
             rectf.set(5, 5, width - 5, height - 5);

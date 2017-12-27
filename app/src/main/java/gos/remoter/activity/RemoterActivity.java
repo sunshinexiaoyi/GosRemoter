@@ -22,6 +22,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import gos.remoter.R;
 import gos.remoter.adapter.RemoterSetting;
@@ -38,8 +40,34 @@ import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
 
 import static gos.remoter.R.id.remoteSet;
-import static gos.remoter.define.CommandType.*;
-import static gos.remoter.define.KeyValue.*;
+import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
+import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
+import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
+import static gos.remoter.define.CommandType.COM_SYS_EXIT;
+import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
+import static gos.remoter.define.KeyValue.KEYVALUE_0;
+import static gos.remoter.define.KeyValue.KEYVALUE_1;
+import static gos.remoter.define.KeyValue.KEYVALUE_2;
+import static gos.remoter.define.KeyValue.KEYVALUE_3;
+import static gos.remoter.define.KeyValue.KEYVALUE_4;
+import static gos.remoter.define.KeyValue.KEYVALUE_5;
+import static gos.remoter.define.KeyValue.KEYVALUE_6;
+import static gos.remoter.define.KeyValue.KEYVALUE_7;
+import static gos.remoter.define.KeyValue.KEYVALUE_8;
+import static gos.remoter.define.KeyValue.KEYVALUE_9;
+import static gos.remoter.define.KeyValue.KEYVALUE_BACK;
+import static gos.remoter.define.KeyValue.KEYVALUE_DOWN;
+import static gos.remoter.define.KeyValue.KEYVALUE_EXIT;
+import static gos.remoter.define.KeyValue.KEYVALUE_FAV;
+import static gos.remoter.define.KeyValue.KEYVALUE_FUNC1;
+import static gos.remoter.define.KeyValue.KEYVALUE_LEFT;
+import static gos.remoter.define.KeyValue.KEYVALUE_MENUE;
+import static gos.remoter.define.KeyValue.KEYVALUE_MUTE;
+import static gos.remoter.define.KeyValue.KEYVALUE_OK;
+import static gos.remoter.define.KeyValue.KEYVALUE_POWER;
+import static gos.remoter.define.KeyValue.KEYVALUE_PVR;
+import static gos.remoter.define.KeyValue.KEYVALUE_RIGHT;
+import static gos.remoter.define.KeyValue.KEYVALUE_UP;
 
 public class RemoterActivity extends Activity {
 
@@ -54,6 +82,7 @@ public class RemoterActivity extends Activity {
 
     public float density;// 屏幕密度（0.75 / 1.0 / 1.5 / 2.0）
     public int densityDpi;// 屏幕密度DPI（120 / 160 / 240 / 320）
+    private Timer timer = null;
 
     HashMap<Integer,Integer> keysMap = new HashMap();
     private boolean isLongKey = false;  //是否长按
@@ -209,17 +238,27 @@ public class RemoterActivity extends Activity {
 
             @Override
             public void longClick(final int keyValue) {
-                runOnUiThread(new Runnable() {//更新到ui线程
+                /*runOnUiThread(new Runnable() {//更新到ui线程
                     @Override
                     public void run() {
                         sendKeyValue(keyValue, KeyStatus.LONG);
                     }
-                });
+                });*/
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Log.e(TAG, "longClick 长按");
+                        sendKeyValue(keyValue, KeyStatus.NORMAL);
+                    }
+                }, 800, 500);
             }
 
             @Override
             public void cancelLong(int keyValue) {
-                sendKeyValue(keyValue, KeyStatus.UP);
+//                sendKeyValue(keyValue, KeyStatus.UP);
+                timer.cancel();
+                Log.e(TAG, "cancelLong 取消长按");
             }
         });
     }
@@ -235,7 +274,7 @@ public class RemoterActivity extends Activity {
 
     private void initViewValue() {
 
-        keysMap.put(R.id.remoteBack, KEYVALUE_BACK);
+        keysMap.put(R.id.remoteBack, KEYVALUE_EXIT);
         keysMap.put(R.id.remoteOnOff, KEYVALUE_POWER);
         keysMap.put(R.id.remoteMute, KEYVALUE_MUTE);
 
@@ -255,7 +294,7 @@ public class RemoterActivity extends Activity {
         keysMap.put(R.id.numberSeven, KEYVALUE_7);
         keysMap.put(R.id.numberEight, KEYVALUE_8);
         keysMap.put(R.id.numberNine, KEYVALUE_9);
-        keysMap.put(R.id.numberBack, KEYVALUE_BACK);
+        keysMap.put(R.id.numberBack, KEYVALUE_BACK);//回看
         keysMap.put(R.id.numberZero, KEYVALUE_0);
         keysMap.put(R.id.numberTv, KEYVALUE_FUNC1);
 
@@ -281,7 +320,7 @@ public class RemoterActivity extends Activity {
     }
 
     public boolean sendKeyValue(int keyValue, KeyStatus keyStatus) {
-        Log.i("fragment_remote","keyValue:" + keyValue);
+//        Log.i("fragment_remote","keyValue:" + keyValue);
         IndexClass indexClass = new IndexClass(keyValue);
         if(keyStatus == KeyStatus.LONG) {
             EventManager.send(CommandType.COM_REMOTE_SET_LONG_KEY, JSON.toJSONString(indexClass), EventMode.OUT);

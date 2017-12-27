@@ -100,6 +100,7 @@ public class LiveListActivity extends Activity {
                             if (respond.getFlag()) {
                                 attach();
                             } else {
+                                clearProgramData();
                                 Log.i(TAG, "连接设备失败");
                             }
                             break;
@@ -258,14 +259,16 @@ public class LiveListActivity extends Activity {
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             if(SystemInfo.getInstance().getState() == SystemState.ATTACH) {
                 listView.setVisibility(View.VISIBLE);
-                errorMaskView.setVisibility(View.GONE);
+                errorMaskView.setVisibleGone();
+
             } else if(SystemInfo.getInstance().getState() == SystemState.DETACH) {
                 listView.setVisibility(View.GONE);
                 errorMaskView.setVisibility(View.VISIBLE);
             }
         } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             listView.setVisibility(View.GONE);
-            errorMaskView.setVisibility(View.GONE);
+            errorMaskView.setVisibleGone();
+
         }
     }
 
@@ -344,7 +347,13 @@ public class LiveListActivity extends Activity {
 
         //设置系统状态为断开连接
         SystemInfo.getInstance().setState(SystemState.DETACH);
+        clearProgramData();
+    }
 
+    /**
+     * 清除信息
+     */
+    private void clearProgramData() {
         setProgramList(new String[0]);  //清空节目列表
         listView.setVisibility(View.GONE);
         errorMaskView.setErrorStatus(true,R.string.jump_connect);

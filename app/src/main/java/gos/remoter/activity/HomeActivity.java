@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.StrictMode;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -18,14 +16,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -45,7 +38,6 @@ import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
-import gos.remoter.view.ErrorMaskView;
 import gos.remoter.view.TitleBarNew;
 
 import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
@@ -62,7 +54,6 @@ public class HomeActivity extends Activity {
     private ViewPager viewPager;
     private HomePagerAdapter pagerAdapter;
     private GridView gridView;
-    private ErrorMaskView errorMaskView = null;
 
     AlertDialog logoutAlert;
     long firstTime;//保存第一次按退出键的时间
@@ -161,11 +152,6 @@ public class HomeActivity extends Activity {
         System.gc();
         ACTCollector.add(this);//添加到收集器
         EventManager.register(this);
-
-        StrictMode.setThreadPolicy(new
-                StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-        StrictMode.setVmPolicy(
-                new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
 
         initView();
 
@@ -309,13 +295,13 @@ public class HomeActivity extends Activity {
 
     private void initImageData() {
         if(null == ads) {
-            Log.e(TAG, "adList == null" + "-----adList-adList-adList");
+//            Log.e(TAG, "adList == null" + "-----adList-adList-adList");
             imageList = new ArrayList<>();
             imageList.add(R.drawable.home_pager01);
             imageList.add(R.drawable.home_pager02);
             imageList.add(R.drawable.details_bg_window);
             imageList.add(R.drawable.home_pager03);
-//            imageList.add(R.drawable.home_pager04);
+            imageList.add(R.drawable.home_pager04);
 
             pagerAdapter = new HomePagerAdapter(this, imageList);
         } else {
@@ -335,37 +321,6 @@ public class HomeActivity extends Activity {
     }
 
     /**
-     * 从网上下载图片，url
-     * @param ads
-     */
-    private void downloadAD(final String[] ads) {
-
-        new Thread() {
-            @Override
-            public void run() {
-                for(int i = 0;i < ads.length; i++) {
-                    try {
-                        URL url=new URL(ads[i]);
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.setRequestMethod("GET");
-                        conn.setConnectTimeout(5000);
-                        if (conn.getResponseCode() == 200) {
-                            InputStream inputStream = conn.getInputStream();
-                            //把流转换为bitmap
-                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                            inputStream.close();
-                            adBitmap.add(bitmap);
-                        }
-                        Log.e(TAG, "adBitmap--" + adBitmap.get(0));
-                    } catch (Exception e) {e.printStackTrace();}
-
-                }
-            }
-        }.start();
-
-    }
-
-    /**
      * 解析广告数据，新建一个字符串数组存储广告信息
      * @param data
      * @return
@@ -373,7 +328,7 @@ public class HomeActivity extends Activity {
     private String[] parseAdDate(String data) {
         adList = new ArrayList<>();
         adList = DataParse.getAdList(data);
-        Log.e(TAG,"adList:\n"+ JSON.toJSONString(adList));
+//        Log.e(TAG,"adList:\n"+ JSON.toJSONString(adList));
         int i = 0;
         ads = new String[adList.size()];
         for(Advertisement ad : adList) {

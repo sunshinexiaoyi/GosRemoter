@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import gos.remoter.data.Device;
 import gos.remoter.data.Respond;
+import gos.remoter.define.CommandType;
 import gos.remoter.define.DataPackage;
 import gos.remoter.define.DataParse;
 import gos.remoter.define.NetProtocol;
@@ -44,9 +45,8 @@ public class NetService extends Service {
 
     UdpUtil udpUtil = new UdpUtil();
 
-
     private HeartbeatPacket heartbeatPacket = null;
-    private int heartbeatInterval = 10000; //设置心跳包超时时间为10s
+    private int heartbeatInterval = 1000; //设置心跳包超时时间为10s
 
     private boolean receiveFlag = true;// 接收运行标志
     private boolean wifiEnableingFlag = false;// wifi开启标志
@@ -73,25 +73,8 @@ public class NetService extends Service {
                 case COM_CONNECT_GET_DEVICE:    //获取设备，发送udp广播
                     Log.i(TAG,"command:"+"获取设备，发送udp广播");
 
-                   final byte[] data = dataPackage.toByte();
-                   new Thread(new Runnable() {
-                       @Override
-                       public void run() {
-                           /*如果发送尚未准备 延时后发送*/
-                           if(!udpUtil.sendPrepared())
-                           {
-                               try {
-                                   Thread.sleep(100);
-                                   Log.i(TAG,"如果发送尚未准备 延时后发送");
-                               } catch (InterruptedException e) {
-                                   e.printStackTrace();
-                               }
-                           }
-                           udpUtil.setSendPara("255.255.255.255", NetProtocol.sendPort);
-                           udpUtil.send(data);
-                       }
-                   }).start();
-
+                    udpUtil.setSendPara("255.255.255.255", NetProtocol.sendPort);
+                    udpUtil.send(dataPackage.toByte());
                     break;
                 case COM_CONNECT_ATTACH:
                     Log.i(TAG,"设备连接设置");
@@ -139,7 +122,7 @@ public class NetService extends Service {
     }
 
     /**
-     * 动态注册广播
+     * 动态注册广播监听wifi
      */
     private void registerWifiReceiver(){
         IntentFilter filter = new IntentFilter();
@@ -176,7 +159,10 @@ public class NetService extends Service {
         EventManager.send(COM_SYS_HEARTBEAT_STOP,"", EventMode.IN);
     }
 
-
+    /**
+     * 网络部分
+     * 接收服务器的响应，并对其解析
+     */
     private void initNet(){
         Log.i(TAG,"初始化网络");
         new Thread(new Runnable() {
@@ -186,11 +172,10 @@ public class NetService extends Service {
                 if(null == ip){
                     Log.e(TAG,"本地ip为空");
                     return;
-
                 }
                 udpUtil.receive(ip, NetProtocol.receivePort, new NetCallback() {
                     @Override
-                    public void recv(byte[] data) {
+                    public void recv(byte[] data) {//回调
                         try {
                             DataPackage dataPackage = new DataPackage(data);
                             parseDataPackage(dataPackage);
@@ -199,12 +184,24 @@ public class NetService extends Service {
                             e.printStackTrace();
                         }
                     }
+
+                    @Override
+                    public void prepared() {
+                        sendSocketPrepared();
+                    }
                 });
 
             }
         }).start();
     }
 
+    /**
+     * 发送网络准备好，sendSocket创建成功
+     */
+    private void sendSocketPrepared() {
+
+        EventManager.send(CommandType.COM_NET_SOCKET_PREPARED, "", EventMode.IN);
+    }
 
     private void enableWifi(){
         Log.i(TAG,"请求开启wifi");
@@ -221,7 +218,6 @@ public class NetService extends Service {
         WifiInfo wifiInfo = wifiMng.getConnectionInfo();
         return getLocalIP(wifiInfo);
     }
-
 
     /**
      * ip判断

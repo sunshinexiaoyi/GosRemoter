@@ -7,4 +7,5 @@ package gos.remoter.service;
 
 public interface NetCallback {
     void recv(byte[] data); //接收回调
+    void prepared();        //网络准备成功,sendSocket
 }

@@ -87,6 +87,9 @@ interface CommandIn{
     byte COM_NET_ENABLE = 107;         //无线网络可用，已打开
     byte COM_NET_DISABLE = 108;        //无线网络不可用
 
+    byte COM_NET_SOCKET_PREPARED = 109;        //网络准备好,socket
+
+
 }
 
 

@@ -29,7 +29,6 @@ import gos.remoter.data.Respond;
 import gos.remoter.define.CommandType;
 import gos.remoter.define.DataParse;
 import gos.remoter.define.InputCheck;
-import gos.remoter.define.NetProtocol;
 import gos.remoter.define.SystemInfo;
 import gos.remoter.enumkey.SystemState;
 import gos.remoter.event.EventManager;
@@ -39,15 +38,7 @@ import gos.remoter.service.NetService;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
 
-import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
-import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
-import static gos.remoter.define.CommandType.COM_CONNECT_GET_DEVICE;
-import static gos.remoter.define.CommandType.COM_CONNECT_SET_DEVICE;
-import static gos.remoter.define.CommandType.COM_NET_DISABLE;
-import static gos.remoter.define.CommandType.COM_NET_ENABLE;
-import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
-import static gos.remoter.define.CommandType.COM_SYS_EXIT;
-import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
+import static gos.remoter.define.CommandType.*;
 
 public class ConnectActivity extends Activity {
     private String TAG = this.getClass().getSimpleName();
@@ -98,7 +89,7 @@ public class ConnectActivity extends Activity {
     public void onRecviveEvent(EventMsg msg){
         if(EventMode.IN == msg.getEventMode()){  //对内
             switch (msg.getCommand()){
-                case COM_NET_ENABLE:
+                case COM_NET_SOCKET_PREPARED:
                     sendFindDevice();
                     break;
                 case COM_NET_DISABLE:
@@ -194,7 +185,7 @@ public class ConnectActivity extends Activity {
     private void initData(){
         getPackageVersionName();
         startService();
-        sendFindDevice();
+       // sendFindDevice();
     }
 
     /**
@@ -203,6 +194,7 @@ public class ConnectActivity extends Activity {
     private void sendFindDevice(){
         Log.i(TAG,"发送粘性事件 获取设备");
         EventManager.sendSticky(COM_CONNECT_GET_DEVICE,"", EventMode.OUT);
+        //        checkDevice(new Device("192.168.100.113", "", ""));  //服务器不回应时，设置默认ip
     }
 
     /**
@@ -269,8 +261,7 @@ public class ConnectActivity extends Activity {
         switch(requestCode){
             case  PERMISSION_CAMERA ://如果用户取消，permissions可能为null.
                 //grantResults[0] == PackageManager.PERMISSION_GRANTED
-                if(cameraIsCanUse() && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        ) {  //同意
+                if(cameraIsCanUse() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {  //同意
                     jumpToScan();
                 } else{//拒绝
                     Toast.makeText(this,getResources().getString(R.string.allow_camera_permission), Toast.LENGTH_SHORT).show();
@@ -345,6 +336,10 @@ public class ConnectActivity extends Activity {
         SystemInfo.getInstance().setState(SystemState.DETACH);
     }
 
+    /**
+     * 连接设备
+     * @param device
+     */
     private void attachDevice(Device device){
         Toast.makeText(this, getResources().getString(R.string.connect_try_connect), Toast.LENGTH_SHORT).show();
         String data = JSON.toJSONString(device);

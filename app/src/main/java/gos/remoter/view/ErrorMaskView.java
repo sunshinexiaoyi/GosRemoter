@@ -21,6 +21,7 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
     private LinearLayout mProgressLayout;
     private TextView mProgressText;
     private OnClickListener mRetryClickListener;
+    private OnClickListener mStopClickListener;
     private TextView mRetryTitleText;
     private int mStatus;
     private TextView mSubTitleText;
@@ -54,7 +55,8 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
 
     private void initView(Context paramContext) {
         this.mContext = paramContext;
-        ((LayoutInflater) this.mContext.getSystemService("layout_inflater")).inflate(R.layout.mask_error_layout, this);
+        LayoutInflater.from(this.mContext).inflate(R.layout.mask_error_layout, this);
+//        ((LayoutInflater) this.mContext.getSystemService("layout_inflater")).inflate(R.layout.mask_error_layout, this);
         this.mTextLayout = ((LinearLayout) findViewById(R.id.textLayout));
         this.mIconImage = ((ImageView) findViewById(R.id.icon));
         this.mTitleText = ((TextView) findViewById(R.id.title));
@@ -84,7 +86,10 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
                 this.mRetryClickListener.onClick(paramView);
                 break;
             case R.id.stopLoading:
-                setStopLoading();
+                if(null != this.mStopClickListener) {
+                    this.mStopClickListener.onClick(paramView);
+                }
+//                setStopLoading();
                 break;
         }
 
@@ -180,6 +185,7 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
         this.mProgressLayout.setVisibility(View.VISIBLE);
         if (null != paramString) {   //!StringUtils.equalsNull(paramString)
             this.mProgressText.setVisibility(View.VISIBLE);
+            this.stopLoading.setVisibility(View.GONE);
             this.mProgressText.setText(paramString);
         }
         this.mStatus = STATUS_LOADING;
@@ -187,6 +193,15 @@ public class ErrorMaskView extends RelativeLayout implements View.OnClickListene
 
     public void setStopLoading(){
         hide();
+    }
+
+    /**
+     * 停止加载，
+     * @param paramOnClickListener
+     */
+    public void setOnStop(View.OnClickListener paramOnClickListener) {
+        this.mStopClickListener = paramOnClickListener;
+
     }
 
     public void setOnRetryClickListener(View.OnClickListener paramOnClickListener) {

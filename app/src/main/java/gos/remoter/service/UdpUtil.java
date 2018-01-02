@@ -32,20 +32,16 @@ public class UdpUtil {
             netCallback.prepared();
 
             Log.i(TAG,"生成套接字");
-            while (receiveFlag) {
+            while (true) {
                 try {
                     DatagramPacket request = new DatagramPacket(new byte[receiveLen], receiveLen);
-                    socket.receive(request);
-
+                    socket.receive(request);//接收带阻塞
                     netCallback.recv(Arrays.copyOf(request.getData(), request.getLength()));
                 } catch (IOException e) {
                     e.printStackTrace();
-                    socket.close();
-                    stopReceive();
+                    break;
                 }
             }
-            Log.i(TAG,"关闭网络");
-            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,9 +51,13 @@ public class UdpUtil {
      * 停止接收
      */
     public void stopReceive(){
-        Log.i(TAG,"停止接收循环");
-        receiveFlag = false;
+        if(null != sendSocket){
+            Log.i(TAG,"***关闭网络***");
+            sendSocket.close();
+            sendSocket = null;
+        }
     }
+
 
 
     /**

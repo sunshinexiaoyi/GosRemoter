@@ -1,8 +1,8 @@
 package gos.remoter.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
+
 import java.util.LinkedList;
 
 /**
@@ -47,7 +47,11 @@ public class ACTCollector {
 
     public static void remove(Activity activity) {
         Log.i(TAG,"移除-"+activity.getClass().getSimpleName());
-        actList.remove(getByName(activity));
+         int index = getByName(activity);
+        if(index != -1){
+            actList.remove(index);
+        }
+
         if(actList.size()==0){
             Log.i(TAG," System.gc()");
             System.gc();

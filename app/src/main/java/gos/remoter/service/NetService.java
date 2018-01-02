@@ -46,7 +46,7 @@ public class NetService extends Service {
     UdpUtil udpUtil = new UdpUtil();
 
     private HeartbeatPacket heartbeatPacket = null;
-    private int heartbeatInterval = 1000; //设置心跳包超时时间为10s
+    private int heartbeatInterval = 10; //设置心跳包超时时间为10s
 
     private boolean receiveFlag = true;// 接收运行标志
     private boolean wifiEnableingFlag = false;// wifi开启标志
@@ -239,7 +239,7 @@ public class NetService extends Service {
     }
 
     private void destroyNetService(){
-        Log.e(TAG,"1.销毁网络服务");
+        Log.e(TAG,"销毁网络服务");
         stopReceiver();
         stopSelf();//Stop the service
     }

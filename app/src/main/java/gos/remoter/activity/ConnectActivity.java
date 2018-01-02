@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -79,6 +80,15 @@ public class ConnectActivity extends Activity {
         }
         Log.e(TAG,"销毁");
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            ACTCollector.finishAll();
+            sendExitSystem();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**

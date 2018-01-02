@@ -23,6 +23,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import gos.remoter.R;
+import gos.remoter.adapter.ReuseAdapter;
 import gos.remoter.data.IndexClass;
 import gos.remoter.data.Program;
 import gos.remoter.data.ProgramUrl;
@@ -50,7 +51,9 @@ public class LiveListActivity extends Activity {
     private ErrorMaskView errorMaskView = null;
 
     private Program curProgram = null;
+    private int curPosition = -1;
     ArrayList<Program> programList;
+    ReuseAdapter<Program> listAdapter;
 
     /**
      * 接收内部事件
@@ -65,14 +68,18 @@ public class LiveListActivity extends Activity {
                     detach();
                     break;
                 case CommandType.COM_LIVE_SET_PROGRAM_LIST:
-                    setProgramList(parseProgramData(msg.getData()));
-                    startDefaultPlay();
+//                    setProgramList(parseProgramData(msg.getData()));
+                    setProgramList(msg.getData());
+//                    startDefaultPlay();
                     break;
                 case CommandType.COM_LIVE_SET_PROGRAM_URL:
                     errorMaskView.setVisibleGone();
+                    listView.setVisibility(View.VISIBLE);
                     ProgramUrl programUrl = JSON.parseObject(msg.getData(),ProgramUrl.class);
-                    if(curProgram == null)
+                    if(curProgram == null) {
+                        curPosition = -1;
                         break;
+                    }
                     Log.i(TAG,"getIndex:"+curProgram.getIndex());
                     if(curProgram.getIndex() == programUrl.getIndex()) {//发送的节目索引与接收的节目索引相同
                         //startPlayByUrl(programUrl.getUrl());
@@ -107,10 +114,14 @@ public class LiveListActivity extends Activity {
                         case CommandType.COM_LIVE_STOP_PROGRAM:
                             Log.i(TAG,"停止当前播放节目成功");
                             curProgram = null;
+                            curPosition = -1;
                             break;
                         case CommandType.COM_LIVE_SET_PROGRAM_URL:
                             if(!respond.getFlag()){     //获取节目url失败
                                 errorMaskView.setVisibleGone();
+                                listView.setVisibility(View.VISIBLE);
+//                                autoPlayNext();
+                                Toast.makeText(this, "播放失败，请重选节目", Toast.LENGTH_SHORT).show();
                             }
                             break;
                         default:
@@ -126,7 +137,6 @@ public class LiveListActivity extends Activity {
             }
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +178,27 @@ public class LiveListActivity extends Activity {
                 Log.e(TAG, "播放第一个--getIndex:"+curProgram.getIndex());
                 getProgramUrl(curProgram.getIndex());
 
+                curPosition = 0;
+                listAdapter.setSelectedId(curPosition);
             }
+        }
+    }
+
+    /**
+     * 获取url失败，则自动播放下一个节目
+     */
+    private void autoPlayNext() {
+        Log.e(TAG, "当前:"+curPosition);
+
+        if(curPosition == (programList.size() - 1)) {
+            startDefaultPlay();
+        } else {
+            curPosition += 1;
+            curProgram = programList.get(curPosition);
+            getProgramUrl(curProgram.getIndex());
+            listAdapter.setSelectedId(curPosition);
+            Log.e(TAG, "当前---next--:"+curPosition);
+
         }
     }
 
@@ -222,6 +252,7 @@ public class LiveListActivity extends Activity {
         if(curProgram != null) {
             stopProgram(curProgram.getIndex());
         }
+        curPosition = -1;
         super.onDestroy();
     }
 
@@ -242,8 +273,13 @@ public class LiveListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 curProgram = programList.get(position);
+                curPosition = position;
                 Log.e(TAG, "getIndex:\n"+curProgram.getIndex());
                 getProgramUrl(curProgram.getIndex());
+
+                listAdapter.setSelectedId(position);
+                //刷新数据
+                listAdapter.notifyDataSetInvalidated();
             }
         });
 
@@ -293,7 +329,8 @@ public class LiveListActivity extends Activity {
      */
     private void getProgramUrl(int index){
         Log.i(TAG,"获取节目url:"+index);
-        //errorMaskView.setLoadingStatus();
+        listView.setVisibility(View.GONE);
+        errorMaskView.setLoadingStatus();
         IndexClass indexClass = new IndexClass(index);
         EventManager.send(CommandType.COM_LIVE_GET_PROGRAM_URL, JSON.toJSONString(indexClass), EventMode.OUT);
     }
@@ -332,6 +369,29 @@ public class LiveListActivity extends Activity {
                 (this, android.R.layout.simple_expandable_list_item_1, programs);
         //获取ListView对象，通过调用setAdapter方法为ListView设置Adapter设置适配器
         listView.setAdapter(adapter);
+
+    }
+
+    /**
+     * 重写了item布局，为item设置点击响应，添加颜色变化
+     * @param data
+     */
+    private void setProgramList(String data) {
+        programList = DataParse.getProgramList(data);
+        if(null == programList) {
+            errorMaskView.setEmptyStatus();
+        }else {
+            errorMaskView.setVisibleGone();
+            listAdapter = new ReuseAdapter<Program>(programList, R.layout.item_live_programlist) {
+                @Override
+                public void bindView(ViewHolder holder, Program obj) {
+                    holder.setText(R.id.liveProgramItem,obj.getName() );
+                    holder.setColor(R.id.liveProgramItem);
+                }
+            };
+            listView.setAdapter(listAdapter);
+        }
+
     }
 
     /**
@@ -354,7 +414,8 @@ public class LiveListActivity extends Activity {
      * 清除信息
      */
     private void clearProgramData() {
-        setProgramList(new String[0]);  //清空节目列表
+//        setProgramList(new String[0]);  //清空节目列表
+        listView.setAdapter(null);
         listView.setVisibility(View.GONE);
         errorMaskView.setErrorStatus(true,R.string.jump_connect);
         errorMaskView.setOnRetry(R.string.jump,new View.OnClickListener() {

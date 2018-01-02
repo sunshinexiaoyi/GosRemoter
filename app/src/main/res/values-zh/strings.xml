@@ -23,9 +23,9 @@
     <string name="program_name">节目名</string>
     <string name="program_title">节目列表</string>
     <string name="clickRefresh">点击刷新</string>
-    <string name="empty_list">网络连接错误</string>
-    <string name="netError">加载中…</string>
-    <string name="loading">暂无数据</string>
+    <string name="empty_list">暂无数据</string>
+    <string name="netError">网络连接错误</string>
+    <string name="loading">加载中…</string>
 
     <!--遥控器-->
     <string name="remoter_title">遥控器</string>

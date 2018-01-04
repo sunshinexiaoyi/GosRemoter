@@ -4,17 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-
 import gos.remoter.R;
-import gos.remoter.adapter.ReuseAdapter;
-import gos.remoter.data.Program;
 import gos.remoter.data.Respond;
 import gos.remoter.define.DataParse;
 import gos.remoter.define.SystemInfo;
@@ -27,31 +23,24 @@ import gos.remoter.view.TitleBarNew;
 
 import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
 import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
-import static gos.remoter.define.CommandType.COM_LIVE_GET_PROGRAM_LIST;
 import static gos.remoter.define.CommandType.COM_LIVE_SET_PROGRAM_LIST;
 import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
 
-public class ProgramActivity extends Activity {
+public class HelpActivity extends Activity implements View.OnClickListener{
     private  final String TAG = this.getClass().getSimpleName();
 
-    private ArrayList<Program> programList;
-
-    ReuseAdapter<Program> adapter = new ReuseAdapter<Program>(R.layout.item_program_list) {
-        @Override
-        public void bindView(ViewHolder holder, Program obj, int position) {
-//            holder.setText(R.id.textLcn,obj.getLcn()+"");
-            holder.setText(R.id.textLcn, (position + 1) +"");
-            holder.setText(R.id.textName,obj.getName());
-        }
-    };
+    private TextView versionInform;
+    private TextView versionUpdate;
+    private TextView versionGuide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_program);
+        setContentView(R.layout.activity_help);
+
         EventManager.register(this);
         initView();
-        initData();
+
     }
 
 
@@ -69,9 +58,7 @@ public class ProgramActivity extends Activity {
 
         switch (msg.getCommand()){
             case COM_LIVE_SET_PROGRAM_LIST:
-                programList = DataParse.getProgramList(msg.getData());
-                Log.i(TAG,msg.getData());
-                adapter.reset(programList);
+
                 break;
 
             case COM_SYSTEM_RESPOND:    //回应
@@ -103,14 +90,7 @@ public class ProgramActivity extends Activity {
 
         /*标题栏*/
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-        titleBar.setTextTitle(R.string.program_title);
-        /*titleBar.setImageRight(R.drawable.program_list_more, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {//更多
-                Toast.makeText(ProgramActivity.this, "更多", Toast.LENGTH_SHORT).show();
-
-            }
-        });*/
+        titleBar.setTextTitle(R.string.helpTitle);
         titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,22 +98,26 @@ public class ProgramActivity extends Activity {
             }
         });
 
-        ListView programView = (ListView)findViewById(R.id.programView);
-        programView.setAdapter(adapter);
+        versionInform = (TextView) findViewById(R.id.versionInform);
+        versionUpdate = (TextView) findViewById(R.id.versionUpdate);
+        versionGuide = (TextView) findViewById(R.id.versionGuide);
+
+        versionInform.setOnClickListener(this);
+        versionUpdate.setOnClickListener(this);
+        versionGuide.setOnClickListener(this);
+
     }
 
-
-    private void initData() {
-        getProgramList();
-    }
-
-    /**
-     * 获取节目列表
-     */
-    private void getProgramList(){
-        Log.i(TAG,"获取节目列表:");
-        //errorMaskView.setLoadingStatus();
-        EventManager.send(COM_LIVE_GET_PROGRAM_LIST,"", EventMode.OUT);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.versionInform:
+                break;
+            case R.id.versionUpdate:
+                break;
+            case R.id.versionGuide:
+                break;
+        }
     }
 
     private void detach(){
@@ -143,5 +127,6 @@ public class ProgramActivity extends Activity {
         //设置系统状态为断开连接
         SystemInfo.getInstance().setState(SystemState.DETACH);
     }
+
 
 }

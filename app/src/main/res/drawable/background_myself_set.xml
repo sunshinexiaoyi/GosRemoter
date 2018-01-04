@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
                 android:exitFadeDuration="@android:integer/config_shortAnimTime">
 
-    <item android:state_pressed="true" android:drawable="@color/dark_bule_press" />
-    <item android:state_focused="true" android:drawable="@color/dark_bule_press" />
-    <item android:drawable="@color/dark_blue" />
+    <item android:state_pressed="true" android:drawable="@color/new_scan_title_press" />
+    <item android:state_focused="true" android:drawable="@color/new_scan_title_press" />
+    <item android:drawable="@color/new_scan_title" />
 </selector>

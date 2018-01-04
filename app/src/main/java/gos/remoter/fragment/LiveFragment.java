@@ -75,7 +75,7 @@ public class LiveFragment extends Fragment {
 
     ReuseAdapter<Program> gridAdapter = new ReuseAdapter<Program>(R.layout.liver_program_gridview_item) {
         @Override
-        public void bindView(ViewHolder holder, Program obj) {
+        public void bindView(ViewHolder holder, Program obj, int position) {
             holder.setText(R.id.name,obj.getName());
         }
     };

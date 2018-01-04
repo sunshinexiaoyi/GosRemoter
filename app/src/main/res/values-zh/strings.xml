@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">高斯遥控</string>
 
+    <!--帮助-->
+    <string name="helpTitle">高斯贝尔</string>
+    <string name="versionInform">版本信息</string>
+    <string name="versionUpdate">版本升级</string>
+    <string name="versionGuide">版本指南</string>
+
     <!--主页-->
     <string name="home_remoter">遥控器</string>
     <string name="home_live">直播</string>
@@ -20,6 +26,7 @@
 
     <!--节目列表-->
     <string name="program_lcn">LCN</string>
+    <string name="program_num">NUM</string>
     <string name="program_name">节目名</string>
     <string name="program_title">节目列表</string>
     <string name="clickRefresh">点击刷新</string>

@@ -65,7 +65,7 @@ public class HomePagerAdapter extends PagerAdapter {
         imageView = (ImageView) view.findViewById(R.id.cardImage);
 
         if(null == ads) {
-            imageView.setImageResource(imageList.get(position % imageList.size()));
+            imageView.setBackgroundResource(imageList.get(position % imageList.size()));
         } else {
             Glide.with(context)
                     .load(ads[position % ads.length])               //图片地址

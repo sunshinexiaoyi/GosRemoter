@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -91,7 +92,7 @@ public class HomeActivity extends Activity {
 
     ReuseAdapter<GridActivity> gridAdapter = new ReuseAdapter<GridActivity>(R.layout.item_home_grid) {
         @Override
-        public void bindView(ViewHolder holder, GridActivity obj) {
+        public void bindView(ViewHolder holder, GridActivity obj, int position) {
 
             holder.setText(R.id.txt_icon,getResources().getString(obj.getName()) );
             holder.setImageResource(R.id.img_icon,obj.getIcon());
@@ -198,7 +199,7 @@ public class HomeActivity extends Activity {
 
         //标题栏
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-        titleBar.setNullBackground();
+        titleBar.setBackgroundColor(Color.parseColor("#e93700"));
 
         titleBar.setTextTitle(R.string.homeTitle);
         /*titleBar.setImageRight(R.drawable.home_logout, new View.OnClickListener() {
@@ -215,15 +216,15 @@ public class HomeActivity extends Activity {
     }
 
     private void initGridView() {
-        gridAdapter.add(new GridActivity(LiveListActivity.class,R.drawable.home_live,R.string.home_live));
-        gridAdapter.add(new GridActivity(RemoterActivity.class,R.drawable.home_micontro,R.string.home_remoter));
-        gridAdapter.add(new GridActivity(ProgramActivity.class,R.drawable.home_programlist,R.string.home_program_list));
-        gridAdapter.add(new GridActivity(EpgActivity.class,R.drawable.home_epg,R.string.home_epg));
-        gridAdapter.add(new GridActivity(null,R.drawable.home_more,R.string.home_edit_program));
-        gridAdapter.add(new GridActivity(null,R.drawable.home_more,R.string.home_timing));
-        gridAdapter.add(new GridActivity(null,R.drawable.home_more,R.string.home_email));
-        gridAdapter.add(new GridActivity(null,R.drawable.home_more,R.string.home_setting));
-        gridAdapter.add(new GridActivity(null,R.drawable.home_more,R.string.home_help));
+        gridAdapter.add(new GridActivity(LiveListActivity.class,R.drawable.new_home_live,R.string.home_live));
+        gridAdapter.add(new GridActivity(RemoterActivity.class,R.drawable.new_home_remote,R.string.home_remoter));
+        gridAdapter.add(new GridActivity(ProgramActivity.class,R.drawable.new_home_list,R.string.home_program_list));
+        gridAdapter.add(new GridActivity(EpgActivity.class,R.drawable.new_home_epg,R.string.home_epg));
+        gridAdapter.add(new GridActivity(null,R.drawable.new_home_edit,R.string.home_edit_program));
+        gridAdapter.add(new GridActivity(null,R.drawable.new_home_switch,R.string.home_timing));
+        gridAdapter.add(new GridActivity(null,R.drawable.new_home_mail,R.string.home_email));
+        gridAdapter.add(new GridActivity(null,R.drawable.new_home_setting,R.string.home_setting));
+        gridAdapter.add(new GridActivity(HelpActivity.class,R.drawable.new_home_help,R.string.home_help));
 
         gridView = (GridView)findViewById(R.id.gridActivity);
         gridView.setAdapter(gridAdapter);

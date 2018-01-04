@@ -7,7 +7,7 @@
     tools:context="gos.remoter.activity.ConnectActivity"
     tools:layout_editor_absoluteY="81dp"
     tools:layout_editor_absoluteX="0dp"
-    android:background="@drawable/title_bar_bg"
+    android:background="@color/new_scan_title"
     android:id="@+id/titleLayout"
     >
 

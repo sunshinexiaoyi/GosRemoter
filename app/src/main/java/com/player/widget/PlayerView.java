@@ -1571,6 +1571,8 @@ public class PlayerView {
         } else if (newStatus == PlayStateParams.MEDIA_INFO_VIDEO_INTERRUPT) {
             /**直播停止推流*/
             status = PlayStateParams.STATE_ERROR;
+            showThumbnail(mOnShowThumbnailListener);
+
             if (!(isGNetWork &&
                     (NetworkUtils.getNetworkType(mContext) == 4
                             || NetworkUtils.getNetworkType(mContext) == 5

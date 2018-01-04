@@ -62,11 +62,12 @@ public abstract class ReuseAdapter<T> extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = ViewHolder.bind(parent.getContext(), convertView, parent, mLayoutRes
                 , position);
-        bindView(holder, getItem(position));
+        bindView(holder, getItem(position), position);
         return holder.getItemView();
     }
 
-    public abstract void bindView(ViewHolder holder, T obj);
+    public abstract void bindView(ViewHolder holder, T obj, int position);
+
 
     //添加一个元素
     public void add(T data) {

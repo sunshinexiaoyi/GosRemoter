@@ -34,8 +34,8 @@ public class RemoterSetting extends View {
     RectF rectf;//整个view
     Rect mBound;//字符串
     String ok = "OK";
-    int blue = Color.parseColor("#2a95e5");
-    int bg_color = Color.parseColor("#f6f7fb");
+    int blue = Color.parseColor("#F75522");//2a95e5：蓝色，F75522：橙色
+    int bg_color = Color.parseColor("#f6f7fb");//f6f7fb:白色
 
     //当前点击位置 0中间，3左，4右，1上，2下
     int clickP = -1;

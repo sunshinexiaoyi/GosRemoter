@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.player.listener.OnShowThumbnailListener;
 import com.player.widget.PlayStateParams;
 import com.player.widget.PlayerView;
 
@@ -46,6 +48,7 @@ import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
 
 public class LiveListActivity extends Activity {
     private String TAG = this.getClass().getSimpleName();
+    private View view;
     private PlayerView mVideoView;
     private ListView listView;
     private ErrorMaskView errorMaskView = null;
@@ -120,6 +123,7 @@ public class LiveListActivity extends Activity {
                             if(!respond.getFlag()){     //获取节目url失败
                                 errorMaskView.setVisibleGone();
                                 listView.setVisibility(View.VISIBLE);
+//                                view.setBackgroundResource(R.drawable.details_bg_window);
 //                                autoPlayNext();
                                 Toast.makeText(this, "播放失败，请重选节目", Toast.LENGTH_SHORT).show();
                             }
@@ -156,13 +160,20 @@ public class LiveListActivity extends Activity {
     //初始化播放器布局
     private void initPlayerView() {
 
-        View v = findViewById(R.id.app_box);//若播放器不是一个单独的布局中，放在其他布局中，需要考虑到--"v"
+        view = findViewById(R.id.app_box);//若播放器不是一个单独的布局中，放在其他布局中，需要考虑到--"view"
 
-        mVideoView = new PlayerView(this,v);
+        mVideoView = new PlayerView(this,view);
         mVideoView.setScaleType(PlayStateParams.fitparent);
         mVideoView.forbidTouch(false);
         mVideoView.hideMenu(true);
         mVideoView.hideRotation(true);
+        mVideoView.showThumbnail(new OnShowThumbnailListener() {
+            @Override
+            public void onShowThumbnail(ImageView ivThumbnail) {
+                Log.e(TAG, "ivThumbnail------未播放时的缩略图");
+                ivThumbnail.setBackgroundResource(R.drawable.details_bg_window);
+            }
+        });
         mVideoView.enableOrientationEventListener();
         //mVideoView.setOnlyFullScreen(false);
 
@@ -252,7 +263,11 @@ public class LiveListActivity extends Activity {
         if(curProgram != null) {
             stopProgram(curProgram.getIndex());
         }
-        curPosition = -1;
+        if(null != listAdapter) {
+            listAdapter.setSelectedId(-1);
+            listAdapter.notifyDataSetInvalidated();
+        }
+
         super.onDestroy();
     }
 
@@ -384,7 +399,7 @@ public class LiveListActivity extends Activity {
             errorMaskView.setVisibleGone();
             listAdapter = new ReuseAdapter<Program>(programList, R.layout.item_live_programlist) {
                 @Override
-                public void bindView(ViewHolder holder, Program obj) {
+                public void bindView(ViewHolder holder, Program obj, int position) {
                     holder.setText(R.id.liveProgramItem,obj.getName() );
                     holder.setColor(R.id.liveProgramItem);
                 }

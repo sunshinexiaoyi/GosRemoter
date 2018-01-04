@@ -26,7 +26,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="@dimen/program_list_title_size"
-            android:text="@string/program_lcn"
+            android:text="@string/program_num"
             android:textColor="#323232"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"/>

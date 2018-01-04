@@ -63,8 +63,8 @@
 
         <!--进度条加载样式，动图由一帧一帧显示-->
         <ProgressBar
-            android:layout_width="54.0dip"
-            android:layout_height="54.0dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:indeterminate="true"
             android:indeterminateDrawable="@drawable/progressbar_foxtail_large" />

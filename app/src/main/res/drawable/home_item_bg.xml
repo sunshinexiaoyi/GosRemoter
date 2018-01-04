@@ -8,14 +8,14 @@
             <item android:state_selected="true">
 
                 <shape android:shape="rectangle">
-                    <solid android:color="#9ec9fa" />
+                    <solid android:color="#EE6030" />
                 </shape>
 
             </item>
 
             <item android:state_pressed="true">
                     <shape android:shape="rectangle">
-                        <solid android:color="#9ec9fa"/>
+                        <solid android:color="#EE6030"/>
                     </shape>
             </item>
 

@@ -21,8 +21,8 @@
     <color name="connect_btn_text">#22A7FF</color>
 
     <color name="remoter_hint">#b9cefa</color>
-    <color name="colorPrimary">#22A7FF</color>
-    <color name="colorPrimaryDark">#1E6FCB</color>
+    <color name="colorPrimary">#e93700</color>
+    <color name="colorPrimaryDark">#e93700</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="bg_topbar">#FF4081</color>
@@ -33,6 +33,8 @@
 
     <color name="dialog_out_back">#e5e5e5</color>
     <color name="dialog_in_back">#FFE5E5E5</color>
+    <color name="viewpager_bg">#FFe1e1e1</color>
+
 
     <color name="dialog">#0e000000</color>
     <color name="remoter_bg"> #f6f7fb </color>
@@ -56,7 +58,7 @@
     <color name="transparent">#00000000</color>
     <color name="dialog_divider_color">#ffcccdd1</color>
     <color name="gray">#eaeaea</color>
-    <color name="deepgray">#802a96e6</color>
+    <color name="deepgray">#80F75522</color>
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="horizontalLine">#ffeeeeee</color>
 
@@ -86,4 +88,9 @@
     <color name="result_view">#b0000000</color>
     <color name="viewfinder_mask">#29000000</color>
     <color name="possible_result_points">#c0ffff00</color>
+
+   <color name="new_scan_title"> #e93700</color>
+   <color name="new_scan_title_press"> #EA3737</color>
+
+
 </resources>

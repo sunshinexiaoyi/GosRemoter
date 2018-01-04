@@ -166,13 +166,13 @@ public class RemoterActivity extends Activity {
                 finish();
             }
         });
-        titleBar.setImageRight(R.drawable.remoter_more, new View.OnClickListener() {
+        /*titleBar.setImageRight(R.drawable.remoter_more, new View.OnClickListener() {
             @Override
             public void onClick(View v) {//退出连接
                 Toast.makeText(RemoterActivity.this, "waiting...", Toast.LENGTH_SHORT).show();
 
             }
-        });
+        });*/
 
         initCustomLayout();
         remoteNumber = (Button) findViewById(R.id.remoteNumber);

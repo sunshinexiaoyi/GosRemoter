@@ -2,18 +2,26 @@ package gos.remoter.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +32,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import gos.remoter.R;
-import gos.remoter.adapter.ReuseAdapter;
 import gos.remoter.data.Device;
 import gos.remoter.data.Respond;
 import gos.remoter.define.CommandType;
@@ -45,18 +52,26 @@ public class ConnectActivity extends Activity {
     private String TAG = this.getClass().getSimpleName();
     private final static int SCANNING_GREQUEST_CODE = 1;
     private final static int PERMISSION_CAMERA = 2;
+    private final static int MAX_HISTORY_COUNT = 5;//最大保存记录
+    private final static String SP_NAME = "ipAddress";
+    private final static String SP_EMPTY_TAG = "empty";
+    private final static String SP_KEY_SEARCH = "search";
 
-    ReuseAdapter<Device> deviceAdapter = new ReuseAdapter<Device>(R.layout.item_connect_device) {
+    private Spinner deviceSpinner;
+    private AutoCompleteTextView autoTxt;
+    private ImageView deleteIamge;
+    private ArrayAdapter<String> deviceAdapter;
+    private String[] deviceHistoryArray;
+    private Device selectDevice;
+    private TextView textVersionName;
+    View view;
+
+   /* ReuseAdapter<Device> deviceAdapter = new ReuseAdapter<Device>(R.layout.item_connect_device) {
         @Override
         public void bindView(ViewHolder holder, Device obj) {
             holder.setText(R.id.address,obj.getIp());
         }
-    };
-
-    private Spinner deviceSpinner;
-    private Device selectDevice;
-    private TextView textVersionName;
-    View view;
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +93,8 @@ public class ConnectActivity extends Activity {
         if(ACTCollector.isEmpty()){
             sendExitSystem();
         }
+//        clearHistoryInSharedPreferences();
+        deviceAdapter.clear();
         Log.e(TAG,"销毁");
         super.onDestroy();
     }
@@ -112,7 +129,9 @@ public class ConnectActivity extends Activity {
                 case COM_CONNECT_SET_DEVICE: {
                     Log.e(TAG, msg.getData());
                     Device device = DataParse.getDevice(msg.getData());
-                    checkDevice(device);
+                    if(checkDevice(device.getIp())) {
+                        //autoTxt.setText(device.getIp());
+                    }
                     //deviceAdapter.add(device);
                     break;
                 }
@@ -168,18 +187,22 @@ public class ConnectActivity extends Activity {
             }
         });
 
+        initAutoTextView();
         Button btnConnect = (Button)findViewById(R.id.btnConnect);
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(null != selectDevice){
-                  attachDevice(selectDevice);
+                saveSearchHistory();
+                autoTxt.dismissDropDown();//关闭下拉提示框
+
+                if(null != selectDevice && null != autoTxt.getText().toString()){
+                    attachDevice(selectDevice);
                 }
             }
         });
 
         textVersionName = (TextView) findViewById(R.id.versionName);
-        deviceSpinner = (Spinner)findViewById(R.id.deviceSpinner);
+        /*deviceSpinner = (Spinner)findViewById(R.id.deviceSpinner);
         deviceSpinner.setAdapter(deviceAdapter);
         deviceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -189,13 +212,136 @@ public class ConnectActivity extends Activity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
+        });*/
+    }
+
+    private void initAutoTextView() {
+        autoTxt = (AutoCompleteTextView) findViewById(R.id.autoTxt);
+        deleteIamge = (ImageView) findViewById(R.id.deleteImage);
+
+//        autoTxt.setDropDownHeight(270);// 设置下拉提示框的高度为200dp
+        autoTxt.setThreshold(1);// 设置输入1个字符就自动提示,默认2个
+        autoTxt.setSingleLine(true); // 设置单行输入限制
+        autoTxt.setDropDownHorizontalOffset(10);	//设置下拉菜单于文本框之间的水平偏移量
+
+        deviceHistoryArray = getHistoryArray(SP_KEY_SEARCH);
+        deviceAdapter = new ArrayAdapter<>(this, R.layout.item_connect_device, deviceHistoryArray);
+        autoTxt.setAdapter(deviceAdapter);  // 设置适配器
+
+        autoTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                autoTxt.setCursorVisible(true);
+                deleteIamge.setVisibility(View.VISIBLE);
+                RelativeLayout relative = (RelativeLayout) findViewById(R.id.relative);
+                relative.setPadding(0, 0, 0, 150);  //使得键盘不挡住编辑框
+
+            }
         });
+        autoTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String ip = deviceAdapter.getItem(position);
+                autoTxt.setText(ip);
+                selectDevice = new Device(ip, "", "");
+                autoTxt.setSelection(ip.length());//设置光标位置
+
+            }
+        });
+
+        deleteIamge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                autoTxt.setText("");
+            }
+        });
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if(event.getKeyCode() == KeyEvent.KEYCODE_ENTER){
+            /*隐藏软键盘*/
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if(inputMethodManager.isActive()){
+                inputMethodManager.hideSoftInputFromWindow(ConnectActivity.this.getCurrentFocus().getWindowToken(), 0);
+            }
+
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     private void initData(){
         getPackageVersionName();
         startService();
-       // sendFindDevice();
+        saveSearchHistory();
+        // sendFindDevice();
+    }
+
+    /**
+     * 最多只提示最近的10条历史记录,MAX_HISTORY_COUNT
+     * @param key
+     * @return
+     */
+    private String[] getHistoryArray(String key) {
+        String[] array = getHistoryFromSharedPreferences(key).split(",");
+        if (array.length > MAX_HISTORY_COUNT) {
+            String[] newArray = new String[MAX_HISTORY_COUNT];
+            System.arraycopy(array, 0, newArray, 0, MAX_HISTORY_COUNT); // 实现数组间的内容复制
+
+            return newArray;
+        }
+        return array;
+    }
+
+    /**
+     * 保存历史记录数据到SharedPreferences中
+     * trim()返回调用字符串对象的一个副本，但是所有起始和结尾的空格都被删除了
+     */
+    private void saveSearchHistory() {
+        String text = autoTxt.getText().toString();       // 获取搜索框文本信息  .trim()
+        if (TextUtils.isEmpty(text)) {                      // null or ""
+            deleteIamge.setVisibility(View.GONE);
+//            Toast.makeText(this, "Please type something again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        autoTxt.showDropDown();//让下拉框弹出来
+        if(checkDevice(text)) {
+            selectDevice = new Device(text, "", "");
+        }
+
+    }
+
+    /**
+     * 检查输入设备信息的格式是否正确
+     * 并添加
+     * @param ip  输入设备
+     * @return  true正确 false错误
+     */
+    private boolean checkDevice(String ip){
+        String old_text = getHistoryFromSharedPreferences(SP_KEY_SEARCH);// 获取SP中保存的历史记录
+        StringBuilder builder;
+        if (SP_EMPTY_TAG.equals(old_text)) {
+            builder = new StringBuilder();
+        } else {
+            builder = new StringBuilder(old_text);
+        }
+        builder.append(ip + ",");      // 使用逗号来分隔每条历史记录
+
+        // 判断搜索内容是否已存在于历史文件中，已存在则不再添加
+        if(InputCheck.isboolIp(ip)) {
+            if (!old_text.contains(ip + ",")) {
+                saveHistoryToSharedPreferences(SP_KEY_SEARCH, builder.toString());  // 实时保存历史记录
+                deviceAdapter.add(ip);        // 实时更新下拉提示框中的历史记录
+                deviceAdapter.notifyDataSetChanged();
+//                Toast.makeText(this, "Search saved: " + ip, Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        } else {
+            autoTxt.setText("");
+            Toast.makeText(this, "格式错误，请重新输入", Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 
     /**
@@ -236,15 +382,15 @@ public class ConnectActivity extends Activity {
             mCamera = Camera.open();
             Camera.Parameters mParameters = mCamera.getParameters(); //针对魅族手机
             mCamera.setParameters(mParameters);
-            } catch (Exception e) {
+        } catch (Exception e) {
             isCanUse = false;
         }
         if (mCamera != null) {
             try {
                 mCamera.release();
-                } catch (Exception e) {
-                 e.printStackTrace();
-                 return isCanUse;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return isCanUse;
             }
         }
         return isCanUse;
@@ -295,7 +441,7 @@ public class ConnectActivity extends Activity {
                     try{
                         Device retDevice =  DataParse.getDevice(retData);
                         System.out.println(JSON.toJSONString(retDevice));
-                        if(checkDevice(retDevice)) {
+                        if(checkDevice(retDevice.getIp())) {
                             attachDevice(retDevice);
                         }
                        /* if(!deviceAdapter.exist(retDevice)){//不存在则添加
@@ -309,23 +455,6 @@ public class ConnectActivity extends Activity {
                 }
                 break;
         }
-    }
-
-    /**
-     * 检查输入设备信息的格式是否正确
-     * 并添加
-     * @param inDevice  输入设备
-     * @return  true正确 false错误
-     */
-    private boolean checkDevice(Device inDevice){
-        String ip = inDevice.getIp();
-        if((InputCheck.isboolIp(ip))){
-            if(!deviceAdapter.exist(inDevice)){//不存在则添加
-                deviceAdapter.add(inDevice);
-            }
-            return true;
-        }
-        return false;
     }
 
     private void attach(){
@@ -385,6 +514,28 @@ public class ConnectActivity extends Activity {
         //start NetService
         Intent intent = new Intent(this, NetService.class);
         startService(intent);
+    }
+
+    // 从SharedPreferences中获取历史记录数据
+    private String getHistoryFromSharedPreferences(String key) {
+        SharedPreferences sp = getSharedPreferences(SP_NAME, MODE_PRIVATE);
+        return sp.getString(key, SP_EMPTY_TAG); // 读取字符串数据，默认为""
+    }
+
+    // 将历史记录数据保存到SharedPreferences中
+    private void saveHistoryToSharedPreferences(String key, String history) {
+        SharedPreferences sp = getSharedPreferences(SP_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key, history);//添加新的配置数据
+        editor.apply();//提交
+    }
+
+    // 清除保存在SharedPreferences中的历史记录数据
+    private void clearHistoryInSharedPreferences() {
+        SharedPreferences sp = getSharedPreferences(SP_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear();
+        editor.apply();
     }
 
     /**

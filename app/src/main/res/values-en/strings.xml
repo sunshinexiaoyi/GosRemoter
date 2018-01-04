@@ -2,6 +2,12 @@
 <resources>
     <string name="app_name">Gos Remoter</string>
 
+    <!--帮助-->
+    <string name="helpTitle">高斯贝尔</string>
+    <string name="versionInform">Version Information</string>
+    <string name="versionUpdate">Version Upgrade</string>
+    <string name="versionGuide">Official Guide</string>
+
     <!--主页-->
     <string name="home_remoter">Remoter</string>
     <string name="home_live">Live</string>
@@ -21,6 +27,7 @@
 
     <!--节目列表-->
     <string name="program_lcn">LCN</string>
+    <string name="program_num">NUM</string>
     <string name="program_name">Name</string>
     <string name="program_title">ProgramList</string>
     <string name="clickRefresh">Click to fresh</string>
@@ -72,7 +79,7 @@
 
     <!--服务器连接界面设置 -->
     <string name = "connect_set_server">Set the address of the server</string>
-    <string name = "connect_edit_server_address">Please enter the address of the server</string>
+    <string name = "connect_edit_server_address">Please Enter IP Address</string>
     <string name = "connect_confirm">CONNECT</string>
     <string name = "connect_hint">address can not null</string>
     <string name = "connect_format">Address format error, please enter again</string>

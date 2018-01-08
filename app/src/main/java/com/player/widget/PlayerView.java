@@ -31,14 +31,13 @@ import com.player.adapter.StreamSelectAdapter;
 import com.player.bean.VideoijkBean;
 import com.player.listener.OnControlPanelVisibilityChangeListener;
 import com.player.listener.OnPlayerBackListener;
+import com.player.listener.OnShowProgramListListener;
 import com.player.listener.OnShowThumbnailListener;
 import com.player.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-//import gos.ott.phone.live.LivePlayer;
 import gos.remoter.R;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -113,6 +112,14 @@ public class PlayerView {
      * 视频返回按钮
      */
     private final ImageView iv_back;
+    /**
+     * 直播节目按钮
+     */
+    private final ImageView iv_progList;
+    /**
+     * epg按钮
+     */
+    private final ImageView iv_epg;
     /**
      * 视频菜单按钮
      */
@@ -445,6 +452,10 @@ public class PlayerView {
      */
     private OnShowThumbnailListener mOnShowThumbnailListener;
     /**
+     * 节目列表显示监听
+     */
+    private OnShowProgramListListener mOnShowProgramListListener;
+    /**
      * 视频的返回键监听
      */
     private OnPlayerBackListener mPlayerBack;
@@ -506,8 +517,15 @@ public class PlayerView {
                 hideStatusUI();
                 startPlay();
                 updatePausePlay();
+            } else if (v.getId() == R.id.app_video_list) {
+                /**直播节目*/
+                showProgramList();
+            }else if (v.getId() == R.id.app_video_epg) {
+                /**epg信息*/
+
             }
         }
+
     };
     /**
      * 视频播放时信息回调
@@ -600,6 +618,10 @@ public class PlayerView {
             tv_steam = (TextView) mActivity.findViewById(R.id.app_video_stream);
             tv_speed = (TextView) mActivity.findViewById(R.id.app_video_speed);
             seekBar = (SeekBar) mActivity.findViewById(R.id.app_video_seekBar);
+
+            iv_progList = (ImageView) mActivity.findViewById(R.id.app_video_list);
+            iv_epg = (ImageView) mActivity.findViewById(R.id.app_video_epg);
+
         } else {
             streamSelectView = (LinearLayout) rootView.findViewById(R.id.simple_player_select_stream_container);
             streamSelectListView = (ListView) rootView.findViewById(R.id.simple_player_select_streams_list);
@@ -615,6 +637,9 @@ public class PlayerView {
             tv_steam = (TextView) rootView.findViewById(R.id.app_video_stream);
             tv_speed = (TextView) rootView.findViewById(R.id.app_video_speed);
             seekBar = (SeekBar) rootView.findViewById(R.id.app_video_seekBar);
+
+            iv_progList = (ImageView) rootView.findViewById(R.id.app_video_list);
+            iv_epg = (ImageView) rootView.findViewById(R.id.app_video_epg);
         }
 
         seekBar.setMax(1000);
@@ -626,6 +651,11 @@ public class PlayerView {
         tv_steam.setOnClickListener(onClickListener);
         iv_back.setOnClickListener(onClickListener);
         iv_menu.setOnClickListener(onClickListener);
+        iv_progList.setOnClickListener(onClickListener);///////
+        iv_epg.setOnClickListener(onClickListener);
+        iv_progList.setVisibility(View.GONE);
+        iv_epg.setVisibility(View.GONE);
+
         query.id(R.id.app_video_netTie_icon).clicked(onClickListener);
         query.id(R.id.app_video_replay_icon).clicked(onClickListener);
         videoView.setOnInfoListener(new IMediaPlayer.OnInfoListener() {
@@ -878,6 +908,23 @@ public class PlayerView {
      */
     public PlayerView setPlayerBackListener(OnPlayerBackListener listener) {
         this.mPlayerBack = listener;
+        return this;
+    }
+
+    /**
+     * 显示节目列表
+     */
+    public void   showProgramList() {
+        if (mOnShowProgramListListener != null && iv_progList != null) {
+            mOnShowProgramListListener.OnShowProgramList(iv_progList);
+        }
+    }
+
+    /**
+     * 设置节目列表监听
+     */
+    public PlayerView setShowProgramListListener(OnShowProgramListListener mOnShowProgramListListener) {
+        this.mOnShowProgramListListener = mOnShowProgramListListener;
         return this;
     }
 
@@ -1248,6 +1295,15 @@ public class PlayerView {
      */
     public PlayerView hideMenu(boolean isHide) {
         iv_menu.setVisibility(isHide ? View.GONE : View.VISIBLE);
+        return this;
+    }
+
+    /**
+     * 隐藏节目键和epg键，true隐藏，false为显示
+     */
+    public PlayerView hideList(boolean isHide) {
+        iv_progList.setVisibility(isHide ? View.GONE : View.VISIBLE);
+        iv_epg.setVisibility(isHide ? View.GONE : View.VISIBLE);
         return this;
     }
 
@@ -1863,8 +1919,10 @@ public class PlayerView {
     private void updateFullScreenButton() {
         if (getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             iv_fullscreen.setImageResource(R.drawable.simple_player_icon_fullscreen_shrink);
+            hideList(false);
         } else {
             iv_fullscreen.setImageResource(R.drawable.simple_player_icon_fullscreen_stretch);
+            hideList(true);
         }
     }
 

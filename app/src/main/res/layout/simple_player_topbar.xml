@@ -11,6 +11,7 @@
         android:id="@+id/app_video_finish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="7dp"
         android:src="@drawable/simple_player_chevron_left_white_36dp" />
 
     <TextView
@@ -26,9 +27,26 @@
         android:visibility="visible" />
 
     <ImageView
+        android:id="@+id/app_video_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="7dp"
+        android:clickable="true"
+        android:src="@drawable/new_home_list" />
+
+    <ImageView
+        android:id="@+id/app_video_epg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="7dp"
+        android:clickable="true"
+        android:src="@drawable/new_home_epg" />
+
+    <ImageView
         android:id="@+id/app_video_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="7dp"
         android:src="@drawable/simple_player_menu" />
 
 </LinearLayout>

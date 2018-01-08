@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/translucent_background"
+        >
+
+        <TextView
+            android:id="@+id/live_programTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/home_program_list"
+            android:textColor="@color/white"
+            android:textSize="@dimen/program_list_title_size"/>
+
+        <TextView
+            android:id="@+id/live_programTitle_null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp"
+            android:text="@string/empty_list"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            android:textSize="@dimen/program_list_title_size"/>
+
+        <GridView
+            android:id="@+id/live_program_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:scrollbars="none"
+            android:layout_gravity="center"
+            android:numColumns="3"
+            android:visibility="visible"/>
+
+</LinearLayout>
+
+</LinearLayout>

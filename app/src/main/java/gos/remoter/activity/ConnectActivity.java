@@ -60,6 +60,7 @@ public class ConnectActivity extends Activity {
     private Spinner deviceSpinner;
     private AutoCompleteTextView autoTxt;
     private ImageView deleteIamge;
+    private RelativeLayout relative;
     private ArrayAdapter<String> deviceAdapter;
     private String[] deviceHistoryArray;
     private Device selectDevice;
@@ -93,8 +94,6 @@ public class ConnectActivity extends Activity {
         if(ACTCollector.isEmpty()){
             sendExitSystem();
         }
-//        clearHistoryInSharedPreferences();
-        deviceAdapter.clear();
         Log.e(TAG,"销毁");
         super.onDestroy();
     }
@@ -130,12 +129,15 @@ public class ConnectActivity extends Activity {
                     Log.e(TAG, msg.getData());
                     Device device = DataParse.getDevice(msg.getData());
                     if(checkDevice(device.getIp())) {
-                        //autoTxt.setText(device.getIp());
+//                        autoTxt.setText(device.getIp());
                     }
                     //deviceAdapter.add(device);
                     break;
                 }
                 case COM_SYS_EXIT: {
+                    clearHistoryInSharedPreferences();
+                    deviceAdapter.clear();
+
                     //系统退出时，断开连接
                     detachDevice();
                     finish();
@@ -155,6 +157,7 @@ public class ConnectActivity extends Activity {
                             if (respond.getFlag()) {
                                 attach();
                             } else {
+                                Toast.makeText(this, getResources().getString(R.string.connect_fail), Toast.LENGTH_SHORT).show();
                                 Log.i(TAG, "连接设备失败");
                             }
                             break;
@@ -218,6 +221,7 @@ public class ConnectActivity extends Activity {
     private void initAutoTextView() {
         autoTxt = (AutoCompleteTextView) findViewById(R.id.autoTxt);
         deleteIamge = (ImageView) findViewById(R.id.deleteImage);
+        relative = (RelativeLayout) findViewById(R.id.relative);
 
 //        autoTxt.setDropDownHeight(270);// 设置下拉提示框的高度为200dp
         autoTxt.setThreshold(1);// 设置输入1个字符就自动提示,默认2个
@@ -233,7 +237,6 @@ public class ConnectActivity extends Activity {
             public void onClick(View v) {
                 autoTxt.setCursorVisible(true);
                 deleteIamge.setVisibility(View.VISIBLE);
-                RelativeLayout relative = (RelativeLayout) findViewById(R.id.relative);
                 relative.setPadding(0, 0, 0, 150);  //使得键盘不挡住编辑框
 
             }
@@ -299,7 +302,7 @@ public class ConnectActivity extends Activity {
      * trim()返回调用字符串对象的一个副本，但是所有起始和结尾的空格都被删除了
      */
     private void saveSearchHistory() {
-        String text = autoTxt.getText().toString();       // 获取搜索框文本信息  .trim()
+        String text = autoTxt.getText().toString().trim();       // 获取搜索框文本信息  .trim()
         if (TextUtils.isEmpty(text)) {                      // null or ""
             deleteIamge.setVisibility(View.GONE);
 //            Toast.makeText(this, "Please type something again.", Toast.LENGTH_SHORT).show();
@@ -332,7 +335,8 @@ public class ConnectActivity extends Activity {
         if(InputCheck.isboolIp(ip)) {
             if (!old_text.contains(ip + ",")) {
                 saveHistoryToSharedPreferences(SP_KEY_SEARCH, builder.toString());  // 实时保存历史记录
-                deviceAdapter.add(ip);        // 实时更新下拉提示框中的历史记录
+                //deviceAdapter.add(ip);        // 实时更新下拉提示框中的历史记录
+                deviceAdapter.insert(ip,0);
                 deviceAdapter.notifyDataSetChanged();
 //                Toast.makeText(this, "Search saved: " + ip, Toast.LENGTH_SHORT).show();
             }

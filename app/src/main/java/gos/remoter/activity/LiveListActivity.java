@@ -3,16 +3,27 @@ package gos.remoter.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.player.listener.OnShowProgramListListener;
 import com.player.listener.OnShowThumbnailListener;
 import com.player.widget.PlayStateParams;
 import com.player.widget.PlayerView;
@@ -41,17 +52,20 @@ import gos.remoter.view.ErrorMaskView;
 
 import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
 import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
+import static gos.remoter.define.CommandType.COM_EPG_SET_INFORM_LIST;
 import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
 import static gos.remoter.define.CommandType.COM_SYS_EXIT;
 import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
 
-
 public class LiveListActivity extends Activity {
     private String TAG = this.getClass().getSimpleName();
+    private final int HANDLE_HIDE_LIST = 0;
+
     private View view;
     private PlayerView mVideoView;
     private ListView listView;
     private ErrorMaskView errorMaskView = null;
+    private PopupWindow mPopupWindow;
 
     private Program curProgram = null;
     private int curPosition = -1;
@@ -96,6 +110,10 @@ public class LiveListActivity extends Activity {
                 case CommandType.COM_SYS_FINISH_LIVE:
                     delayFinish(3000, getResources().getString(R.string.switch_freq));
                     break;
+                case COM_EPG_SET_INFORM_LIST: {//收到节目epg信息
+
+                    break;
+                }
                 case COM_SYSTEM_RESPOND:{    //回应
                     Respond respond = DataParse.getRespond(msg.getData());
                     switch (respond.getCommand()) {
@@ -142,6 +160,18 @@ public class LiveListActivity extends Activity {
         }
     }
 
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case HANDLE_HIDE_LIST:
+                    mPopupWindow.dismiss();
+                    break;
+            }
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,8 +200,15 @@ public class LiveListActivity extends Activity {
         mVideoView.showThumbnail(new OnShowThumbnailListener() {
             @Override
             public void onShowThumbnail(ImageView ivThumbnail) {
-                Log.e(TAG, "ivThumbnail------未播放时的缩略图");
+//                Log.e(TAG, "ivThumbnail------未播放时的缩略图");
                 ivThumbnail.setBackgroundResource(R.drawable.details_bg_window);
+            }
+        });
+        mVideoView.setShowProgramListListener(new OnShowProgramListListener() {
+            @Override
+            public void OnShowProgramList(ImageView ivProgramList) {
+//                Log.e(TAG, "showProgramList------节目列表");
+                showLiveProgramList();
             }
         });
         mVideoView.enableOrientationEventListener();
@@ -308,6 +345,9 @@ public class LiveListActivity extends Activity {
     private void initScreen() {
         Log.e(TAG, this.getResources().getConfiguration().orientation + "----Screen");
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if(null != mPopupWindow) {
+                mPopupWindow.dismiss();
+            }
             if(SystemInfo.getInstance().getState() == SystemState.ATTACH) {
                 listView.setVisibility(View.VISIBLE);
                 errorMaskView.setVisibleGone();
@@ -473,6 +513,53 @@ public class LiveListActivity extends Activity {
 
     private void attach(){
         getProgramList();
+    }
+
+    /**
+     * 直播节目显示
+     */
+    private void showLiveProgramList() {
+        View view = LayoutInflater.from(this).inflate(R.layout.live_program_list, null);
+        GridView gridView = (GridView) view.findViewById(R.id.live_program_list);
+        TextView textView = (TextView) view.findViewById(R.id.live_programTitle_null);
+        if (programList == null || programList.size() == 0) {
+            textView.setVisibility(View.VISIBLE);
+            gridView.setVisibility(View.GONE);
+        } else {
+            textView.setVisibility(View.GONE);
+            gridView.setVisibility(View.VISIBLE);
+        }
+        gridView.setClickable(false);
+        ReuseAdapter<Program> gridAdapter = new ReuseAdapter<Program>(programList, R.layout.item_live_programlist) {
+            @Override
+            public void bindView(ViewHolder holder, Program obj, int position) {
+                Log.e(TAG, obj.getName());
+                holder.setText(R.id.liveProgramItem,obj.getName() );
+                holder.setTextColor(R.id.liveProgramItem, Color.WHITE);
+                holder.setTextSize(R.id.liveProgramItem, 20);
+            }
+        };
+        gridView.setAdapter(gridAdapter);
+
+        mPopupWindow = new PopupWindow(view, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+//        mPopupWindow.setOutsideTouchable(true);
+        //显示PopupWindow
+        View rootview = LayoutInflater.from(this).inflate(R.layout.live_player, null);
+        mPopupWindow.setAnimationStyle(R.style.LiveAnim);
+        mPopupWindow.showAtLocation(rootview, Gravity.CENTER_HORIZONTAL, 0, 0);//若是直接加载，activity可能为空，此时需要延时
+        /*new Handler().postDelayed(new Runnable(){
+            public void run() {
+                mPopupWindow.showAtLocation(rootview, Gravity.CENTER_HORIZONTAL, 0, 0);//延时加载，避免activity为空
+            }
+        }, 100L);*/
+
+        if (mHandler.hasMessages(HANDLE_HIDE_LIST)) {
+            mHandler.removeMessages(HANDLE_HIDE_LIST);//避免信息还存在，可选
+        }
+        mHandler.sendEmptyMessageDelayed(HANDLE_HIDE_LIST, 5000);
+
     }
 
 }

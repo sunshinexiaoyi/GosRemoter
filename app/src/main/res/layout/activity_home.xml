@@ -47,6 +47,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:background="@color/home_grid_bg"
+        android:scrollbars="none"
         android:layout_gravity="center"
         android:numColumns="3"
         android:visibility="visible"/>

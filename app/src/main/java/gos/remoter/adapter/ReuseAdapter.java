@@ -193,6 +193,28 @@ public abstract class ReuseAdapter<T> extends BaseAdapter {
         }
 
         /**
+         * 设置文字颜色
+         */
+        public ViewHolder setTextColor(int id, int color) {
+            View view = getView(id);
+            if (view instanceof TextView) {
+                ((TextView) view).setTextColor(color);
+            }
+            return this;
+        }
+
+        /**
+         * 设置文字da大小
+         */
+        public ViewHolder setTextSize(int id, int size) {
+            View view = getView(id);
+            if (view instanceof TextView) {
+                ((TextView) view).setTextSize(size);
+            }
+            return this;
+        }
+
+        /**
          * 设置图片
          */
         public ViewHolder setImageResource(int id, int drawableRes) {
@@ -206,7 +228,7 @@ public abstract class ReuseAdapter<T> extends BaseAdapter {
         }
 
         /**
-         * 设置颜色
+         * 设置item颜色
          */
         public ViewHolder setColor(int id) {
             View view = getView(id);

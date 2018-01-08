@@ -54,7 +54,7 @@
 
     <LinearLayout
         android:id="@id/progressLayout"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
@@ -65,9 +65,11 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:indeterminate="true"
-            android:indeterminateDrawable="@drawable/progressbar_foxtail_large" />
+            android:layout_gravity="center_horizontal" />
+      <!--  android:indeterminateOnly="true"
+        android:indeterminateDuration="700"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateDrawable="@drawable/progressbar_foxtail_large"-->
 
         <TextView
             android:id="@id/progressTitle"

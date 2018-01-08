@@ -135,7 +135,7 @@ public class ExampleUnitTest {
             case COM_SYSTEM_HEARTBEAT_PACKET :
                 System.out.println("心跳包");
                 try{
-                    Thread.sleep(1000);
+                    Thread.sleep(3000);
                     dataPackage.setCommand(COM_SYSTEM_HEARTBEAT_PACKET);
                 }catch (Exception e){
                     e.printStackTrace();}

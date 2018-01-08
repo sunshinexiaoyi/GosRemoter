@@ -34,13 +34,8 @@ import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
+import static gos.remoter.define.CommandType.*;   //导入静态命令集
 
-import static gos.remoter.define.CommandType.COM_EPG_GET_INFORM_LIST;
-import static gos.remoter.define.CommandType.COM_EPG_SET_INFORM_LIST;
-import static gos.remoter.define.CommandType.COM_EPG_SET_RESERVE;
-import static gos.remoter.define.CommandType.COM_LIVE_GET_PROGRAM_LIST;
-import static gos.remoter.define.CommandType.COM_LIVE_SET_PROGRAM_LIST;
-import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
 
 public class EpgActivity extends Activity {
     private Epg_myAdapter progItemAdapter = null;

@@ -2,7 +2,7 @@
     <string name="app_name">高斯遥控</string>
 
     <!--帮助-->
-    <string name="helpTitle">高斯贝尔</string>
+    <string name="helpTitle">帮助</string>
     <string name="versionInform">版本信息</string>
     <string name="versionUpdate">版本升级</string>
     <string name="versionGuide">版本指南</string>
@@ -87,6 +87,7 @@
     <string name="connect_detach">设备已断开</string>
     <string name="connect_detach_hint">断开连接</string>
     <string name="connect_try_connect">尝试连接设备...</string>
+    <string name="connect_fail">连接失败</string>
 
     <!--主页-->
     <string name="homeTitle">高斯贝尔</string>

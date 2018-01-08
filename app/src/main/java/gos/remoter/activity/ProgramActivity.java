@@ -25,11 +25,7 @@ import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
 
-import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
-import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
-import static gos.remoter.define.CommandType.COM_LIVE_GET_PROGRAM_LIST;
-import static gos.remoter.define.CommandType.COM_LIVE_SET_PROGRAM_LIST;
-import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
+import static gos.remoter.define.CommandType.*;
 
 public class ProgramActivity extends Activity {
     private  final String TAG = this.getClass().getSimpleName();

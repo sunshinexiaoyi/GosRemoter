@@ -3,7 +3,7 @@
     <string name="app_name">Gos Remoter</string>
 
     <!--帮助-->
-    <string name="helpTitle">高斯贝尔</string>
+    <string name="helpTitle">Help</string>
     <string name="versionInform">Version Information</string>
     <string name="versionUpdate">Version Upgrade</string>
     <string name="versionGuide">Official Guide</string>
@@ -87,7 +87,9 @@
     <string name = "connect_detach">Device has been disconnected</string>
     <string name = "connect_detach_hint">detach the device</string>
     <string name = "connect_try_connect">Try to connect device...</string>
-    
+    <string name="connect_fail">Connection Fail</string>
+
+
     <!--主页-->
     <string name="homeTitle">GOSPELL</string>
     <string name="homeExit">exit</string>

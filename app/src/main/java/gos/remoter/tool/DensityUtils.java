@@ -50,11 +50,14 @@ public class DensityUtils {
 
     /**
      * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+     * dp即dip
+     *  px = dip * density / 160,则当屏幕密度为160时，px = dip
      */
     public static int px2dp(Context context, float pxValue) {
         int autoDpi = 160;
         float scale = context.getResources().getDisplayMetrics().densityDpi;
         return (int) (pxValue / scale * autoDpi);
+//        return (int) (pxValue / scale + 0.5f);
     }
 
     /**

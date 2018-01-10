@@ -11,6 +11,7 @@ public class Time {
     private String endTime;
     private String event;
     private String shortDes;
+    private String longDes;
 
     private String eventType;//（0：delete， 1：View， 2：View Series， 3： Record，4： Record Series）
     private String eventID;
@@ -67,6 +68,13 @@ public class Time {
         this.eventID = eventID;
     }
 
+    public String getLongDes() {
+        return longDes;
+    }
+
+    public void setLongDes(String longDes) {
+        this.longDes = longDes;
+    }
 
     public Time clone()  {
         return JSON.parseObject(JSON.toJSONString(this),getClass());

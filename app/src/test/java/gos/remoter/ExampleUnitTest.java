@@ -276,6 +276,7 @@ public class ExampleUnitTest {
                 time.setEndTime(String.format("%d:00",j+1));
 
                 time.setShortDes("short des"+str+String.format(" %d:%d",i,j));
+                time.setLongDes("long des"+str+String.format(" %d:%d",i,j));
                 time.setEvent(String.format("bbc %d-%d-%d",index,startDate,j+1));
                 time.setEventID(String.valueOf(position++));
 

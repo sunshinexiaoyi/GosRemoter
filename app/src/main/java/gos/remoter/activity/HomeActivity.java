@@ -75,9 +75,8 @@ public class HomeActivity extends Activity {
                     if (isRunning) {
                         if(ads == null && viewPager.getCurrentItem() == imageList.size() -1) {
                             //Log.e(TAG, viewPager.getCurrentItem() + "--imageList---CurrentItem--000000");
-                            viewPager.setCurrentItem(0, false);
+                            viewPager.setCurrentItem(0, true);
                         } else if(ads != null && viewPager.getCurrentItem() == ads.length -1) {
-                           // Log.e(TAG, viewPager.getCurrentItem() + "--ads----CurrentItem--000000");
                             viewPager.setCurrentItem(0, false);
                         } else {
                             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
@@ -221,7 +220,7 @@ public class HomeActivity extends Activity {
         gridAdapter.add(new GridActivity(ProgramActivity.class,R.drawable.new_home_list,R.string.home_program_list));
         gridAdapter.add(new GridActivity(EpgActivity.class,R.drawable.new_home_epg,R.string.home_epg));
         gridAdapter.add(new GridActivity(null,R.drawable.new_home_edit,R.string.home_edit_program));
-        gridAdapter.add(new GridActivity(null,R.drawable.new_home_switch,R.string.home_timing));
+        gridAdapter.add(new GridActivity(TimeSwitchActivity.class,R.drawable.new_home_switch,R.string.home_timing));
         gridAdapter.add(new GridActivity(null,R.drawable.new_home_mail,R.string.home_email));
         gridAdapter.add(new GridActivity(null,R.drawable.new_home_setting,R.string.home_setting));
         gridAdapter.add(new GridActivity(HelpActivity.class,R.drawable.new_home_help,R.string.home_help));

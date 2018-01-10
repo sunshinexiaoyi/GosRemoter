@@ -3,7 +3,7 @@
     android:id="@+id/app_video_top_box"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#CC000000"
+    android:background="@drawable/new_live_bar_bg"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="7dp"
-        android:src="@drawable/simple_player_chevron_left_white_36dp" />
+        android:src="@drawable/new_live_back" />
 
     <TextView
         android:id="@+id/app_video_title"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:padding="7dp"
         android:clickable="true"
-        android:src="@drawable/new_home_list" />
+        android:src="@drawable/new_live_list" />
 
     <ImageView
         android:id="@+id/app_video_epg"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:padding="7dp"
         android:clickable="true"
-        android:src="@drawable/new_home_epg" />
+        android:src="@drawable/new_live_epg" />
 
     <ImageView
         android:id="@+id/app_video_menu"

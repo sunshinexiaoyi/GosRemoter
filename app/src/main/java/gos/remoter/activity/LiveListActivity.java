@@ -8,21 +8,23 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.player.listener.OnShowEpgListListener;
 import com.player.listener.OnShowProgramListListener;
 import com.player.listener.OnShowThumbnailListener;
 import com.player.widget.PlayStateParams;
@@ -36,11 +38,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import gos.remoter.R;
+import gos.remoter.adapter.LivePagerAdapter;
 import gos.remoter.adapter.ReuseAdapter;
+import gos.remoter.data.Date;
 import gos.remoter.data.IndexClass;
 import gos.remoter.data.Program;
 import gos.remoter.data.ProgramUrl;
 import gos.remoter.data.Respond;
+import gos.remoter.data.Time;
 import gos.remoter.define.CommandType;
 import gos.remoter.define.DataParse;
 import gos.remoter.define.SystemInfo;
@@ -48,10 +53,12 @@ import gos.remoter.enumkey.SystemState;
 import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
+import gos.remoter.tool.DensityUtils;
 import gos.remoter.view.ErrorMaskView;
 
 import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
 import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
+import static gos.remoter.define.CommandType.COM_EPG_GET_INFORM_LIST;
 import static gos.remoter.define.CommandType.COM_EPG_SET_INFORM_LIST;
 import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
 import static gos.remoter.define.CommandType.COM_SYS_EXIT;
@@ -60,17 +67,25 @@ import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
 public class LiveListActivity extends Activity {
     private String TAG = this.getClass().getSimpleName();
     private final int HANDLE_HIDE_LIST = 0;
+    private final int HANDLE_HIDE_EPG = 1;
 
     private View view;
     private PlayerView mVideoView;
     private ListView listView;
+    private ViewPager viewPager;
+    private LivePagerAdapter pagerAdapter;
     private ErrorMaskView errorMaskView = null;
-    private PopupWindow mPopupWindow;
+    private PopupWindow mListPopupWindow;
+    private PopupWindow mEpgPopupWindow;
 
     private Program curProgram = null;
     private int curPosition = -1;
-    ArrayList<Program> programList;
+    ArrayList<Program> programList = null;
     ReuseAdapter<Program> listAdapter;
+
+    private ArrayList<Date> progDate = null;//节目日期信息
+    private ArrayList<Time> progTime = null;//一个日期的节目Epg信息，包含在ExpandableTime中
+
 
     /**
      * 接收内部事件
@@ -111,7 +126,7 @@ public class LiveListActivity extends Activity {
                     delayFinish(3000, getResources().getString(R.string.switch_freq));
                     break;
                 case COM_EPG_SET_INFORM_LIST: {//收到节目epg信息
-
+                    makeProgramData(msg.getData());
                     break;
                 }
                 case COM_SYSTEM_RESPOND:{    //回应
@@ -165,8 +180,10 @@ public class LiveListActivity extends Activity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case HANDLE_HIDE_LIST:
-                    mPopupWindow.dismiss();
+                    mListPopupWindow.dismiss();
                     break;
+                case HANDLE_HIDE_EPG:
+                    mEpgPopupWindow.dismiss();
             }
 
         }
@@ -197,6 +214,8 @@ public class LiveListActivity extends Activity {
         mVideoView.forbidTouch(false);
         mVideoView.hideMenu(true);
         mVideoView.hideRotation(true);
+        mVideoView.enableOrientationEventListener();
+        //mVideoView.setOnlyFullScreen(false);
         mVideoView.showThumbnail(new OnShowThumbnailListener() {
             @Override
             public void onShowThumbnail(ImageView ivThumbnail) {
@@ -207,12 +226,33 @@ public class LiveListActivity extends Activity {
         mVideoView.setShowProgramListListener(new OnShowProgramListListener() {
             @Override
             public void OnShowProgramList(ImageView ivProgramList) {
-//                Log.e(TAG, "showProgramList------节目列表");
+                if(null != mEpgPopupWindow) {
+                    mEpgPopupWindow.dismiss();
+                }
                 showLiveProgramList();
             }
         });
-        mVideoView.enableOrientationEventListener();
-        //mVideoView.setOnlyFullScreen(false);
+        mVideoView.setShowEpgListListener(new OnShowEpgListListener() {
+            @Override
+            public void OnShowEpgList(ImageView ivEpgList) {
+                Log.e(TAG, "OnShowEpgList------EPG信息");
+                if(null != mListPopupWindow) {
+                    mListPopupWindow.dismiss();
+                }
+                if(null != programList && null != curProgram) {
+                    /*if(null == curProgram) {
+                        getSelectedEpgInfo(programList.get(0).getIndex());
+                    } else {*/
+                        getSelectedEpgInfo(curProgram.getIndex());
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showLiveEpgList();
+                    }
+                }, 100L);
+            }
+        });
 
     }
 
@@ -271,6 +311,9 @@ public class LiveListActivity extends Activity {
 
         mVideoView.onConfigurationChanged(newConfig);//根据播放器的状态设置播放器高度
         initScreen();
+        if(SystemState.DETACH == SystemInfo.getInstance().getState()) {//横竖屏切换后，由于配置原因按钮失效，但会直接加载此方法
+            clearProgramData();
+        }
     }
 
     @Override
@@ -345,8 +388,11 @@ public class LiveListActivity extends Activity {
     private void initScreen() {
         Log.e(TAG, this.getResources().getConfiguration().orientation + "----Screen");
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if(null != mPopupWindow) {
-                mPopupWindow.dismiss();
+            if(null != mListPopupWindow) {
+                mListPopupWindow.dismiss();
+            }
+            if(null != mEpgPopupWindow) {
+                mEpgPopupWindow.dismiss();
             }
             if(SystemInfo.getInstance().getState() == SystemState.ATTACH) {
                 listView.setVisibility(View.VISIBLE);
@@ -376,6 +422,15 @@ public class LiveListActivity extends Activity {
         Log.i(TAG,"获取节目列表:");
         errorMaskView.setLoadingStatus();
         EventManager.send(CommandType.COM_LIVE_GET_PROGRAM_LIST,"", EventMode.OUT);
+    }
+
+    /**
+     * 获取当前播放节目的EPG信息
+     * @param index
+     */
+    private void getSelectedEpgInfo(int index){
+        IndexClass indexClass = new IndexClass(index);
+        EventManager.send(COM_EPG_GET_INFORM_LIST, JSON.toJSONString(indexClass), EventMode.OUT);//获取选中的节目epg信息
     }
 
     /**
@@ -447,6 +502,15 @@ public class LiveListActivity extends Activity {
             listView.setAdapter(listAdapter);
         }
 
+    }
+
+    /**
+     * 解析得到指定界面的所有EPG信息，7天
+     * @param data
+     */
+    private void makeProgramData(String data) {
+        progDate = DataParse.getEpgProgram(data).getDateArray();//得到日期所有信息
+        progTime = progDate.get(0).getTimeArray();//拿到第0个日期中的epg信息列表
     }
 
     /**
@@ -533,7 +597,6 @@ public class LiveListActivity extends Activity {
         ReuseAdapter<Program> gridAdapter = new ReuseAdapter<Program>(programList, R.layout.item_live_programlist) {
             @Override
             public void bindView(ViewHolder holder, Program obj, int position) {
-                Log.e(TAG, obj.getName());
                 holder.setText(R.id.liveProgramItem,obj.getName() );
                 holder.setTextColor(R.id.liveProgramItem, Color.WHITE);
                 holder.setTextSize(R.id.liveProgramItem, 20);
@@ -541,25 +604,81 @@ public class LiveListActivity extends Activity {
         };
         gridView.setAdapter(gridAdapter);
 
-        mPopupWindow = new PopupWindow(view, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
-        mPopupWindow.setTouchable(true);
-        mPopupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
-//        mPopupWindow.setOutsideTouchable(true);
+        Log.i("getScreenHeight", "getScreenHeight " + DensityUtils.getScreenHeight(this));
+        mListPopupWindow = new PopupWindow(view, DensityUtils.getScreenWidth(this) * 2 / 3, DensityUtils.getScreenHeight(this) * 2 / 5, true);//WindowManager.LayoutParams.MATCH_PARENT
+        mListPopupWindow.setTouchable(true);
+        mListPopupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        mListPopupWindow.setOutsideTouchable(true);
         //显示PopupWindow
         View rootview = LayoutInflater.from(this).inflate(R.layout.live_player, null);
-        mPopupWindow.setAnimationStyle(R.style.LiveAnim);
-        mPopupWindow.showAtLocation(rootview, Gravity.CENTER_HORIZONTAL, 0, 0);//若是直接加载，activity可能为空，此时需要延时
-        /*new Handler().postDelayed(new Runnable(){
-            public void run() {
-                mPopupWindow.showAtLocation(rootview, Gravity.CENTER_HORIZONTAL, 0, 0);//延时加载，避免activity为空
-            }
-        }, 100L);*/
+        mListPopupWindow.setAnimationStyle(R.style.LiveAnim);
+        mListPopupWindow.showAtLocation(rootview, Gravity.CENTER, 0, 0);//若是直接加载，activity可能为空，此时需要延时,如epg获取
 
         if (mHandler.hasMessages(HANDLE_HIDE_LIST)) {
             mHandler.removeMessages(HANDLE_HIDE_LIST);//避免信息还存在，可选
         }
-        mHandler.sendEmptyMessageDelayed(HANDLE_HIDE_LIST, 5000);
+//        mHandler.sendEmptyMessageDelayed(HANDLE_HIDE_LIST, 5000);
 
+    }
+
+    /**
+     * EPG信息显示
+     */
+    private void showLiveEpgList() {
+        View view = LayoutInflater.from(this).inflate(R.layout.live_epg_viewpager, null);
+        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.line_epg_null);
+        viewPager = (ViewPager) view.findViewById(R.id.live_epg_pager);
+
+//        Log.e("showLiveEpgList", "progTime " + progTime.get(0).getEvent());
+        if (programList == null || programList.size() == 0 || progTime == null || progTime.size() == 0) {
+            linearLayout.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.GONE);
+        } else {
+            linearLayout.setVisibility(View.GONE);
+            viewPager.setVisibility(View.VISIBLE);
+        }
+        initViewPager();
+
+        mEpgPopupWindow = new PopupWindow(view, DensityUtils.getScreenWidth(this) * 2 / 3, DensityUtils.getScreenHeight(this) * 2 / 5, true);//DensityUtils.getScreenWidth(this) * 2 / 3
+        mEpgPopupWindow.setTouchable(true);
+        mEpgPopupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        mEpgPopupWindow.setOutsideTouchable(true);
+        //显示PopupWindow
+        View rootview = LayoutInflater.from(this).inflate(R.layout.live_player, null);
+        mEpgPopupWindow.setAnimationStyle(R.style.LiveAnim);
+        mEpgPopupWindow.showAtLocation(rootview, Gravity.CENTER, 0, 0);//若是直接加载，activity可能为空，此时需要延时
+    }
+
+    private void initViewPager() {
+        pagerAdapter = new LivePagerAdapter(this, progTime, curProgram);
+        viewPager.setOffscreenPageLimit(4);//限制四张
+        viewPager.setPageTransformer(true, new ViewPager.PageTransformer() {
+            @Override
+            public void transformPage(View page, float position) {
+                if (position <= 0.0f) {//第一页,被滑动的那页
+                    page.setAlpha(1.0f);
+//                    Log.e("onTransform", "position <= 0.0f ==>" + position);
+                    page.setTranslationY(0f);
+                    //控制停止滑动切换的时候，只有最上面的一张卡片可以点击
+                    page.setClickable(true);
+                    page.setScaleX(0.9f);
+                } else if (position <= 3.0f) {
+//                    Log.e("onTransform", "position <= 3.0f ==>" + position);
+                    float scale = (float) (page.getWidth() - DensityUtils.dip2px(getBaseContext(), 60 * position)) / (float) (page.getWidth());
+                    //控制下面卡片的可见度
+                    page.setAlpha(1.0f);
+                    //控制停止滑动切换的时候，只有最上面的一张卡片可以点击
+                    page.setClickable(false);
+                    page.setPivotX(page.getWidth() / 2f);
+                    page.setPivotY(page.getHeight() / 2f);
+                    page.setScaleX((float)(0.9 * scale));
+                    page.setScaleY(scale);
+                    page.setTranslationX(-page.getWidth() * position + (page.getWidth() * 0.5f) * (1 - scale) + DensityUtils.dip2px(getBaseContext(), 20) * position);
+//                    page.setTranslationX((-page.getWidth() * position));
+                }
+            }
+        });
+        viewPager.setAdapter(pagerAdapter);
     }
 
 }

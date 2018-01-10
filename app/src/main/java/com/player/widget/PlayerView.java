@@ -31,6 +31,7 @@ import com.player.adapter.StreamSelectAdapter;
 import com.player.bean.VideoijkBean;
 import com.player.listener.OnControlPanelVisibilityChangeListener;
 import com.player.listener.OnPlayerBackListener;
+import com.player.listener.OnShowEpgListListener;
 import com.player.listener.OnShowProgramListListener;
 import com.player.listener.OnShowThumbnailListener;
 import com.player.utils.NetworkUtils;
@@ -168,6 +169,10 @@ public class PlayerView {
      * 视频播放进度条
      */
     private final SeekBar seekBar;
+    /**
+     * 视频播放进度条,不同布局
+     */
+    private final SeekBar seekBarLine;
     /**
      * 不同分辨率列表的外层布局
      */
@@ -454,7 +459,10 @@ public class PlayerView {
     /**
      * 节目列表显示监听
      */
-    private OnShowProgramListListener mOnShowProgramListListener;
+    private OnShowProgramListListener mOnShowProgramListListener;/**
+     * epg显示监听
+     */
+    private OnShowEpgListListener mOnShowEpgListListener;
     /**
      * 视频的返回键监听
      */
@@ -522,7 +530,7 @@ public class PlayerView {
                 showProgramList();
             }else if (v.getId() == R.id.app_video_epg) {
                 /**epg信息*/
-
+                showEpgList();
             }
         }
 
@@ -618,6 +626,8 @@ public class PlayerView {
             tv_steam = (TextView) mActivity.findViewById(R.id.app_video_stream);
             tv_speed = (TextView) mActivity.findViewById(R.id.app_video_speed);
             seekBar = (SeekBar) mActivity.findViewById(R.id.app_video_seekBar);
+            seekBarLine = (SeekBar) mActivity.findViewById(R.id.app_video_line_seekBar);
+
 
             iv_progList = (ImageView) mActivity.findViewById(R.id.app_video_list);
             iv_epg = (ImageView) mActivity.findViewById(R.id.app_video_epg);
@@ -637,13 +647,17 @@ public class PlayerView {
             tv_steam = (TextView) rootView.findViewById(R.id.app_video_stream);
             tv_speed = (TextView) rootView.findViewById(R.id.app_video_speed);
             seekBar = (SeekBar) rootView.findViewById(R.id.app_video_seekBar);
+            seekBarLine = (SeekBar) mActivity.findViewById(R.id.app_video_line_seekBar);
+
 
             iv_progList = (ImageView) rootView.findViewById(R.id.app_video_list);
             iv_epg = (ImageView) rootView.findViewById(R.id.app_video_epg);
         }
 
         seekBar.setMax(1000);
+        seekBarLine.setMax(1000);
         seekBar.setOnSeekBarChangeListener(mSeekListener);
+        seekBarLine.setOnSeekBarChangeListener(mSeekListener);
         iv_bar_player.setOnClickListener(onClickListener);
         iv_player.setOnClickListener(onClickListener);
         iv_fullscreen.setOnClickListener(onClickListener);
@@ -653,8 +667,7 @@ public class PlayerView {
         iv_menu.setOnClickListener(onClickListener);
         iv_progList.setOnClickListener(onClickListener);///////
         iv_epg.setOnClickListener(onClickListener);
-        iv_progList.setVisibility(View.GONE);
-        iv_epg.setVisibility(View.GONE);
+        hideList(true);
 
         query.id(R.id.app_video_netTie_icon).clicked(onClickListener);
         query.id(R.id.app_video_replay_icon).clicked(onClickListener);
@@ -914,7 +927,7 @@ public class PlayerView {
     /**
      * 显示节目列表
      */
-    public void   showProgramList() {
+    public void showProgramList() {
         if (mOnShowProgramListListener != null && iv_progList != null) {
             mOnShowProgramListListener.OnShowProgramList(iv_progList);
         }
@@ -925,6 +938,23 @@ public class PlayerView {
      */
     public PlayerView setShowProgramListListener(OnShowProgramListListener mOnShowProgramListListener) {
         this.mOnShowProgramListListener = mOnShowProgramListListener;
+        return this;
+    }
+
+    /**
+     * 显示EPG
+     */
+    public void showEpgList() {
+        if (mOnShowEpgListListener != null && iv_epg != null) {
+            mOnShowEpgListListener.OnShowEpgList(iv_epg);
+        }
+    }
+
+    /**
+     * 设置EPG监听
+     */
+    public PlayerView setShowEpgListListener(OnShowEpgListListener mOnShowEpgListListener) {
+        this.mOnShowEpgListListener = mOnShowEpgListListener;
         return this;
     }
 
@@ -1854,6 +1884,15 @@ public class PlayerView {
             seekBar.setSecondaryProgress(percent * 10);
         }
 
+        if (seekBarLine != null) {
+            if (duration > 0) {
+                long pos = 1000L * position / duration;
+                seekBarLine.setProgress((int) pos);
+            }
+            int percent = videoView.getBufferPercentage();
+            seekBarLine.setSecondaryProgress(percent * 10);
+        }
+
         if (isCharge && maxPlaytime + 1000 < getCurrentPosition()) {
             query.id(R.id.app_video_freeTie).visible();
             pausePlay();
@@ -1918,10 +1957,10 @@ public class PlayerView {
      */
     private void updateFullScreenButton() {
         if (getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            iv_fullscreen.setImageResource(R.drawable.simple_player_icon_fullscreen_shrink);
+            iv_fullscreen.setImageResource(R.drawable.new_live_fullscreen_shrink);
             hideList(false);
         } else {
-            iv_fullscreen.setImageResource(R.drawable.simple_player_icon_fullscreen_stretch);
+            iv_fullscreen.setImageResource(R.drawable.new_live_fullscreen_stretch);
             hideList(true);
         }
     }

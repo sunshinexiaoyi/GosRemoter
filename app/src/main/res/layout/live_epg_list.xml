@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/new_live_bar_bg"
+    >
+        <TextView
+            android:id="@+id/live_programTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="13dp"
+            android:text="@string/home_epg"
+            android:textColor="@color/white"
+            android:textSize="@dimen/program_list_title_size"/>
+
+        <RelativeLayout
+            android:id="@+id/live_epg_inform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            >
+
+            <!--缩略信息-->
+            <TextView
+                android:id="@+id/live_epg_titleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TRRRRRRRC News"
+                android:textSize="@dimen/epg_info_title"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/live_epg_titleTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignBaseline="@+id/live_epg_titleName"
+                android:text="9:00-10:00"
+                android:textSize="@dimen/epg_info_title"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/live_epg_longDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/live_epg_titleName"
+                android:layout_marginTop="7dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="There are somethingmesfgfr …"
+                android:textColor="@color/white"
+                android:textSize="@dimen/epg_info_title"/>
+
+        </RelativeLayout>
+
+</LinearLayout>

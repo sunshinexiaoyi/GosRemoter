@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     >
 
     <LinearLayout
+        android:id="@+id/line_epg_null"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@drawable/new_live_bar_bg"
+        android:visibility="gone"
         >
 
         <TextView
@@ -16,9 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="22dp"
             android:layout_marginTop="13dp"
-            android:text="@string/home_program_list"
+            android:text="@string/home_epg"
             android:textColor="@color/white"
             android:textSize="@dimen/program_list_title_size"/>
 
@@ -32,18 +34,13 @@
             android:layout_marginBottom="30dp"
             android:text="@string/empty_list"
             android:textColor="@color/white"
-            android:visibility="gone"
             android:textSize="@dimen/program_list_title_size"/>
+    </LinearLayout>
 
-        <GridView
-            android:id="@+id/live_program_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="center"
-            android:numColumns="3"
-            android:visibility="visible"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/live_epg_pager"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:visibility="visible"/>
 
-</LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

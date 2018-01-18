@@ -21,7 +21,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +30,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import gos.remoter.R;
 import gos.remoter.data.Device;
@@ -48,15 +48,7 @@ import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.tool.SharedPreferencesUtils;
 import gos.remoter.view.TitleBarNew;
 
-import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
-import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
-import static gos.remoter.define.CommandType.COM_CONNECT_GET_DEVICE;
-import static gos.remoter.define.CommandType.COM_CONNECT_SET_DEVICE;
-import static gos.remoter.define.CommandType.COM_NET_DISABLE;
-import static gos.remoter.define.CommandType.COM_NET_SOCKET_PREPARED;
-import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
-import static gos.remoter.define.CommandType.COM_SYS_EXIT;
-import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
+import static gos.remoter.define.CommandType.*;
 
 public class ConnectActivity extends Activity {
     private String TAG = this.getClass().getSimpleName();
@@ -67,7 +59,6 @@ public class ConnectActivity extends Activity {
     private final static String SP_EMPTY_TAG = "empty";
     private final static String SP_KEY_SEARCH = "search";
 
-    private Spinner deviceSpinner;
     private AutoCompleteTextView autoTxt;
     private ImageView deleteIamge;
     private RelativeLayout relative;
@@ -103,13 +94,18 @@ public class ConnectActivity extends Activity {
         if(ACTCollector.isEmpty()){
             sendExitSystem();
         }
-        SharedPreferencesUtils.clear();
-        if(deviceAdapter != null) {
-            deviceAdapter.clear();
-        }
 
         Log.e(TAG,"销毁");
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(deviceAdapter != null) {
+            Log.e(TAG, "重连----" + SharedPreferencesUtils.get(SP_KEY_SEARCH));
+
+        }
     }
 
     @Override
@@ -150,6 +146,10 @@ public class ConnectActivity extends Activity {
                 }
                 case COM_SYS_EXIT: {
 
+                    SharedPreferencesUtils.clear();
+                    if(deviceAdapter != null) {
+                        deviceAdapter.clear();
+                     }
                     //系统退出时，断开连接
                     detachDevice();
                     finish();
@@ -229,10 +229,10 @@ public class ConnectActivity extends Activity {
         autoTxt.setSingleLine(true); // 设置单行输入限制
         autoTxt.setDropDownHorizontalOffset(10);	//设置下拉菜单于文本框之间的水平偏移量
 
-        //saveAdapterData = new ArrayList(Arrays.asList(getHistoryArray(SP_KEY_SEARCH)));
+        saveAdapterData = new ArrayList(Arrays.asList(getHistoryArray(SP_KEY_SEARCH)));
         //ArrayAdapter(Context, int, List), 第三个参数传入ArrayList, 将Objects[] 转化为 ArrayList，否则易异常
 
-        deviceAdapter = new ArrayAdapter<>(this, R.layout.item_connect_device);
+        deviceAdapter = new ArrayAdapter<>(this, R.layout.item_connect_device, saveAdapterData);
         autoTxt.setAdapter(deviceAdapter);  // 设置适配器
 
         autoTxt.setOnClickListener(new View.OnClickListener() {
@@ -300,7 +300,7 @@ public class ConnectActivity extends Activity {
         String[] array = SharedPreferencesUtils.get(key).split(",");
         if (array.length > MAX_HISTORY_COUNT) {
             String[] newArray = new String[MAX_HISTORY_COUNT];
-            System.arraycopy(array, 0, newArray, 0, MAX_HISTORY_COUNT); // 实现数组间的内容复制
+            System.arraycopy(array, 0, newArray, (array.length - 5), MAX_HISTORY_COUNT); // 实现数组间的内容复制
             Log.e(TAG,"超出数量5");
             return newArray;
         }
@@ -360,7 +360,7 @@ public class ConnectActivity extends Activity {
             deviceAdapter.add(ip);        // 实时更新下拉提示框中的历史记录
             deviceAdapter.notifyDataSetChanged();
         }
-        deviceAdapter.addAll();getHistoryArray(SP_KEY_SEARCH);
+
     }
 
     /**

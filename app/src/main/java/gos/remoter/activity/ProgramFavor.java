@@ -341,7 +341,7 @@ public class ProgramFavor extends Activity implements AdapterView.OnItemClickLis
                 adapter.notifyDataSetChanged();
             }
         } else {
-            Toast.makeText(getBaseContext(), "服务器已断开，无法操作", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), R.string.program_list_error_net, Toast.LENGTH_SHORT).show();
         }
 
     }

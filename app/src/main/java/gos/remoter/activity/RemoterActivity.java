@@ -41,34 +41,8 @@ import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
 
-import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
-import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
-import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
-import static gos.remoter.define.CommandType.COM_SYS_EXIT;
-import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
-import static gos.remoter.define.KeyValue.KEYVALUE_0;
-import static gos.remoter.define.KeyValue.KEYVALUE_1;
-import static gos.remoter.define.KeyValue.KEYVALUE_2;
-import static gos.remoter.define.KeyValue.KEYVALUE_3;
-import static gos.remoter.define.KeyValue.KEYVALUE_4;
-import static gos.remoter.define.KeyValue.KEYVALUE_5;
-import static gos.remoter.define.KeyValue.KEYVALUE_6;
-import static gos.remoter.define.KeyValue.KEYVALUE_7;
-import static gos.remoter.define.KeyValue.KEYVALUE_8;
-import static gos.remoter.define.KeyValue.KEYVALUE_9;
-import static gos.remoter.define.KeyValue.KEYVALUE_BACK;
-import static gos.remoter.define.KeyValue.KEYVALUE_DOWN;
-import static gos.remoter.define.KeyValue.KEYVALUE_EXIT;
-import static gos.remoter.define.KeyValue.KEYVALUE_FAV;
-import static gos.remoter.define.KeyValue.KEYVALUE_FUNC1;
-import static gos.remoter.define.KeyValue.KEYVALUE_LEFT;
-import static gos.remoter.define.KeyValue.KEYVALUE_MENUE;
-import static gos.remoter.define.KeyValue.KEYVALUE_MUTE;
-import static gos.remoter.define.KeyValue.KEYVALUE_OK;
-import static gos.remoter.define.KeyValue.KEYVALUE_POWER;
-import static gos.remoter.define.KeyValue.KEYVALUE_PVR;
-import static gos.remoter.define.KeyValue.KEYVALUE_RIGHT;
-import static gos.remoter.define.KeyValue.KEYVALUE_UP;
+import static gos.remoter.define.CommandType.*;
+import static gos.remoter.define.KeyValue.*;
 
 public class RemoterActivity extends Activity implements View.OnLongClickListener, View.OnTouchListener{
 

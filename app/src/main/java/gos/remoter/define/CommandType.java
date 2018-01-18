@@ -65,8 +65,8 @@ interface CommandOut{
 
 
     /* 广告模块命令 */
-    byte CMD_GET_AD_INFO = 80; //获取广告
-    byte CMD_SET_AD_INFO = 81; //设置广告
+    byte COM_GET_AD_INFO = 80; //获取广告
+    byte COM_SET_AD_IMFO = 81; //设置广告
 
 }
 

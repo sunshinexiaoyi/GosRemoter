@@ -26,7 +26,7 @@ import gos.remoter.define.DataPackage;
 import gos.remoter.define.DataParse;
 import gos.remoter.define.NetProtocol;
 
-import static gos.remoter.define.CommandType.*;
+import static gos.remoter.define.CommandType.*;   //导入静态命令集
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -163,9 +163,9 @@ public class ExampleUnitTest {
                 sendData = JSON.toJSONString(respond);
                 break;    //
             /*广告信息*/
-            case CMD_GET_AD_INFO:
+            case COM_GET_AD_INFO:
                 System.out.println("获取广告列表");
-                dataPackage.setCommand(CMD_SET_AD_INFO);
+                dataPackage.setCommand(COM_SET_AD_IMFO);
                 ArrayList<Advertisement> advertisements = new ArrayList<>();
                 for(int i = 0; i < testAD.length; i++) {
                     Advertisement advertisement = new Advertisement(testAD[i]);

@@ -195,7 +195,11 @@ public class ProgramActivity extends Activity implements AdapterView.OnItemClick
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         curProgram = programList.get(position);
-        switchProgram(curProgram);
+        if(SystemApplication.getInstance().getState() == SystemState.ATTACH ) {
+            switchProgram(curProgram);
+        } else {
+            Toast.makeText(getBaseContext(), R.string.program_list_error_net, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initData() {

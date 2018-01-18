@@ -41,13 +41,7 @@ import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
 
-import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
-import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
-import static gos.remoter.define.CommandType.CMD_GET_AD_INFO;
-import static gos.remoter.define.CommandType.CMD_SET_AD_INFO;
-import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
-import static gos.remoter.define.CommandType.COM_SYS_EXIT;
-import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
+import static gos.remoter.define.CommandType.*;
 
 
 public class HomeActivity extends Activity {
@@ -109,7 +103,7 @@ public class HomeActivity extends Activity {
                 case COM_SYS_HEARTBEAT_STOP:
                     detach();
                     break;
-                case CMD_SET_AD_INFO: //广告
+                case COM_SET_AD_IMFO: //广告
                     parseAdDate(msg.getData());
                     initImageData();
                     break;
@@ -383,7 +377,7 @@ public class HomeActivity extends Activity {
      */
     private void getAD() {
         Log.i(TAG,"获取广告信息:");
-        EventManager.send(CMD_GET_AD_INFO, "", EventMode.OUT);
+        EventManager.send(COM_GET_AD_INFO, "", EventMode.OUT);
     }
 
     //断开与服务器的连接

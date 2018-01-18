@@ -569,7 +569,7 @@ public class LiveListActivity extends Activity {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Log.e("delayFinish", "finish-----------------");
+                Log.e(TAG, "delayFinish----finish--------");
 //                finish();//销毁当前activity
                 mVideoView.stopPlay();
             }

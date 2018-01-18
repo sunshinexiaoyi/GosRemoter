@@ -60,6 +60,7 @@
     <string name="program_favor_all">All</string>
     <string name="program_favor_singer">Choose</string>
     <string name="program_favor_delete_ok">OK</string>
+    <string name="program_list_error_net">The server is disconnected and unable to operate.</string>
 
     <!--遥控器-->
     <string name="remoter_title">Remoter</string>

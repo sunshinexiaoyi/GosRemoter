@@ -59,6 +59,7 @@
     <string name="program_favor_all">全选</string>
     <string name="program_favor_singer">选择</string>
     <string name="program_favor_delete_ok">确定</string>
+    <string name="program_list_error_net">服务器已断开，无法操作</string>
 
     <!--遥控器-->
     <string name="remoter_title">遥控器</string>

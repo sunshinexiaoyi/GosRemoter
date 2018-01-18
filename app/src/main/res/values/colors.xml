@@ -91,6 +91,8 @@
 
    <color name="new_scan_title"> #e93700</color>
    <color name="new_scan_title_press"> #EA3737</color>
+   <color name="underline"> #ff75767b</color>
+
 
 
 </resources>

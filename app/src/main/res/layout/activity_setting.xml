@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f6f7fb"
+    tools:context="gos.remoter.activity.SettingActivity">
+
+    <gos.remoter.view.TitleBarNew
+        android:id="@+id/titleBar"
+        style="@style/TitleBar"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/titleBar">
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@drawable/program_list">
+
+            <TextView
+                android:id="@+id/setLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/selectLanguage"
+                android:padding="15dp"
+                android:clickable="true"
+                android:textSize="@dimen/program_list_size"/>
+
+            <TextView
+                android:id="@+id/selectedLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:textSize="@dimen/epg_info_set_title"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:layout_marginRight="10dp"
+                android:padding="5dp"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/versionInform"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/versionInform"
+            android:padding="15dp"
+            android:textSize="@dimen/program_list_size"
+            android:clickable="true"
+            android:background="@drawable/program_list"/>
+
+        <TextView
+            android:id="@+id/parentLock"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/parentLock"
+            android:padding="15dp"
+            android:textSize="@dimen/program_list_size"
+            android:clickable="true"
+            android:background="@drawable/program_list"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

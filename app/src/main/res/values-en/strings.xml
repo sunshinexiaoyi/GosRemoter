@@ -2,22 +2,43 @@
 <resources>
     <string name="app_name">Gos Remoter</string>
 
+    <!--设置-->
+    <string name="settingTitle">Setting</string>
+    <string name="selectLanguage">Language Selection</string>
+    <string name="versionInform">Version Information</string>
+    <string name="parentLock">Parents Lock</string>
+    <string name="lanSystem">Auto</string>
+    <string name="lanChinse">简体中文</string>
+    <string name="lanEnglish">English</string>
+    <string name="checkVersion">Check Version</string>
+    <string name="checkVersionResult"> The Latest Version.</string>
+    <string name="copyRight">Copyright © 2017-2018 GOSPELL.All Rights Reserved.</string>
+
     <!--帮助-->
     <string name="helpTitle">Help</string>
-    <string name="versionInform">Version Information</string>
     <string name="versionUpdate">Version Upgrade</string>
     <string name="versionGuide">Official Guide</string>
+    <string name="guideInfor">
+        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+        Open the Gos Remoter (open before connecting wifi),
+        wait for the program to automatically obtain IP, click "Connect" to enter the main interface.\n\n
+        Function Introduction：\n\n
+        1："Live"&#160;&#160;&#160;&#160; This feature allows you to watch live broadcasts on your phone.\n\n
+        2："Remoter"&#160;&#160;&#160;&#160; allows the phone to be used as a remote control for the TV set-top box.\n\n
+        3： "Program List"&#160;&#160;&#160;&#160; shows all the programs and the programs on the TV can be switched at the same time.
+    </string>
 
     <!--主页-->
-    <string name="home_remoter">Remoter</string>
-    <string name="home_live">Live</string>
-    <string name="home_program_list">ProgramList</string>
+    <string name="home_remoter">REMOTER</string>
+    <string name="home_live">LIVE</string>
+    <string name="home_program_list">PROGRAM LIST</string>
+    <string name="home_program_list_abbr">LIST</string>
     <string name="home_epg">EPG</string>
-    <string name="home_edit_program">Edit Programmes</string>
-    <string name="home_timing">Timing Switch</string>
-    <string name="home_email">Email</string>
-    <string name="home_setting">Setting</string>
-    <string name="home_help">Help</string>
+    <string name="home_group_program">GROUP</string>
+    <string name="home_timing">TIMING</string>
+    <string name="home_email">EMAIL</string>
+    <string name="home_setting">SETTING</string>
+    <string name="home_help">HELP</string>
     <string name="home_info">This feature is not yet open, please look!</string>
     <string name="home_alert_title">Info</string>
     <string name="home_alert_msg">Are you sure quit the Application？</string>
@@ -34,6 +55,11 @@
     <string name="empty_list">No data</string>
     <string name="netError">Network connection error</string>
     <string name="loading">Loading…</string>
+    <string name="program_favor_delete">Delete</string>
+    <string name="program_favor_list">Favorites</string>
+    <string name="program_favor_all">All</string>
+    <string name="program_favor_singer">Choose</string>
+    <string name="program_favor_delete_ok">OK</string>
 
     <!--遥控器-->
     <string name="remoter_title">Remoter</string>

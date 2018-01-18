@@ -46,7 +46,7 @@ public class NetService extends Service {
     UdpUtil udpUtil = new UdpUtil();
 
     private HeartbeatPacket heartbeatPacket = null;
-    private int heartbeatInterval = 10; //设置心跳包超时时间为10s
+    private int heartbeatInterval = 1000; //设置心跳包超时时间为10s
 
     private boolean receiveFlag = true;// 接收运行标志
     private boolean wifiEnableingFlag = false;// wifi开启标志
@@ -171,6 +171,7 @@ public class NetService extends Service {
                 String ip = getWifiIp();
                 if(null == ip){
                     Log.e(TAG,"本地ip为空");
+                    EventManager.send(COM_NET_DISABLE,"", EventMode.IN);
                     return;
                 }
                 udpUtil.receive(ip, NetProtocol.receivePort, new NetCallback() {

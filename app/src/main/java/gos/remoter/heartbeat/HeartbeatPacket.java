@@ -83,7 +83,9 @@ public class HeartbeatPacket implements HeartbeatStop {
     }
 
     public void stop(){
-        timer.cancel();
-        timer = null;
+        if(null != timer) {
+            timer.cancel();
+            timer = null;
+        }
     }
 }

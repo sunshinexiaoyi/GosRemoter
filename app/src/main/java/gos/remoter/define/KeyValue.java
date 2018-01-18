@@ -58,7 +58,7 @@ public class KeyValue {
     public static final int KEYVALUE_STOP = 39;
     public static final int KEYVALUE_NEXT = 40;
 
-    public static final int KEYVALUE_MUTE = 41;//������
+    public static final int KEYVALUE_MUTE = 41;//静音键
     public static final int KEYVALUE_SET = 42;
     public static final int KEYVALUE_GOTO = 43;
     public static final int KEYVALUE_STORE = 44;

@@ -13,7 +13,7 @@
         android:id="@+id/homeAD"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_weight="2.3">
         <!--android:background="@drawable/details_bg_window"-->
         <!--android:clipChildren="false"-->
 
@@ -22,13 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="5dp"
+            android:background="@color/viewpager_bg"
+            />
+<!--android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:background="@color/viewpager_bg"
-            />
-<!--android:layout_marginLeft="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"-->
     </RelativeLayout>
 

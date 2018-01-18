@@ -5,6 +5,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class LivePagerAdapter extends PagerAdapter {
 
     private Context context;
     private LayoutInflater inflater;
+    private LinearLayout layout;
     private TextView programName;
     private TextView titleName;
     private TextView titleTime;
@@ -62,6 +64,7 @@ public class LivePagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View view = inflater.inflate(R.layout.live_epg_list, container, false);
+        layout = (LinearLayout) view.findViewById(R.id.pager_item);
         programName = (TextView) view.findViewById(R.id.live_programTitle);
         titleName = (TextView) view.findViewById(R.id.live_epg_titleName);
         titleTime = (TextView) view.findViewById(R.id.live_epg_titleTime);

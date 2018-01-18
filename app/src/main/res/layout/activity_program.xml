@@ -1,58 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f6f7fb"
-    android:orientation="vertical"
     tools:context="gos.remoter.activity.ProgramActivity">
 
     <gos.remoter.view.TitleBarNew
         android:id="@+id/titleBar"
         style="@style/TitleBar"
+        android:layout_alignParentTop="true"
         />
 
     <LinearLayout
+        android:id="@+id/groupLinear"
         android:layout_width="match_parent"
         android:layout_height="@dimen/program_list_title_height"
         android:orientation="horizontal"
-        android:id="@+id/linearLayout"
-        android:background="@drawable/home_item_bg">
+        android:layout_below="@+id/titleBar"
+        android:layout_gravity="center"
+        android:background="@drawable/home_item_bg"
+        android:visibility="gone">
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/fav_delete_all_lin"
             android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="@dimen/program_list_title_size"
-            android:text="@string/program_num"
-            android:textColor="#323232"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"/>
+            android:clickable="true"
+            android:layout_gravity="center"
+            android:gravity="center">
 
-        <TextView
-            android:layout_width="0dp"
+            <Button
+                android:id="@+id/fav_delete_all"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/programlist_fav_uncaceled"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="@dimen/program_list_title_size"
+                android:gravity="center"
+                android:text="@string/program_favor_all"
+                android:textColor="#323232"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fav_delete_single_lin"
             android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="@dimen/program_list_title_size"
-            android:text="@string/program_name"
-            android:textColor="#323232"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"/>
+            android:clickable="true"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/fav_delete_single"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/programlist_fav_canceled"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/program_list_title_size"
+                android:text="@string/program_favor_singer"
+                android:textColor="#323232"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
+
+            </LinearLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/programList_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/groupLinear"
+        android:textSize="@dimen/program_list_title_size"
+        android:text="@string/empty_list"
+        android:textColor="#323232"
+        android:padding="10dp"
+        android:visibility="gone"/>
 
     <ListView
         android:id="@+id/programView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
-        android:padding="8dp"
-        android:scrollbars="none"
-        >
-    </ListView>
+        android:layout_below="@+id/programList_null"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:divider="@color/underline"
+        android:dividerHeight="0.7dp"
+        android:scrollbars="none"/>
+    <!--        android:listSelector="@color/transparent"-->
 
-</LinearLayout>
+    <View
+        android:id="@+id/underline"
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:layout_below="@+id/programView"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/underline"
+        android:visibility="visible"/>
+
+    <Button
+        android:id="@+id/fav_delete_ok"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:background="@color/new_scan_title"
+        android:text="@string/program_favor_delete_ok"
+        android:textSize="18sp"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

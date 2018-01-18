@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
-    android:background="@drawable/program_list">
+    android:layout_height="55dp"
+    android:orientation="horizontal">
+<!--android:background="@drawable/list_item_click_bg"-->
+
+    <ImageView
+        android:id="@+id/textDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:src="@drawable/programlist_fav_uncaceled"
+        android:clickable="true"
+        android:layout_marginLeft="20dp"
+        android:visibility="gone"
+        android:padding="5dp"/>
 
     <TextView
-        android:id="@+id/textLcn"
+        android:id="@+id/textNum"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:textColor="#808080"
-        android:textSize="@dimen/program_list_size" />
+        android:padding="5dp"
+        android:textColor="@color/black_text"
+        android:textSize="@dimen/program_list_title_size" />
 
     <TextView
         android:id="@+id/textName"
@@ -21,8 +33,25 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:textSize="@dimen/program_list_size"
-        android:textColor="#808080"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp" />
+        android:textSize="@dimen/program_list_title_size"
+        android:textColor="@color/black_text"
+        android:padding="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="5dp"/>
+
+    <ImageView
+        android:id="@+id/textEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:src="@drawable/programlist_fav_nomal"
+        android:clickable="true"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"/>
 </LinearLayout>

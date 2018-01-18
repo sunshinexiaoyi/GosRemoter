@@ -13,7 +13,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import gos.remoter.R;
 import gos.remoter.data.Respond;
 import gos.remoter.define.DataParse;
-import gos.remoter.define.SystemInfo;
+import gos.remoter.define.SystemApplication;
 import gos.remoter.enumkey.SystemState;
 import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
@@ -29,9 +29,9 @@ import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
 public class HelpActivity extends Activity implements View.OnClickListener{
     private  final String TAG = this.getClass().getSimpleName();
 
-    private TextView versionInform;
-    private TextView versionUpdate;
     private TextView versionGuide;
+    private TextView guideInfor;
+    private boolean isExpand = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class HelpActivity extends Activity implements View.OnClickListener{
 
     }
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReceiveEvent(EventMsg msg){
         if(msg.getEventMode() == EventMode.OUT)
             return;
@@ -90,7 +90,7 @@ public class HelpActivity extends Activity implements View.OnClickListener{
 
         /*标题栏*/
         TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
-        titleBar.setTextTitle(R.string.helpTitle);
+        titleBar.setTextTitle(R.string.home_help);
         titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,12 +98,8 @@ public class HelpActivity extends Activity implements View.OnClickListener{
             }
         });
 
-        versionInform = (TextView) findViewById(R.id.versionInform);
-        versionUpdate = (TextView) findViewById(R.id.versionUpdate);
         versionGuide = (TextView) findViewById(R.id.versionGuide);
-
-        versionInform.setOnClickListener(this);
-        versionUpdate.setOnClickListener(this);
+        guideInfor = (TextView) findViewById(R.id.guideInfor);
         versionGuide.setOnClickListener(this);
 
     }
@@ -111,11 +107,14 @@ public class HelpActivity extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.versionInform:
-                break;
-            case R.id.versionUpdate:
-                break;
             case R.id.versionGuide:
+                if (isExpand) {
+                    guideInfor.setVisibility(View.GONE);
+                    isExpand = false;
+                } else {
+                    guideInfor.setVisibility(View.VISIBLE);
+                    isExpand = true;
+                }
                 break;
         }
     }
@@ -125,7 +124,7 @@ public class HelpActivity extends Activity implements View.OnClickListener{
         Toast.makeText(this,getResources().getString(R.string.connect_detach), Toast.LENGTH_SHORT).show();
 
         //设置系统状态为断开连接
-        SystemInfo.getInstance().setState(SystemState.DETACH);
+        SystemApplication.getInstance().setState(SystemState.DETACH);
     }
 
 

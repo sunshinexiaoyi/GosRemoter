@@ -33,7 +33,7 @@ import gos.remoter.data.Advertisement;
 import gos.remoter.data.GridActivity;
 import gos.remoter.data.Respond;
 import gos.remoter.define.DataParse;
-import gos.remoter.define.SystemInfo;
+import gos.remoter.define.SystemApplication;
 import gos.remoter.enumkey.SystemState;
 import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
@@ -43,8 +43,8 @@ import gos.remoter.view.TitleBarNew;
 
 import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
 import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
-import static gos.remoter.define.CommandType.COM_GET_AD;
-import static gos.remoter.define.CommandType.COM_SET_AD;
+import static gos.remoter.define.CommandType.CMD_GET_AD_INFO;
+import static gos.remoter.define.CommandType.CMD_SET_AD_INFO;
 import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
 import static gos.remoter.define.CommandType.COM_SYS_EXIT;
 import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
@@ -82,7 +82,7 @@ public class HomeActivity extends Activity {
                             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
                         }
                         // 再发一个handler延时
-                        pagerHandler.sendEmptyMessageDelayed(0, 2000);
+                        pagerHandler.sendEmptyMessageDelayed(0, 6000);
                     }
                     break;
             }
@@ -109,7 +109,7 @@ public class HomeActivity extends Activity {
                 case COM_SYS_HEARTBEAT_STOP:
                     detach();
                     break;
-                case COM_SET_AD: //广告
+                case CMD_SET_AD_INFO: //广告
                     parseAdDate(msg.getData());
                     initImageData();
                     break;
@@ -217,12 +217,12 @@ public class HomeActivity extends Activity {
     private void initGridView() {
         gridAdapter.add(new GridActivity(LiveListActivity.class,R.drawable.new_home_live,R.string.home_live));
         gridAdapter.add(new GridActivity(RemoterActivity.class,R.drawable.new_home_remote,R.string.home_remoter));
-        gridAdapter.add(new GridActivity(ProgramActivity.class,R.drawable.new_home_list,R.string.home_program_list));
+        gridAdapter.add(new GridActivity(ProgramActivity.class,R.drawable.new_home_list,R.string.home_program_list_abbr));
         gridAdapter.add(new GridActivity(EpgActivity.class,R.drawable.new_home_epg,R.string.home_epg));
-        gridAdapter.add(new GridActivity(null,R.drawable.new_home_edit,R.string.home_edit_program));
-        gridAdapter.add(new GridActivity(TimeSwitchActivity.class,R.drawable.new_home_switch,R.string.home_timing));
-        gridAdapter.add(new GridActivity(null,R.drawable.new_home_mail,R.string.home_email));
-        gridAdapter.add(new GridActivity(null,R.drawable.new_home_setting,R.string.home_setting));
+        gridAdapter.add(new GridActivity(null,R.drawable.new_home_group,R.string.home_group_program));
+        gridAdapter.add(new GridActivity(null,R.drawable.new_home_switch,R.string.home_timing));
+        gridAdapter.add(new GridActivity(null,R.drawable.new_home_email,R.string.home_email));
+        gridAdapter.add(new GridActivity(SettingActivity.class,R.drawable.new_home_setting,R.string.home_setting));
         gridAdapter.add(new GridActivity(HelpActivity.class,R.drawable.new_home_help,R.string.home_help));
 
         gridView = (GridView)findViewById(R.id.gridActivity);
@@ -249,7 +249,7 @@ public class HomeActivity extends Activity {
     private void initViewPager() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setPageMargin(5);
-        viewPager.setOffscreenPageLimit(3);//默认为1时，左右各预加载一页
+        viewPager.setOffscreenPageLimit(2);//默认为1时，左右各预加载一页
         viewPager.setPageTransformer(false, new ScaleTransformer(this));
 
         initImageData();
@@ -289,7 +289,7 @@ public class HomeActivity extends Activity {
          * 自动循环： 1.定时器：Timer 2.开子线程：while true循环
          * 3.ClockManger ; 4.用Handler发送延时信息，实现循环，最简单最方便
          */
-        pagerHandler.sendEmptyMessageDelayed(0, 2000);
+        pagerHandler.sendEmptyMessageDelayed(0, 6000);
 
     }
 
@@ -297,11 +297,11 @@ public class HomeActivity extends Activity {
         if(null == ads) {
 //            Log.e(TAG, "adList == null" + "-----adList-adList-adList");
             imageList = new ArrayList<>();
-            imageList.add(R.drawable.home_pager01);
-            imageList.add(R.drawable.home_pager02);
-            imageList.add(R.drawable.details_bg_window);
-            imageList.add(R.drawable.home_pager03);
-            imageList.add(R.drawable.home_pager04);
+            imageList.add(R.drawable.home_pager1);
+            imageList.add(R.drawable.home_pager2);
+            imageList.add(R.drawable.home_pager3);
+            imageList.add(R.drawable.home_pager4);
+            imageList.add(R.drawable.home_pager5);
 
             pagerAdapter = new HomePagerAdapter(this, imageList);
         } else {
@@ -317,7 +317,7 @@ public class HomeActivity extends Activity {
         Toast.makeText(this,getResources().getString(R.string.connect_detach), Toast.LENGTH_SHORT).show();
 
         //设置系统状态为断开连接
-        SystemInfo.getInstance().setState(SystemState.DETACH);
+        SystemApplication.getInstance().setState(SystemState.DETACH);
     }
 
     /**
@@ -383,21 +383,21 @@ public class HomeActivity extends Activity {
      */
     private void getAD() {
         Log.i(TAG,"获取广告信息:");
-        EventManager.send(COM_GET_AD, "", EventMode.OUT);
+        EventManager.send(CMD_GET_AD_INFO, "", EventMode.OUT);
     }
 
     //断开与服务器的连接
     private void sendDetachDevice(){
-        if(SystemState.ATTACH == SystemInfo.getInstance().getState()) {
+        if(SystemState.ATTACH == SystemApplication.getInstance().getState()) {
             Log.e(TAG,"发送断开与服务器的连接");
-            SystemInfo.getInstance().setState(SystemState.DETACH);
+            SystemApplication.getInstance().setState(SystemState.DETACH);
 
             EventManager.send(COM_CONNECT_DETACH, "", EventMode.OUT);
         }
     }
 
     void exitSystem(){
-        if(SystemState.ATTACH == SystemInfo.getInstance().getState()) {
+        if(SystemState.ATTACH == SystemApplication.getInstance().getState()) {
             sendDetachDevice();
         }
         sendExitSystem();
@@ -407,10 +407,11 @@ public class HomeActivity extends Activity {
      * 退出系统
      */
     void sendExitSystem(){
-        if(SystemState.EXIT != SystemInfo.getInstance().getState()) {
+        if(SystemState.EXIT != SystemApplication.getInstance().getState()) {
             Log.e(TAG,"发送退出系统");
-            SystemInfo.getInstance().setState(SystemState.EXIT);
+            SystemApplication.getInstance().setState(SystemState.EXIT);
             EventManager.send(COM_SYS_EXIT,"",EventMode.IN);
+            finish();
         }
     }
 

@@ -1,19 +1,14 @@
 package gos.remoter.view;
 
 import android.content.Context;
-import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntRange;
 import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import gos.remoter.R;
 
@@ -25,6 +20,7 @@ public class TitleBarNew  extends android.support.constraint.ConstraintLayout{
     private ImageView imageRight;
     private ImageView imageLeft;
     private TextView textTitle;
+    private TextView textRight;
     private ConstraintLayout titleLayout;
 
 
@@ -55,6 +51,7 @@ public class TitleBarNew  extends android.support.constraint.ConstraintLayout{
         imageLeft = (ImageView)findViewById(R.id.imageLeft);
         imageRight = (ImageView)findViewById(R.id.imageRight);
         textTitle = (TextView) findViewById(R.id.textTitle);
+        textRight = (TextView) findViewById(R.id.textRight);
         titleLayout = (ConstraintLayout)findViewById(R.id.titleLayout);
     }
 
@@ -64,6 +61,12 @@ public class TitleBarNew  extends android.support.constraint.ConstraintLayout{
      */
     public void setTextTitle(@StringRes int resId){
         textTitle.setText(resId);
+    }
+
+
+    public void setTextRight(@StringRes int resId,OnClickListener onClickListener){
+        textRight.setText(resId);
+        textRight.setOnClickListener(onClickListener);
     }
 
     /**

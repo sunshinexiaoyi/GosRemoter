@@ -1,18 +1,39 @@
 <resources>
     <string name="app_name">高斯遥控</string>
 
+    <!--设置-->
+    <string name="settingTitle">设置</string>
+    <string name="selectLanguage">选择语言</string>
+    <string name="versionInform">版本信息</string>
+    <string name="parentLock">父母锁</string>
+    <string name="lanSystem">跟随系统</string>
+    <string name="lanChinse">简体中文</string>
+    <string name="lanEnglish">English</string>
+    <string name="checkVersion">检查新版本</string>
+    <string name="checkVersionResult">已是最新版本</string>
+    <string name="copyRight">Copyright © 2017-2018 高斯贝尔 版权所有</string>
+
+
     <!--帮助-->
     <string name="helpTitle">帮助</string>
-    <string name="versionInform">版本信息</string>
     <string name="versionUpdate">版本升级</string>
     <string name="versionGuide">版本指南</string>
+    <string name="guideInfor">
+        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+        打开高斯遥控（打开前请先连接wifi），等待程序自动获取IP，点击“连接”进入主界面。\n\n
+        功能介绍：\n\n
+        1：“直播”	&#160;&#160;&#160;&#160;该功能能够实现在手机上观看直播节目。\n\n
+        2：“遥控器”&#160;&#160;&#160;&#160;可将手机作为遥控器对电视机顶盒进行控制。\n\n
+        3：“节目列表”&#160;&#160;&#160;&#160;	显示所有节目，同时可对电视机上的节目进行切换。</string>
+
 
     <!--主页-->
     <string name="home_remoter">遥控器</string>
     <string name="home_live">直播</string>
     <string name="home_program_list">节目列表</string>
+    <string name="home_program_list_abbr">节目列表</string>
     <string name="home_epg">EPG</string>
-    <string name="home_edit_program">节目编辑</string>
+    <string name="home_group_program">节目分组</string>
     <string name="home_timing">定时开关</string>
     <string name="home_email">邮件</string>
     <string name="home_setting">设置</string>
@@ -33,6 +54,11 @@
     <string name="empty_list">暂无数据</string>
     <string name="netError">网络连接错误</string>
     <string name="loading">加载中…</string>
+    <string name="program_favor_delete">删除</string>
+    <string name="program_favor_list">喜爱列表</string>
+    <string name="program_favor_all">全选</string>
+    <string name="program_favor_singer">选择</string>
+    <string name="program_favor_delete_ok">确定</string>
 
     <!--遥控器-->
     <string name="remoter_title">遥控器</string>

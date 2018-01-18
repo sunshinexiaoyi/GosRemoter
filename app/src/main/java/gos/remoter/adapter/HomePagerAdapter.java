@@ -61,7 +61,7 @@ public class HomePagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View view = inflater.inflate(R.layout.item_viewpager, container, false);
+        View view = inflater.inflate(R.layout.item_home_viewpager, container, false);
         imageView = (ImageView) view.findViewById(R.id.cardImage);
 
         if(null == ads) {

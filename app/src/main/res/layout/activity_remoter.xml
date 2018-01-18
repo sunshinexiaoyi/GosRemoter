@@ -33,7 +33,7 @@
                 android:layout_height="65dp"
                 android:layout_centerInParent="true"
                 android:onClick="remoterFuncOnClick"
-                android:background="@drawable/new_remote_off"/>
+                android:background="@drawable/remoter_on_off"/>
 
             <ImageView
                 android:id="@+id/remoteBack"
@@ -43,7 +43,7 @@
                 android:layout_marginRight="50dp"
                 android:layout_alignBottom="@+id/remoteOnOff"
                 android:onClick="remoterFuncOnClick"
-                android:background="@drawable/new_remote_back"/>
+                android:background="@drawable/remoter_back"/>
 
             <ImageView
                 android:id="@+id/remoteMute"
@@ -53,25 +53,97 @@
                 android:layout_marginLeft="50dp"
                 android:layout_alignBottom="@+id/remoteOnOff"
                 android:onClick="remoterFuncOnClick"
-                android:background="@drawable/new_remote_mute"/>
+                android:background="@drawable/remoter_mute"/>
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="1.7"
-            android:gravity="center"
-            android:padding="20dp">
+            android:gravity="center">
+            <!--android:padding="20dp"-->
 
-            <gos.remoter.adapter.RemoterSetting
+            <!--<gos.remoter.adapter.RemoterSetting
                 android:id="@+id/remoteSet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true" />-->
 
-        </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/remoteBg"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/new_remote"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/up"
+                    android:layout_width="58dp"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/transparent"
+                    android:onClick="remoterFuncOnClick" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/left"
+                        android:layout_width="37dp"
+                        android:layout_height="58dp"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:onClick="remoterFuncOnClick" />
+
+                    <Button
+                        android:id="@+id/ok"
+                        android:layout_width="37dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="OK"
+                        android:textColor="@color/white"
+                        android:textSize="27sp"
+                        android:background="@android:color/transparent"
+                        android:onClick="remoterFuncOnClick" />
+
+                    <Button
+                        android:id="@+id/right"
+                        android:layout_width="37dp"
+                        android:layout_height="58dp"
+                        android:background="@android:color/transparent"
+                        android:onClick="remoterFuncOnClick" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/down"
+                    android:layout_width="58dp"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/transparent"
+                    android:onClick="remoterFuncOnClick" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -86,12 +158,10 @@
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
                 android:text="@string/remoter_number"
-                android:textSize="23sp"
-                android:paddingRight="6dp"
-                android:paddingBottom="5dp"
+                android:textSize="24sp"
                 android:textStyle="normal"
                 android:textColor="@drawable/remoter_text_color"
-                android:background="@drawable/new_remote_bg"/>
+                android:background="@drawable/remoter_null"/>
 
         </RelativeLayout>
 
@@ -111,12 +181,10 @@
                 android:layout_height="65dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/remoter_menu"
-                android:textSize="17sp"
-                android:paddingRight="4dp"
-                android:paddingBottom="4dp"
+                android:textSize="19sp"
                 android:textColor="@drawable/remoter_text_color"
                 android:onClick="remoterFuncOnClick"
-                android:background="@drawable/new_remote_bg"/>
+                android:background="@drawable/remoter_null"/>
 
             <Button
                 android:id="@+id/remoteFav"
@@ -125,12 +193,10 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
                 android:text="@string/remoter_fav"
-                android:textSize="17sp"
-                android:paddingRight="3dp"
-                android:paddingBottom="4dp"
+                android:textSize="19sp"
                 android:textColor="@drawable/remoter_text_color"
                 android:onClick="remoterFuncOnClick"
-                android:background="@drawable/new_remote_bg"/>
+                android:background="@drawable/remoter_null"/>
 
             <Button
                 android:id="@+id/remotePvr"
@@ -139,12 +205,10 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
                 android:text="@string/remoter_pvr"
-                android:textSize="17sp"
-                android:paddingRight="3dp"
-                android:paddingBottom="4dp"
+                android:textSize="19sp"
                 android:textColor="@drawable/remoter_text_color"
                 android:onClick="remoterFuncOnClick"
-                android:background="@drawable/new_remote_bg"/>
+                android:background="@drawable/remoter_null"/>
 
             <Button
                 android:id="@+id/remoteExit"
@@ -153,12 +217,10 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
                 android:text="@string/remoter_exit"
-                android:textSize="17sp"
-                android:paddingRight="3dp"
-                android:paddingBottom="4dp"
+                android:textSize="19sp"
                 android:textColor="@drawable/remoter_text_color"
                 android:onClick="remoterFuncOnClick"
-                android:background="@drawable/new_remote_bg"/>
+                android:background="@drawable/remoter_null"/>
 
         </LinearLayout>
 

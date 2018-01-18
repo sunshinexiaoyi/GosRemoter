@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import gos.remoter.R;
 
@@ -23,7 +24,7 @@ public abstract class ReuseAdapter<T> extends BaseAdapter {
 
     private ArrayList<T> mData;
     private int mLayoutRes;           //布局id
-    public static int selectedPosition = -1;  //选中的位置
+    private static int selectedPosition = -1;  //选中的位置
 
 
     public ReuseAdapter() {
@@ -78,8 +79,18 @@ public abstract class ReuseAdapter<T> extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    //添加一个元素
+    //添加所有元素
     public void reset(ArrayList<T> data) {
+        if (mData == null) {
+            mData = new ArrayList<>();
+        }
+        mData.clear();
+        mData.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    //添加所有元素
+    public void reset(List<T> data) {
         if (mData == null) {
             mData = new ArrayList<>();
         }
@@ -228,6 +239,43 @@ public abstract class ReuseAdapter<T> extends BaseAdapter {
         }
 
         /**
+         * 设置可变的图片，当前位置，
+         * @param id
+         * @return
+         */
+        public ViewHolder setImageResource(int id, int drawableSelect,int drawableUnSelect) {
+            View view = getView(id);
+            //如果selectedId是当前选择的position，则设置
+            if (view instanceof ImageView) {
+                if (selectedPosition  == position) {
+                    ((ImageView) view).setImageResource(drawableSelect);//R.drawable.programlist_fav_canceled
+                } else {
+                    ((ImageView) view).setImageResource(drawableUnSelect);//R.drawable.programlist_fav_uncaceled
+                }
+            }
+
+            return this;
+        }
+
+        /**
+         * 设置item的喜爱
+         * @param id
+         * @param isFavor
+         * @return
+         */
+        public ViewHolder setImageResource(int id, int drawableSelect,int drawableUnSelect, boolean isFavor) {
+            View view = getView(id);
+            if (view instanceof ImageView) {
+                if(isFavor) {
+                    ((ImageView) view).setImageResource(drawableSelect);//R.drawable.programlist_fav_selected
+                } else {
+                    ((ImageView) view).setImageResource(drawableUnSelect);//R.drawable.programlist_fav_nomal
+                }
+            }
+            return this;
+        }
+
+        /**
          * 设置item颜色
          */
         public ViewHolder setColor(int id) {
@@ -242,7 +290,6 @@ public abstract class ReuseAdapter<T> extends BaseAdapter {
             }
             return this;
         }
-
 
         /**
          * 设置点击监听

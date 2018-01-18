@@ -1,29 +1,31 @@
 package gos.remoter.define;
 
 import android.app.Application;
+import android.content.Context;
 
 import gos.remoter.data.Device;
 import gos.remoter.enumkey.SystemState;
+import gos.remoter.tool.SharedPreferencesUtils;
 
 /**
  * 系统信息
  * Created by wuxy on 2017/7/14.
  */
 
-public class SystemInfo extends Application {
+public class SystemApplication extends Application {
     private Device service = null;
     private SystemState state = SystemState.DETACH;
-    private static SystemInfo instance = null;
-
-    public SystemInfo(){
+    private static SystemApplication instance = null;
+    public SystemApplication(){
         super();
     }
+    private Context context;
 
     /**
      * 获取SystemInfo实例
      * @return SystemInfo对象
      */
-    public static SystemInfo getInstance(){
+    public static SystemApplication getInstance(){
         return instance;
     }
 
@@ -55,5 +57,7 @@ public class SystemInfo extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        context = getApplicationContext();
+        SharedPreferencesUtils.init(context);//初始化
     }
 }

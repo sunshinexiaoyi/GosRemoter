@@ -48,7 +48,7 @@ import gos.remoter.data.Respond;
 import gos.remoter.data.Time;
 import gos.remoter.define.CommandType;
 import gos.remoter.define.DataParse;
-import gos.remoter.define.SystemInfo;
+import gos.remoter.define.SystemApplication;
 import gos.remoter.enumkey.SystemState;
 import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
@@ -56,13 +56,7 @@ import gos.remoter.event.EventMsg;
 import gos.remoter.tool.DensityUtils;
 import gos.remoter.view.ErrorMaskView;
 
-import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
-import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
-import static gos.remoter.define.CommandType.COM_EPG_GET_INFORM_LIST;
-import static gos.remoter.define.CommandType.COM_EPG_SET_INFORM_LIST;
-import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
-import static gos.remoter.define.CommandType.COM_SYS_EXIT;
-import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
+import static gos.remoter.define.CommandType.*;
 
 public class LiveListActivity extends Activity {
     private String TAG = this.getClass().getSimpleName();
@@ -94,6 +88,8 @@ public class LiveListActivity extends Activity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRecviveEvent(EventMsg msg){
         if(EventMode.IN == msg.getEventMode()){  //对内
+            Log.e(TAG,"收到的命令" + msg.getCommand());
+            Log.e(TAG,"收到的数据" + msg.getData());
             switch (msg.getCommand()){
                 case COM_SYS_HEARTBEAT_STOP:
                     //delayFinish(0, getResources().getString(R.string.heartbeat_stop));
@@ -129,6 +125,9 @@ public class LiveListActivity extends Activity {
                     makeProgramData(msg.getData());
                     break;
                 }
+                case COM_NET_DISABLE:
+                    errorMaskView.setErrorStatus(false, R.string.netError);
+                    break;
                 case COM_SYSTEM_RESPOND:{    //回应
                     Respond respond = DataParse.getRespond(msg.getData());
                     switch (respond.getCommand()) {
@@ -260,7 +259,7 @@ public class LiveListActivity extends Activity {
      * 默认播放列表的第一个
      */
     private void startDefaultPlay() {
-        if(SystemInfo.getInstance().getState() == SystemState.ATTACH) {
+        if(SystemApplication.getInstance().getState() == SystemState.ATTACH) {
             if(null != programList) {
                 curProgram = programList.get(0);
                 Log.e(TAG, "播放第一个--getIndex:"+curProgram.getIndex());
@@ -311,7 +310,7 @@ public class LiveListActivity extends Activity {
 
         mVideoView.onConfigurationChanged(newConfig);//根据播放器的状态设置播放器高度
         initScreen();
-        if(SystemState.DETACH == SystemInfo.getInstance().getState()) {//横竖屏切换后，由于配置原因按钮失效，但会直接加载此方法
+        if(SystemState.DETACH == SystemApplication.getInstance().getState()) {//横竖屏切换后，由于配置原因按钮失效，但会直接加载此方法
             clearProgramData();
         }
     }
@@ -378,7 +377,7 @@ public class LiveListActivity extends Activity {
             }
         });
 
-        if( SystemInfo.getInstance().getState() == SystemState.DETACH){
+        if( SystemApplication.getInstance().getState() == SystemState.DETACH){
             detach();
         }
 
@@ -394,11 +393,11 @@ public class LiveListActivity extends Activity {
             if(null != mEpgPopupWindow) {
                 mEpgPopupWindow.dismiss();
             }
-            if(SystemInfo.getInstance().getState() == SystemState.ATTACH) {
+            if(SystemApplication.getInstance().getState() == SystemState.ATTACH) {
                 listView.setVisibility(View.VISIBLE);
                 errorMaskView.setVisibleGone();
 
-            } else if(SystemInfo.getInstance().getState() == SystemState.DETACH) {
+            } else if(SystemApplication.getInstance().getState() == SystemState.DETACH) {
                 listView.setVisibility(View.GONE);
                 errorMaskView.setVisibility(View.VISIBLE);
             }
@@ -410,7 +409,7 @@ public class LiveListActivity extends Activity {
     }
 
     private void initData(){
-        if( SystemInfo.getInstance().getState() == SystemState.ATTACH) {
+        if( SystemApplication.getInstance().getState() == SystemState.ATTACH) {
             getProgramList();
         }
     }
@@ -500,6 +499,7 @@ public class LiveListActivity extends Activity {
                 }
             };
             listView.setAdapter(listAdapter);
+
         }
 
     }
@@ -525,7 +525,7 @@ public class LiveListActivity extends Activity {
         //Toast.makeText(this,getResources().getString(R.string.connect_detach), Toast.LENGTH_SHORT).show();
 
         //设置系统状态为断开连接
-        SystemInfo.getInstance().setState(SystemState.DETACH);
+        SystemApplication.getInstance().setState(SystemState.DETACH);
         clearProgramData();
     }
 
@@ -569,8 +569,9 @@ public class LiveListActivity extends Activity {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Log.e("delayFinish", "finish");
-                finish();
+                Log.e("delayFinish", "finish-----------------");
+//                finish();//销毁当前activity
+                mVideoView.stopPlay();
             }
         }, delay);
     }
@@ -593,8 +594,7 @@ public class LiveListActivity extends Activity {
             textView.setVisibility(View.GONE);
             gridView.setVisibility(View.VISIBLE);
         }
-        gridView.setClickable(false);
-        ReuseAdapter<Program> gridAdapter = new ReuseAdapter<Program>(programList, R.layout.item_live_programlist) {
+        ReuseAdapter<Program> gridAdapter = new ReuseAdapter<Program>(programList, R.layout.item_live_itemlist) {
             @Override
             public void bindView(ViewHolder holder, Program obj, int position) {
                 holder.setText(R.id.liveProgramItem,obj.getName() );
@@ -605,7 +605,7 @@ public class LiveListActivity extends Activity {
         gridView.setAdapter(gridAdapter);
 
         Log.i("getScreenHeight", "getScreenHeight " + DensityUtils.getScreenHeight(this));
-        mListPopupWindow = new PopupWindow(view, DensityUtils.getScreenWidth(this) * 2 / 3, DensityUtils.getScreenHeight(this) * 2 / 5, true);//WindowManager.LayoutParams.MATCH_PARENT
+        mListPopupWindow = new PopupWindow(view, DensityUtils.getScreenWidth(this) * 2 / 3, DensityUtils.getScreenHeight(this) * 3 / 5, true);//WindowManager.LayoutParams.MATCH_PARENT
         mListPopupWindow.setTouchable(true);
         mListPopupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
         mListPopupWindow.setOutsideTouchable(true);
@@ -639,7 +639,7 @@ public class LiveListActivity extends Activity {
         }
         initViewPager();
 
-        mEpgPopupWindow = new PopupWindow(view, DensityUtils.getScreenWidth(this) * 2 / 3, DensityUtils.getScreenHeight(this) * 2 / 5, true);//DensityUtils.getScreenWidth(this) * 2 / 3
+        mEpgPopupWindow = new PopupWindow(view, DensityUtils.getScreenWidth(this) * 2 / 3, DensityUtils.getScreenHeight(this) * 3 / 5, true);//DensityUtils.getScreenWidth(this) * 2 / 3
         mEpgPopupWindow.setTouchable(true);
         mEpgPopupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
         mEpgPopupWindow.setOutsideTouchable(true);
@@ -666,7 +666,7 @@ public class LiveListActivity extends Activity {
 //                    Log.e("onTransform", "position <= 3.0f ==>" + position);
                     float scale = (float) (page.getWidth() - DensityUtils.dip2px(getBaseContext(), 60 * position)) / (float) (page.getWidth());
                     //控制下面卡片的可见度
-                    page.setAlpha(1.0f);
+                    page.setAlpha(0.7f);
                     //控制停止滑动切换的时候，只有最上面的一张卡片可以点击
                     page.setClickable(false);
                     page.setPivotX(page.getWidth() / 2f);

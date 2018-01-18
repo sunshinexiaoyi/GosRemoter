@@ -3,83 +3,94 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@drawable/new_connect_bg"
+    android:orientation="vertical"
     android:id = "@+id/linear">
+
+    <gos.remoter.view.TitleBarNew
+        android:id="@+id/titleBar"
+        style="@style/TitleBar"/>
 
     <RelativeLayout
         android:id = "@+id/connect"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/new_connect_bg">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <gos.remoter.view.TitleBarNew
-        android:id="@+id/titleBar"
-        style="@style/TitleBar"
-        android:layout_alignParentTop="true" />
+    </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relative"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/versionName"
-        android:layout_marginBottom="96dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.3"
+        android:layout_gravity="center"
         android:gravity="center">
 
         <RelativeLayout
-            android:id="@+id/relative_edit"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_gravity="center">
+            android:id="@+id/relative"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center">
+<!--android:layout_marginBottom="96dp"-->
 
-            <ImageView
-                android:id="@+id/ipImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/new_connect_ip"
-                android:focusableInTouchMode="true"
-                android:paddingLeft="10dp"
-                android:visibility="visible" />
-
-            <AutoCompleteTextView
-                android:id="@+id/autoTxt"
+            <RelativeLayout
+                android:id="@+id/relative_edit"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:gravity="center"
-                android:layout_marginBottom="130dp"
-                android:hint="@string/connect_edit_server_address"
-                android:textColorHint="@color/gray1"
-                android:textSize="17sp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:inputType="textUri"
-                android:cursorVisible="false"
-                android:textColorHighlight="@color/bg1_whole"/>
+                android:layout_gravity="center">
 
-            <ImageView
-                android:id="@+id/deleteImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/delete_address"
-                android:paddingRight="10dp"
-                android:visibility="gone" />
+                <ImageView
+                    android:id="@+id/ipImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/new_connect_ip"
+                    android:focusableInTouchMode="true"
+                    android:paddingLeft="10dp"
+                    android:visibility="visible" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:gravity="center"
+                    android:layout_marginBottom="130dp"
+                    android:hint="@string/connect_edit_server_address"
+                    android:textColorHint="@color/gray1"
+                    android:textSize="17sp"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:inputType="textUri"
+                    android:cursorVisible="false"
+                    android:textColorHighlight="@color/bg1_whole"/>
+
+                <ImageView
+                    android:id="@+id/deleteImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/delete_address"
+                    android:paddingRight="10dp"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnConnect"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:layout_below="@+id/relative_edit"
+                android:background="@drawable/connect_btn"
+                android:text="@string/connect_confirm"
+                android:textColor="@drawable/button_font_style"
+                android:textSize="@dimen/home_item_size"
+                android:layout_marginTop="20dp" />
 
         </RelativeLayout>
-
-        <Button
-            android:id="@+id/btnConnect"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:layout_below="@+id/relative_edit"
-            android:background="@drawable/connect_btn"
-            android:text="@string/connect_confirm"
-            android:textColor="@drawable/button_font_style"
-            android:textSize="@dimen/home_item_size"
-            android:layout_marginTop="20dp" />
 
     </RelativeLayout>
 
@@ -87,14 +98,11 @@
         android:id="@+id/versionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="11dp"
+        android:layout_gravity="center"
         android:text="版本号"
         android:textColor="@color/gray3"
         android:textSize="@dimen/epg_spinner_title" />
-
-</RelativeLayout>
 
 </LinearLayout>
 

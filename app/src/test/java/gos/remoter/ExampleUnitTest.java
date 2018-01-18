@@ -23,10 +23,10 @@ import gos.remoter.data.ReserveEventSend;
 import gos.remoter.data.Respond;
 import gos.remoter.data.Time;
 import gos.remoter.define.DataPackage;
+import gos.remoter.define.DataParse;
 import gos.remoter.define.NetProtocol;
-import gos.remoter.define.*;
 
-import static gos.remoter.define.CommandType.*;   //导入静态命令集
+import static gos.remoter.define.CommandType.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -163,9 +163,9 @@ public class ExampleUnitTest {
                 sendData = JSON.toJSONString(respond);
                 break;    //
             /*广告信息*/
-            case COM_GET_AD:
+            case CMD_GET_AD_INFO:
                 System.out.println("获取广告列表");
-                dataPackage.setCommand(COM_SET_AD);
+                dataPackage.setCommand(CMD_SET_AD_INFO);
                 ArrayList<Advertisement> advertisements = new ArrayList<>();
                 for(int i = 0; i < testAD.length; i++) {
                     Advertisement advertisement = new Advertisement(testAD[i]);
@@ -174,6 +174,20 @@ public class ExampleUnitTest {
                 sendData = JSON.toJSONString(advertisements);
 
                 break;
+            /* 获取所有节目模块命令 */
+            case COM_PROGRAM_GET_All_LIST :
+                System.out.println("获取所有节目的列表");
+                dataPackage.setCommand(COM_PROGRAM_SET_All_LIST);
+
+                sendData = JSON.toJSONString(getAllProgramList());
+                break;
+            case COM_PROGRAM_SET_UPDATE_ALL_LIST :
+                System.out.println("更新所有节目的列表");
+                dataPackage.setCommand(COM_PROGRAM_UPDATE_ALL_LIST);
+
+                sendData = JSON.toJSONString(getAllNewProgramList());
+                break;
+
              /* 直播模块命令 */
             case COM_LIVE_GET_PROGRAM_LIST :
                 System.out.println("获取节目列表");
@@ -303,6 +317,35 @@ public class ExampleUnitTest {
         }
 
         return programList;
+    }
+
+    ArrayList<Program> getAllProgramList(){
+
+        ArrayList<Program> allProgramList = new ArrayList<>();
+        for(int i = 0;i < (epgPrograms.size() - 7);i++)
+        {
+            EpgProgram epgProgram = epgPrograms.get(i);
+            Program program = new Program(epgProgram.getName(),epgProgram.getIndex());
+            program.setType(epgProgram.getType());
+
+            allProgramList.add(program);
+        }
+
+        return allProgramList;
+    }
+
+    ArrayList<Program> getAllNewProgramList() {
+        ArrayList<Program> allProgramList = new ArrayList<>();
+        for(int i = 3;i < (epgPrograms.size() - 6);i++)
+        {
+            EpgProgram epgProgram = epgPrograms.get(i);
+            Program program = new Program(epgProgram.getName(),epgProgram.getIndex());
+            program.setType(epgProgram.getType());
+
+            allProgramList.add(program);
+        }
+
+        return allProgramList;
     }
 
     Time getTimeByEventId(ArrayList<Date> dates, String id){

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -31,7 +32,8 @@ import gos.remoter.data.IndexClass;
 import gos.remoter.data.Respond;
 import gos.remoter.define.CommandType;
 import gos.remoter.define.DataParse;
-import gos.remoter.define.SystemInfo;
+import gos.remoter.define.KeyValue;
+import gos.remoter.define.SystemApplication;
 import gos.remoter.enumkey.SystemState;
 import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
@@ -39,15 +41,44 @@ import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
 import gos.remoter.view.TitleBarNew;
 
-import static gos.remoter.define.CommandType.*;
-import static gos.remoter.define.KeyValue.*;
+import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
+import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
+import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
+import static gos.remoter.define.CommandType.COM_SYS_EXIT;
+import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
+import static gos.remoter.define.KeyValue.KEYVALUE_0;
+import static gos.remoter.define.KeyValue.KEYVALUE_1;
+import static gos.remoter.define.KeyValue.KEYVALUE_2;
+import static gos.remoter.define.KeyValue.KEYVALUE_3;
+import static gos.remoter.define.KeyValue.KEYVALUE_4;
+import static gos.remoter.define.KeyValue.KEYVALUE_5;
+import static gos.remoter.define.KeyValue.KEYVALUE_6;
+import static gos.remoter.define.KeyValue.KEYVALUE_7;
+import static gos.remoter.define.KeyValue.KEYVALUE_8;
+import static gos.remoter.define.KeyValue.KEYVALUE_9;
+import static gos.remoter.define.KeyValue.KEYVALUE_BACK;
+import static gos.remoter.define.KeyValue.KEYVALUE_DOWN;
+import static gos.remoter.define.KeyValue.KEYVALUE_EXIT;
+import static gos.remoter.define.KeyValue.KEYVALUE_FAV;
+import static gos.remoter.define.KeyValue.KEYVALUE_FUNC1;
+import static gos.remoter.define.KeyValue.KEYVALUE_LEFT;
+import static gos.remoter.define.KeyValue.KEYVALUE_MENUE;
+import static gos.remoter.define.KeyValue.KEYVALUE_MUTE;
+import static gos.remoter.define.KeyValue.KEYVALUE_OK;
+import static gos.remoter.define.KeyValue.KEYVALUE_POWER;
+import static gos.remoter.define.KeyValue.KEYVALUE_PVR;
+import static gos.remoter.define.KeyValue.KEYVALUE_RIGHT;
+import static gos.remoter.define.KeyValue.KEYVALUE_UP;
 
-public class RemoterActivity extends Activity {
+public class RemoterActivity extends Activity implements View.OnLongClickListener, View.OnTouchListener{
 
     private String TAG = this.getClass().getSimpleName();
     private Button remoteNumber;
     private TitleBarNew titleBar;
     private RemoterSetting remoterSet;
+
+    private LinearLayout remoteBg;
+    private Button btnUp,btnDown,btnLeft,btnRight,btnOk;
 
     private View viewNumber;
     private AlertDialog alertDialog = null;
@@ -59,6 +90,7 @@ public class RemoterActivity extends Activity {
 
     HashMap<Integer,Integer> keysMap = new HashMap();
     private boolean isLongKey = false;  //是否长按
+
     private enum KeyStatus {
         NORMAL, //正常调台
         LONG,  // 长按
@@ -159,7 +191,7 @@ public class RemoterActivity extends Activity {
         titleBar = (TitleBarNew)findViewById(R.id.titleBar);
         titleBar.setAlpha(255);
 
-        titleBar.setTextTitle(R.string.remoter_title);
+        titleBar.setTextTitle(R.string.home_remoter);
         titleBar.setImageLeft(R.drawable.activity_return, new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,7 +206,25 @@ public class RemoterActivity extends Activity {
             }
         });*/
 
-        initCustomLayout();
+//        initCustomLayout();
+        remoteBg   = (LinearLayout) findViewById(R.id.remoteBg);
+        btnUp      = (Button) findViewById(R.id.up);
+        btnDown    = (Button) findViewById(R.id.down);
+        btnLeft    = (Button) findViewById(R.id.left);
+        btnRight   = (Button) findViewById(R.id.right);
+        btnOk      = (Button) findViewById(R.id.ok);
+
+        btnUp.setOnTouchListener(this);
+        btnDown.setOnTouchListener(this);
+        btnLeft.setOnTouchListener(this);
+        btnRight.setOnTouchListener(this);
+        btnOk.setOnTouchListener(this);
+
+        btnUp.setOnLongClickListener(this);
+        btnDown.setOnLongClickListener(this);
+        btnLeft.setOnLongClickListener(this);
+        btnRight.setOnLongClickListener(this);
+
         remoteNumber = (Button) findViewById(R.id.remoteNumber);
         remoteNumber.setOnClickListener(new OnClickListener() {
             @Override
@@ -185,6 +235,71 @@ public class RemoterActivity extends Activity {
         initNumberLayout();
         initViewValue();
 
+    }
+
+    @Override
+    public boolean onLongClick(final View view) {
+        isLongKey = true;
+        switch (view.getId()) {
+            case R.id.up:
+                remoteBg.setBackgroundResource(R.drawable.new_remote_click_up);
+                break;
+            case R.id.down:
+                remoteBg.setBackgroundResource(R.drawable.new_remote_click_down);
+                break;
+            case R.id.left:
+                remoteBg.setBackgroundResource(R.drawable.new_remote_click_left);
+                break;
+            case R.id.right:
+                remoteBg.setBackgroundResource(R.drawable.new_remote_click_right);
+                break;
+        }
+
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Log.e(TAG, "longClick 长按");
+                sendKeyValue(view.getId(), KeyStatus.NORMAL);
+            }
+        }, 500, 500);
+
+        return false;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if(event.getAction() == MotionEvent.ACTION_UP) {
+            remoteBg.setBackgroundResource(R.drawable.new_remote);
+            if(!isLongKey) {
+                sendKeyValue(v.getId(), KeyStatus.NORMAL);
+                Log.e(TAG, "onTouch 点击");
+
+            } else {
+                isLongKey = false;
+                timer.cancel();
+                Log.e(TAG, "cancelLong 取消长按");
+            }
+        } else if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE){
+            switch (v.getId()) {
+                case R.id.up:
+                    remoteBg.setBackgroundResource(R.drawable.new_remote_click_up);
+                    break;
+                case R.id.down:
+                    remoteBg.setBackgroundResource(R.drawable.new_remote_click_down);
+                    break;
+                case R.id.left:
+                    remoteBg.setBackgroundResource(R.drawable.new_remote_click_left);
+                    break;
+                case R.id.right:
+                    remoteBg.setBackgroundResource(R.drawable.new_remote_click_right);
+                    break;
+                case R.id.ok:
+                    remoteBg.setBackgroundResource(R.drawable.new_remote_click_ok);
+                    break;
+            }
+        }
+        return false;
     }
 
     /**
@@ -201,7 +316,7 @@ public class RemoterActivity extends Activity {
         Log.e(TAG, displayWidth + "--" + displayHeight + "宽高");
         Log.e(TAG, density + "--" + densityDpi + "密度");
 
-        remoterSet = (RemoterSetting) findViewById(R.id.remoteSet);
+//        remoterSet = (RemoterSetting) findViewById(R.id.remoteSet);
         remoterSet.setKeyValue(KEYVALUE_UP, KEYVALUE_DOWN, KEYVALUE_LEFT, KEYVALUE_RIGHT, KEYVALUE_OK);
         remoterSet.setOnTouchListener(new RemoterSetting.onTouchListener() {
             @Override
@@ -247,7 +362,7 @@ public class RemoterActivity extends Activity {
 
     private void initViewValue() {
 
-        keysMap.put(R.id.remoteBack, KEYVALUE_EXIT);
+        keysMap.put(R.id.remoteBack, KEYVALUE_BACK);
         keysMap.put(R.id.remoteOnOff, KEYVALUE_POWER);
         keysMap.put(R.id.remoteMute, KEYVALUE_MUTE);
 
@@ -256,6 +371,12 @@ public class RemoterActivity extends Activity {
         keysMap.put(R.id.remotePvr, KEYVALUE_PVR);
         keysMap.put(R.id.remoteExit, KEYVALUE_EXIT);
         //keysMap.put(R.id.info, KEYVALUE_INFO);
+
+        keysMap.put(R.id.up, KeyValue.KEYVALUE_UP);
+        keysMap.put(R.id.left,KeyValue.KEYVALUE_LEFT);
+        keysMap.put(R.id.ok,KeyValue.KEYVALUE_OK);
+        keysMap.put(R.id.right,KeyValue.KEYVALUE_RIGHT);
+        keysMap.put(R.id.down,KeyValue.KEYVALUE_DOWN);
 
         //设置popupWindow/dialog里的按钮的事件
         keysMap.put(R.id.numberOne, KEYVALUE_1);
@@ -292,6 +413,12 @@ public class RemoterActivity extends Activity {
         return false;
     }
 
+    /**
+     * 目前与服务器间通信，其实只用到了NORMAL状态
+     * @param keyValue
+     * @param keyStatus
+     * @return
+     */
     public boolean sendKeyValue(int keyValue, KeyStatus keyStatus) {
 //        Log.i("fragment_remote","keyValue:" + keyValue);
         IndexClass indexClass = new IndexClass(keyValue);
@@ -336,7 +463,7 @@ public class RemoterActivity extends Activity {
         Toast.makeText(this,getResources().getString(R.string.connect_detach), Toast.LENGTH_SHORT).show();
 
         //设置系统状态为断开连接
-        SystemInfo.getInstance().setState(SystemState.DETACH);
+        SystemApplication.getInstance().setState(SystemState.DETACH);
     }
 
 	//查找对应id，

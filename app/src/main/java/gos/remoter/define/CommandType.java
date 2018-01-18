@@ -17,6 +17,7 @@ interface CommandOut{
     /* 系统命令 */
     byte COM_SYSTEM_RESPOND = 1;     //回应
     byte COM_SYSTEM_HEARTBEAT_PACKET = 2;     //心跳包
+    byte CMD_SYSTEM_CLIENT_NOT_FOUND = 3;//
 
     /* 连接模块命令 */
     byte COM_CONNECT_GET_DEVICE = 10;       //查找设备
@@ -48,22 +49,24 @@ interface CommandOut{
     byte COM_EPG_CLASH_RESERVE = 43; //epg预定事件冲突
 
     /* 定时开关机模块命令 */
-    byte COM_TIME_SET_ON = 50; //设置定时开机
-    byte COM_TIME_SET_OFF = 51; //设置定时关机
+    byte COM_TIME_SET_OFF = 50; //设置定时关机
+    byte COM_TIME_SET_ON = 51; //设置定时开机
 
     /* 邮件模块命令 */
-    byte COM_EMAIL_GET_EMAIL_INFORM = 60;//获取邮件信息
-    byte COM_EMAIL_SET_EMAIL_INFORM = 61;//设置邮件信息
+    byte COM_EMAIL_GET_INFORM = 60;//获取邮件信息
+    byte COM_EMAIL_SET_INFORM = 61;//设置邮件信息
 
     /* 节目列表模块命令 */
     byte COM_PROGRAM_GET_All_LIST = 70; //获取所有节目列表 
     byte COM_PROGRAM_SET_All_LIST = 71; //设置所有节目列表
     byte COM_PROGRAM_STB_SWITCH = 72;   //切换播放节目
     byte COM_PROGRAM_UPDATE_ALL_LIST = 73;//更新所有节目列表
+    byte COM_PROGRAM_SET_UPDATE_ALL_LIST = 74;//触发服务器的更新命令，模拟
+
 
     /* 广告模块命令 */
-    byte COM_GET_AD = 80; //获取广告
-    byte COM_SET_AD = 81; //设置广告
+    byte CMD_GET_AD_INFO = 80; //获取广告
+    byte CMD_SET_AD_INFO = 81; //设置广告
 
 }
 

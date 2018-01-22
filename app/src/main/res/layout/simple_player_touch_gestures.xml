@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:text="50%"
             android:textColor="@android:color/white"
-            android:textSize="18dp" />
+            android:textSize="@dimen/text_dimen_18sp" />
     </LinearLayout>
     <!-- 亮度-->
     <LinearLayout
@@ -53,7 +53,7 @@
             android:paddingTop="8dp"
             android:text="50%"
             android:textColor="@android:color/white"
-            android:textSize="16dp" />
+            android:textSize="@dimen/text_dimen_16sp" />
     </LinearLayout>
     <!-- 快进快退-->
     <LinearLayout
@@ -73,7 +73,7 @@
             android:paddingTop="8dp"
             android:text="50%"
             android:textColor="@android:color/white"
-            android:textSize="16dp" />
+            android:textSize="@dimen/text_dimen_16sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:text="50%"
                 android:textColor="@android:color/white"
-                android:textSize="16dp" />
+                android:textSize="@dimen/text_dimen_16sp" />
 
             <TextView
                 android:id="@+id/app_video_fastForward_all"
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:text="50%"
                 android:textColor="@color/Grey_300"
-                android:textSize="16dp" />
+                android:textSize="@dimen/text_dimen_16sp" />
 
         </LinearLayout>
 

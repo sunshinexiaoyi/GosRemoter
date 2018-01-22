@@ -35,7 +35,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="#808080"
-            android:textSize="@dimen/live_program_title"
+            android:textSize="@dimen/text_dimen_15sp"
             android:layout_centerInParent="true"/>
 
         <View

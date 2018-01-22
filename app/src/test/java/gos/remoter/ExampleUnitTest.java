@@ -23,8 +23,8 @@ import gos.remoter.data.ReserveEventSend;
 import gos.remoter.data.Respond;
 import gos.remoter.data.Time;
 import gos.remoter.define.DataPackage;
-import gos.remoter.define.DataParse;
 import gos.remoter.define.NetProtocol;
+import gos.remoter.define.*;
 
 import static gos.remoter.define.CommandType.*;   //导入静态命令集
 
@@ -272,7 +272,7 @@ public class ExampleUnitTest {
         epgProgram.setServiceId(10);
         epgProgram.setType(index%4);
 
-        String str = "好的每tion取出对应的boolean值，然后再进行checkbox的状态设置，呵呵呵呵";
+        String str = "取出对应的boolean值，然后再进行checkbox的状态设置;取出对应的boolean值，然后再进行checkbox的状态设置；取出对应的boolean值，然后再进行checkbox的状态设置；";
 
         ArrayList<Date> dateArrayList = epgProgram.getDateArray();
         int position = 0;

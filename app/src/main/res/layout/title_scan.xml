@@ -38,7 +38,7 @@
             android:layout_marginLeft="10dp"
             android:text="@string/scan_title"
             android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:textSize="@dimen/text_dimen_18sp" />
 
     </RelativeLayout>
 

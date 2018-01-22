@@ -23,7 +23,7 @@
         android:padding="8dp"
         android:singleLine="true"
         android:textColor="@android:color/white"
-        android:textSize="12dp"
+        android:textSize="@dimen/text_dimen_12sp"
         android:visibility="visible" />
 
     <ImageView

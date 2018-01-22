@@ -11,12 +11,12 @@
         android:gravity="center"
         android:padding="5dp"
         android:textColor="@color/black_text"
-        android:textSize="@dimen/program_list_title_size" />
+        android:textSize="@dimen/text_dimen_20sp" />
 
     <ImageView
         android:id="@+id/languageEdit"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_centerVertical="true"
         android:gravity="center"
         android:layout_alignParentRight="true"

@@ -12,17 +12,21 @@ import java.util.ArrayList;
 
 import gos.remoter.R;
 import gos.remoter.adapter.ReuseAdapter;
+import gos.remoter.define.CommandType;
+import gos.remoter.event.EventManager;
+import gos.remoter.event.EventMode;
 import gos.remoter.tool.ImmersionLayout;
+import gos.remoter.tool.SharedPreferencesUtils;
 import gos.remoter.view.TitleBarNew;
 
 public class SettingLanguage extends Activity {
     private  final String TAG = this.getClass().getSimpleName();
-    private final static int SETTING_SELECTED_LANGUAGE_CONTENT = 2;
+    public final static String SETTING_LANGUAGE_SELECTED = "language";
+    private final static String SETTING_LANGUAGE_SELECTED_POSITION = "language_position";
 
     private ListView languageList;
-    private View setUnderline;
     private ArrayList<String> lanLists;//{"跟随系统", "简体中文", "English"}
-    private int curPosition = 0;
+    private int curPosition;
     private String curLanguage;
 
     ReuseAdapter<String> lanAdapter = new ReuseAdapter<String>(R.layout.item_set_language) {
@@ -35,12 +39,15 @@ public class SettingLanguage extends Activity {
     };
 
 
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_language);
 
+//        EventManager.register(this);
+        ACTCollector.add(this);
         initView();
+        initData();
 
     }
 
@@ -48,7 +55,28 @@ public class SettingLanguage extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
+        ACTCollector.remove(this);
+/*        EventManager.removeSticky(this);
+        EventManager.unregister(this);*/
+
     }
+/*
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRecviveEvent(EventMsg msg) {
+        if(msg.getEventMode() == EventMode.IN) {
+            switch (msg.getCommand()) {
+                case CommandType.COM_SET_SYSTEM_LANGUAGE:
+
+        LanguageUtil.resetDefaultLanguage();
+        Log.e(TAG, "configuration--" + LanguageUtil.getSetLocale().getDisplayName());
+
+        recreate();//刷新界面
+
+                    break;
+
+            }
+        }
+    }*/
 
     void initView(){
         new ImmersionLayout(this).setImmersion();
@@ -62,18 +90,16 @@ public class SettingLanguage extends Activity {
                 finish();
             }
         });
-        titleBar.setImageRight(R.drawable.new_live_list, new View.OnClickListener() {
+        titleBar.setTextRight(R.string.saveLanguage, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //回传数据,保存状态
-                sendData();
+                //保存状态
+                saveLanguage();
             }
 
         });
 
         languageList = (ListView) findViewById(R.id.set_language);
-        setUnderline = findViewById(R.id.underline);
-
         languageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -85,29 +111,46 @@ public class SettingLanguage extends Activity {
 
             }
         });
-        languageList.setSelector(R.color.deepgray);
         languageList.setAdapter(lanAdapter);
-        lanAdapter.setSelectedId(curPosition);
 
+    }
+
+    private void initData() {
         lanLists = new ArrayList<>();
         lanLists.add(getResources().getString(R.string.lanSystem));
         lanLists.add(getResources().getString(R.string.lanChinse));
         lanLists.add(getResources().getString(R.string.lanEnglish));
         lanAdapter.reset(lanLists);
 
-        curLanguage = lanLists.get(curPosition);
+        curPosition = SharedPreferencesUtils.getInt(SETTING_LANGUAGE_SELECTED_POSITION, 0);
+        curLanguage = SharedPreferencesUtils.get(SETTING_LANGUAGE_SELECTED, getString(R.string.lanSystem));
+        Log.e(TAG, "存储的位置和语言" + curPosition + curLanguage);
+        lanAdapter.setSelectedId(curPosition);
 
     }
 
-    //用SharedPreference存储语言，
+    private void saveLanguage() {
+        SharedPreferencesUtils.save(SETTING_LANGUAGE_SELECTED, curLanguage);
+        SharedPreferencesUtils.save(SETTING_LANGUAGE_SELECTED_POSITION, curPosition);
+        //通知其他Activity选择的语言
+        changeOther();
 
-
-    private void sendData() {
-        Log.e(TAG,"intent----intent");
-        Intent intent = new Intent();
-        intent.putExtra("language", curLanguage);
-        setResult(SETTING_SELECTED_LANGUAGE_CONTENT, intent);
+//        startJump();
         finish();
+    }
+
+    private void changeOther() {
+        EventManager.send(CommandType.COM_SET_SYSTEM_LANGUAGE, curLanguage, EventMode.IN);
+
+    }
+
+    private void startJump() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        // 杀掉进程
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
     }
 
 

@@ -71,7 +71,7 @@ public class ProgramActivity extends Activity implements AdapterView.OnItemClick
                             setSelectSinger(position, false);
                            holder.setImageResource(R.id.textEdit, R.drawable.programlist_fav_selected, R.drawable.programlist_fav_nomal, false);
                        }
-                        Log.e(TAG, "查询数据库里的信息" + db.qryAllInfo());
+//                        Log.e(TAG, "查询数据库里的信息" + db.qryAllInfo());
 
                     }
                 });
@@ -107,7 +107,7 @@ public class ProgramActivity extends Activity implements AdapterView.OnItemClick
 
     }
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReceiveEvent(EventMsg msg){
         if(msg.getEventMode() == EventMode.OUT)
             return;
@@ -234,7 +234,7 @@ public class ProgramActivity extends Activity implements AdapterView.OnItemClick
      */
     private void setProgramList(String data) {
 
-        Log.i(TAG,"是否更新---" + isUpdate);
+        Log.i(TAG,"是否更新所有列表---" + isUpdate);
         programList = DataParse.getProgramList(data);
         if(null != programList) {
             underline.setVisibility(View.VISIBLE);
@@ -271,12 +271,11 @@ public class ProgramActivity extends Activity implements AdapterView.OnItemClick
      * 同步之前数据和新解析的数据
      */
     private void updateList() {
-
         for(int i = 0;i < databaseList.size(); i ++) {
             for(int j = 0; j < programList.size(); j ++) {
                 if(databaseList.get(i).getName().equals(programList.get(j).getName()) && databaseList.get(i).getFavor()) {
                     programList.get(j).setFavor(true);
-                    Log.i(TAG, "同步数据" + programList.get(j));
+//                    Log.i(TAG, "同步数据" + programList.get(j));
                 }
             }
 
@@ -284,7 +283,7 @@ public class ProgramActivity extends Activity implements AdapterView.OnItemClick
         db.deleteAll();
         db.addlist(programList);
         databaseList = db.qryAllInfo();
-        Log.e(TAG, "数据库更新后的数据" + databaseList);
+//        Log.e(TAG, "数据库更新后的数据" + databaseList);
     }
 
     /**
@@ -296,7 +295,7 @@ public class ProgramActivity extends Activity implements AdapterView.OnItemClick
         favorProgram.setId(favorProgram.getId());
         db.updateInfo(favorProgram);
         Log.e(TAG, "喜爱状态改变后的数据---" + favorProgram);
-        Log.i(TAG, "改变后的数据库---" + db.qryAllInfo());
+//        Log.i(TAG, "改变后的数据库---" + db.qryAllInfo());
     }
 
     /**

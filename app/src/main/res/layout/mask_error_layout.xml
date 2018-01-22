@@ -25,7 +25,7 @@
             android:layout_marginTop="23.0dip"
             android:text="@string/netError"
             android:textColor="@color/dark3"
-            android:textSize="14.0sp"
+            android:textSize="@dimen/text_dimen_14sp"
             android:visibility="visible" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="6.0dip"
             android:textColor="@color/gray2"
-            android:textSize="12.0sp"
+            android:textSize="@dimen/text_dimen_12sp"
             android:visibility="visible" />
 
         <TextView
@@ -48,7 +48,7 @@
             android:gravity="center"
             android:text="@string/clickRefresh"
             android:textColor="@color/red"
-            android:textSize="14.0sp"
+            android:textSize="@dimen/text_dimen_14sp"
             android:visibility="visible" />
     </LinearLayout>
 
@@ -79,7 +79,7 @@
             android:layout_marginTop="8.0dip"
             android:text="@string/loading"
             android:textColor="@color/gray1"
-            android:textSize="14.0sp" />
+            android:textSize="@dimen/text_dimen_14sp" />
 
 
         <TextView
@@ -92,7 +92,7 @@
             android:gravity="center"
             android:text="@string/mask_stop_loading"
             android:textColor="@color/red"
-            android:textSize="14.0sp"
+            android:textSize="@dimen/text_dimen_14sp"
             android:visibility="visible" />
     </LinearLayout>
 

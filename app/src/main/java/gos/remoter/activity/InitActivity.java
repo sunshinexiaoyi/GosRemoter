@@ -11,6 +11,7 @@ import java.util.TimerTask;
 
 import gos.remoter.R;
 import gos.remoter.tool.ImmersionLayout;
+import gos.remoter.tool.LanguageUtil;
 
 public class InitActivity extends AppCompatActivity{
     private String TAG = this.getClass().getSimpleName();
@@ -22,13 +23,10 @@ public class InitActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
 
-        view = findViewById(R.id.init);
         ACTCollector.add(this);//添加到收集器
-        initView();
-        //沉浸式隐藏标题栏
-        actionBar = getSupportActionBar();
-        actionBar.hide();
 
+        initLanguage();
+        initView();
         startConnectActivity();
     }
 
@@ -38,9 +36,20 @@ public class InitActivity extends AppCompatActivity{
         super.onDestroy();
     }
 
+    // 系统的设置会导致Configuration 的locale 属性发生变化，进行判断
+    private void initLanguage() {
+        if(!LanguageUtil.isSetValue()) {
+            LanguageUtil.resetDefaultLanguage();
+        }
+    }
+
     void initView(){
         new ImmersionLayout(this).setImmersion();
 
+        view = findViewById(R.id.init);
+        //沉浸式隐藏标题栏
+        actionBar = getSupportActionBar();
+        actionBar.hide();
     }
 
     void startConnectActivity(){

@@ -8,15 +8,25 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import gos.remoter.R;
+import gos.remoter.define.CommandType;
 import gos.remoter.define.SystemApplication;
 import gos.remoter.enumkey.SystemState;
+import gos.remoter.event.EventManager;
+import gos.remoter.event.EventMode;
+import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
+import gos.remoter.tool.LanguageUtil;
+import gos.remoter.tool.SharedPreferencesUtils;
 import gos.remoter.view.TitleBarNew;
+
+import static gos.remoter.activity.SettingLanguage.SETTING_LANGUAGE_SELECTED;
 
 public class SettingActivity extends Activity implements View.OnClickListener{
     private  final String TAG = this.getClass().getSimpleName();
-    private final static int SETTING_SELECTED_LANGUAGE = 2;
 
     private TextView setLanguage;
     private TextView selectedLanguage;
@@ -24,11 +34,28 @@ public class SettingActivity extends Activity implements View.OnClickListener{
     private TextView parentLock;
     private String language;
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRecviveEvent(EventMsg msg) {
+        if (msg.getEventMode() == EventMode.IN) {
+            switch (msg.getCommand()) {
+                case CommandType.COM_SET_SYSTEM_LANGUAGE:
+                    LanguageUtil.resetDefaultLanguage();
+                    Log.e(TAG, "configuration--" + LanguageUtil.getSetLocale().getDisplayLanguage());
+
+                    recreate();//刷新界面
+                    break;
+
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        ACTCollector.add(this);
+        EventManager.register(this);
         initView();
 
     }
@@ -36,12 +63,31 @@ public class SettingActivity extends Activity implements View.OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        selectedLanguage.setText(language);
+
+        /*  LanguageUtil.resetDefaultLanguage();
+        Log.e(TAG, "configuration--" + LanguageUtil.getSetLocale().getDisplayName());
+
+      setContentView(R.layout.activity_setting);
+        initView();*/
+
+        language = SharedPreferencesUtils.get(SETTING_LANGUAGE_SELECTED, getResources().getString(R.string.lanSystem));
+        if(selectedLanguage != null) {
+            if(language.equals("Auto") || language.equals("跟随系统")) {
+                selectedLanguage.setText(getResources().getString(R.string.lanSystem));
+            }else {
+                selectedLanguage.setText(language);
+            }
+        }
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        ACTCollector.remove(this);
+        EventManager.unregister(this);
+        Log.i(TAG,"销毁---------");
 
     }
 
@@ -63,8 +109,12 @@ public class SettingActivity extends Activity implements View.OnClickListener{
         versionInform = (TextView) findViewById(R.id.versionInform);
         parentLock = (TextView) findViewById(R.id.parentLock);
 
-        language = getResources().getString(R.string.lanSystem);
-        selectedLanguage.setText(language);
+        language = SharedPreferencesUtils.get(SETTING_LANGUAGE_SELECTED, getResources().getString(R.string.lanSystem));
+        if(language.equals("Auto") || language.equals("跟随系统")) {
+            selectedLanguage.setText(getResources().getString(R.string.lanSystem));
+        } else {
+            selectedLanguage.setText(language);
+        }
         setLanguage.setOnClickListener(this);
         versionInform.setOnClickListener(this);
         parentLock.setOnClickListener(this);
@@ -75,10 +125,10 @@ public class SettingActivity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.setLanguage:
-                //调用系统的语言设置
+                /*//调用系统的语言设置
                 Intent intentLanguage = new Intent(android.provider.Settings.ACTION_LOCALE_SETTINGS);
-                startActivity(intentLanguage);
-                //jumpToLanguage();
+                startActivity(intentLanguage);*/
+                jumpToLanguage();
 
                 break;
             case R.id.versionInform:
@@ -91,26 +141,12 @@ public class SettingActivity extends Activity implements View.OnClickListener{
     }
 
     private void jumpToLanguage(){
-        Log.i(TAG,"jumpToScan");
+        Log.i(TAG,"jumpToSettingLanguage");
         Intent intent = new Intent();
-        intent.setClass(this,SettingLanguage.class);
-        startActivityForResult(intent, SETTING_SELECTED_LANGUAGE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 2) { //默认为0
-            if(null != data) {
-                language = data.getStringExtra("language");
-                Log.e(TAG, "已设置的语言--" + language);
-            }
-            Log.e(TAG, "data 为空--" + language);
-            selectedLanguage.setText(language);
-        } else {
-            Log.e(TAG, "data 为空, 请求码问题--");
-
-        }
+        /*intent.setClass(this,SettingLanguage.class);
+        startActivityForResult(intent, SETTING_SELECTED_LANGUAGE);*/
+        intent.setClass(SettingActivity.this, SettingLanguage.class);
+        startActivity(intent);
     }
 
     private void detach(){

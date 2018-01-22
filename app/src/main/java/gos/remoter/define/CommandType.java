@@ -63,7 +63,6 @@ interface CommandOut{
     byte COM_PROGRAM_UPDATE_ALL_LIST = 73;//更新所有节目列表
     byte COM_PROGRAM_SET_UPDATE_ALL_LIST = 74;//触发服务器的更新命令，模拟
 
-
     /* 广告模块命令 */
     byte COM_GET_AD_INFO = 80; //获取广告
     byte COM_SET_AD_IMFO = 81; //设置广告
@@ -91,6 +90,8 @@ interface CommandIn{
     byte COM_NET_DISABLE = 108;        //无线网络不可用
 
     byte COM_NET_SOCKET_PREPARED = 109;        //网络准备好,socket
+
+    byte COM_SET_SYSTEM_LANGUAGE = 110;        //系统语言
 
 
 }

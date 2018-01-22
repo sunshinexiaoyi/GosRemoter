@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:text="@string/small_problem"
             android:textColor="@android:color/white"
-            android:textSize="14dp" />
+            android:textSize="@dimen/text_dimen_14sp" />
 
         <ImageView
             android:id="@+id/app_video_replay_icon"

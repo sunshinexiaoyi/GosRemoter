@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
-    <TextView
+<!--直播节目，可点击切台-->
+    <gos.remoter.view.MarqueeTextView
         android:id="@+id/liveProgramItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,6 +16,7 @@
         android:paddingLeft="40dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="22sp"/>
+        android:paddingRight="20dp"
+        android:textSize="@dimen/text_dimen_22sp"/>
 
 </RelativeLayout>

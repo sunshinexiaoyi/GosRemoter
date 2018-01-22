@@ -15,6 +15,6 @@
         android:text="测试"
         android:includeFontPadding="false"
         android:textColor="@color/live_program_type"
-        android:textSize="@dimen/live_program_type_nor"
+        android:textSize="@dimen/text_dimen_15sp"
         android:visibility="visible" />
 </RelativeLayout>

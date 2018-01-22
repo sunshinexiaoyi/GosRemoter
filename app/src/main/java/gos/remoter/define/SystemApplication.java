@@ -2,9 +2,13 @@ package gos.remoter.define;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
+
+import java.util.Locale;
 
 import gos.remoter.data.Device;
 import gos.remoter.enumkey.SystemState;
+import gos.remoter.tool.LanguageUtil;
 import gos.remoter.tool.SharedPreferencesUtils;
 
 /**
@@ -16,6 +20,8 @@ public class SystemApplication extends Application {
     private Device service = null;
     private SystemState state = SystemState.DETACH;
     private static SystemApplication instance = null;
+    private Locale setLocale;
+
     public SystemApplication(){
         super();
     }
@@ -59,5 +65,9 @@ public class SystemApplication extends Application {
         instance = this;
         context = getApplicationContext();
         SharedPreferencesUtils.init(context);//初始化
+        new LanguageUtil(context);
+        LanguageUtil.resetDefaultLanguage();
+        Log.e("System", "configuration--" + LanguageUtil.getSetLocale().getDisplayLanguage());
+
     }
 }

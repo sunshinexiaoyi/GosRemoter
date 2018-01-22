@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:textSize="@dimen/live_program"
+    android:textSize="@dimen/text_dimen_15sp"
     android:textColor="#808080"
     android:background="@drawable/liver_gridview_item_bg">
 

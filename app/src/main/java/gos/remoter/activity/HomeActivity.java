@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -30,8 +32,10 @@ import gos.remoter.adapter.HomePagerAdapter;
 import gos.remoter.adapter.ReuseAdapter;
 import gos.remoter.adapter.ScaleTransformer;
 import gos.remoter.data.Advertisement;
+import gos.remoter.data.Device;
 import gos.remoter.data.GridActivity;
 import gos.remoter.data.Respond;
+import gos.remoter.define.CommandType;
 import gos.remoter.define.DataParse;
 import gos.remoter.define.SystemApplication;
 import gos.remoter.enumkey.SystemState;
@@ -39,9 +43,18 @@ import gos.remoter.event.EventManager;
 import gos.remoter.event.EventMode;
 import gos.remoter.event.EventMsg;
 import gos.remoter.tool.ImmersionLayout;
+import gos.remoter.tool.LanguageUtil;
+import gos.remoter.tool.SharedPreferencesUtils;
 import gos.remoter.view.TitleBarNew;
 
-import static gos.remoter.define.CommandType.*;
+import static gos.remoter.activity.ConnectActivity.SP_KEY_SUCCESS;
+import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
+import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
+import static gos.remoter.define.CommandType.COM_GET_AD_INFO;
+import static gos.remoter.define.CommandType.COM_SET_AD_IMFO;
+import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
+import static gos.remoter.define.CommandType.COM_SYS_EXIT;
+import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
 
 
 public class HomeActivity extends Activity {
@@ -100,6 +113,12 @@ public class HomeActivity extends Activity {
     public void onRecviveEvent(EventMsg msg){
         if(EventMode.IN == msg.getEventMode()){  //对内
             switch (msg.getCommand()){
+                case CommandType.COM_SET_SYSTEM_LANGUAGE:
+                    LanguageUtil.resetDefaultLanguage();
+                    Log.e(TAG, "configuration--" + LanguageUtil.getSetLocale().getDisplayLanguage());
+
+                    recreate();//刷新界面
+                    break;
                 case COM_SYS_HEARTBEAT_STOP:
                     detach();
                     break;
@@ -119,7 +138,7 @@ public class HomeActivity extends Activity {
                             break;
                         case COM_CONNECT_ATTACH:
                             if (respond.getFlag()) {
-                                //attach();
+                                attach();
                                 getAD();
                             } else {
                                 Log.i(TAG, "连接设备失败");
@@ -147,7 +166,28 @@ public class HomeActivity extends Activity {
         ACTCollector.add(this);//添加到收集器
         EventManager.register(this);
 
+        //Log.e(TAG, "UdpUtil.sendSocket--" + UdpUtil.sendSocket);
+        if(SystemApplication.getInstance().getState() == SystemState.DETACH) {
+            Log.e(TAG, " SystemState.DETACH");
+            restartService();
+        }
         initView();
+
+    }
+
+    private void restartService() {
+        Log.e(TAG, "重连服务器--");
+        Log.e(TAG, "getIp()----" +  SharedPreferencesUtils.get(SP_KEY_SUCCESS));
+        if(null != SharedPreferencesUtils.get(SP_KEY_SUCCESS)) {
+            Device device = new Device(SharedPreferencesUtils.get(SP_KEY_SUCCESS), "", "");
+            EventManager.send(COM_CONNECT_ATTACH, JSON.toJSONString(device), EventMode.OUT);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume--");
 
     }
 
@@ -304,6 +344,13 @@ public class HomeActivity extends Activity {
         }
         viewPager.setAdapter(pagerAdapter);
 
+    }
+
+    private void attach() {
+        //设置服务器设备信息
+        SystemApplication.getInstance().setService(SystemApplication.getInstance().getService());
+        //设置系统状态为已连接
+        SystemApplication.getInstance().setState(SystemState.ATTACH);
     }
 
     private void detach(){

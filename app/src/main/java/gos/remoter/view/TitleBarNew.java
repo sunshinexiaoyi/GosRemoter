@@ -69,6 +69,10 @@ public class TitleBarNew  extends android.support.constraint.ConstraintLayout{
         textRight.setOnClickListener(onClickListener);
     }
 
+    public void setRightVisible(int visible) {
+        textRight.setVisibility(visible);
+    }
+
     /**
      * 设置右部图片
      * @param resId 图片资源id

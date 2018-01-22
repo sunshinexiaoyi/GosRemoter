@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="15dp"
-            android:textSize="@dimen/program_list_size"
+            android:textSize="@dimen/text_dimen_20sp"
             android:clickable="true"
             android:background="@drawable/program_list"
             android:visibility="gone"/>
@@ -32,7 +32,7 @@
             android:layout_height="match_parent"
             android:text="@string/versionGuide"
             android:padding="15dp"
-            android:textSize="@dimen/program_list_size"
+            android:textSize="@dimen/text_dimen_20sp"
             android:clickable="true"
             android:background="@drawable/program_list"/>
 
@@ -40,7 +40,7 @@
             android:id="@+id/guideInfor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:textSize="@dimen/text_dimen_15sp"
             android:padding="15dp"
             android:text="@string/guideInfor"
             android:visibility="gone"/>

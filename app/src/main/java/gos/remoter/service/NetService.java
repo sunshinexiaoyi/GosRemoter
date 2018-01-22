@@ -27,16 +27,7 @@ import gos.remoter.exception.DataPackageException;
 import gos.remoter.heartbeat.HeartbeatPacket;
 import gos.remoter.heartbeat.HeartbeatStop;
 
-import static gos.remoter.define.CommandType.COM_CONNECT_ATTACH;
-import static gos.remoter.define.CommandType.COM_CONNECT_DETACH;
-import static gos.remoter.define.CommandType.COM_CONNECT_GET_DEVICE;
-import static gos.remoter.define.CommandType.COM_LIVE_STOP_PROGRAM;
-import static gos.remoter.define.CommandType.COM_NET_DISABLE;
-import static gos.remoter.define.CommandType.COM_NET_ENABLE;
-import static gos.remoter.define.CommandType.COM_SYSTEM_HEARTBEAT_PACKET;
-import static gos.remoter.define.CommandType.COM_SYSTEM_RESPOND;
-import static gos.remoter.define.CommandType.COM_SYS_EXIT;
-import static gos.remoter.define.CommandType.COM_SYS_HEARTBEAT_STOP;
+import static gos.remoter.define.CommandType.*;
 
 public class NetService extends Service {
     private  final String TAG = this.getClass().getSimpleName();
@@ -116,6 +107,8 @@ public class NetService extends Service {
     public void onDestroy() {
         Log.e(TAG,"网络服务销毁");
         super.onDestroy();
+
+        EventManager.removeSticky(this);
         EventManager.unregister(this);//取消订阅
         unregisterWifiReceiver();
 

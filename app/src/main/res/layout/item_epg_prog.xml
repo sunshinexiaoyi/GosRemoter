@@ -12,7 +12,7 @@
     <TextView
         android:id="@+id/epg_progName"
         android:text="TRRRRRRRC News"
-        android:textSize="@dimen/epg_info_title"
+        android:textSize="@dimen/text_dimen_18sp"
         android:textColor="@color/epg_blackTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
     <TextView
         android:id="@+id/epg_progTime"
         android:text="9:00-10:00"
-        android:textSize="@dimen/epg_info_title"
+        android:textSize="@dimen/text_dimen_18sp"
         android:textColor="@color/epg_littleBlack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         android:layout_marginTop="6dp"
         android:text="There are somethingmesfgfr …"
         android:textColor="@color/epg_littleBlack"
-        android:textSize="@dimen/epg_info_content"
+        android:textSize="@dimen/text_dimen_14sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/epg_progName"
         tools:layout_constraintLeft_creator="1"
@@ -105,7 +105,7 @@
             android:layout_toRightOf="@id/epg_recordImg"
             android:text="@string/epg_Reservation_record"
             android:textColor="@color/epg_littleBlack"
-            android:textSize="@dimen/epg_info_set_title" />
+            android:textSize="@dimen/text_dimen_16sp" />
 
         <Button
             android:id="@+id/epg_full_recBtnOnce"
@@ -119,7 +119,7 @@
             android:paddingLeft="9dp"
             android:text="@string/epg_progSettingBtnText_Once"
             android:textAllCaps="false"
-            android:textSize="@dimen/epg_info_button_text" />
+            android:textSize="@dimen/text_dimen_12sp" />
 
         <Button
             android:id="@+id/epg_full_recBtnCycle"
@@ -133,7 +133,7 @@
             android:paddingRight="17dp"
             android:text="@string/epg_progSettingBtnText_Days"
             android:textAllCaps="false"
-            android:textSize="@dimen/epg_info_button_text" />
+            android:textSize="@dimen/text_dimen_12sp" />
 
         <!--预定观看-->
         <Button
@@ -152,7 +152,7 @@
             android:layout_toRightOf="@id/epg_watchImg"
             android:text="@string/epg_Scheduled_to_watch"
             android:textColor="@color/epg_littleBlack"
-            android:textSize="@dimen/epg_info_set_title" />
+            android:textSize="@dimen/text_dimen_16sp" />
 
         <Button
             android:id="@+id/epg_full_watchBtnOnce"
@@ -166,7 +166,7 @@
             android:paddingLeft="9dp"
             android:text="@string/epg_progSettingBtnText_Once"
             android:textAllCaps="false"
-            android:textSize="@dimen/epg_info_button_text" />
+            android:textSize="@dimen/text_dimen_12sp" />
 
         <Button
             android:id="@+id/epg_full_watchBtnCycle"
@@ -180,6 +180,6 @@
             android:paddingRight="17dp"
             android:text="@string/epg_progSettingBtnText_Days"
             android:textAllCaps="false"
-            android:textSize="@dimen/epg_info_button_text" />
+            android:textSize="@dimen/text_dimen_12sp" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

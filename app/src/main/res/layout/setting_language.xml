@@ -26,15 +26,14 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:listSelector="@color/transparent"
             android:divider="@color/underline"
-            android:dividerHeight="1dp"
+            android:dividerHeight="0.5dp"
             android:scrollbars="none"/>
 
         <View
             android:id="@+id/set_underline"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:background="@color/underline"

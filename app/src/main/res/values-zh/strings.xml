@@ -9,6 +9,7 @@
     <string name="lanSystem">跟随系统</string>
     <string name="lanChinse">简体中文</string>
     <string name="lanEnglish">English</string>
+    <string name="saveLanguage">保存</string>
     <string name="checkVersion">检查新版本</string>
     <string name="checkVersionResult">已是最新版本</string>
     <string name="copyRight">Copyright © 2017-2018 高斯贝尔 版权所有</string>
@@ -87,7 +88,7 @@
     <string name="epg_Scheduled_to_watch">预订观看</string>
     <string name="epg_progSettingBtnText_Once">一天</string>
     <string name="epg_progSettingBtnText_Days">每天</string>
-    <string name="epg_test">核心是重写BaseExpandableListAdpter，其实和之前写的普通的BaseAdapter是类似的， 但是BaseExpandableListAdpter则分成了两部分：组和子列表，具体看代码你就知道了！</string>
+    <string name="epg_test">核心是重写BaseExpandableListAdpter，其实和之前写的普通的BaseAdapter是类似的，但是BaseExpandableListAdpter则分成了两部分：组和子列表，具体看代码你就知道了！</string>
 
     <!--直播-->
     <string name="live_title">直播</string>
@@ -191,7 +192,7 @@
     <string name="bit_rate">bit_rate</string>
 
     <!-- 直播部分-->
-    <string name="jump_connect">尚未连接，请连接</string>
+    <string name="jump_connect">连接已断开，请重连</string>
     <string name="jump">点击连接</string>
     <string name="pref_key_using_media_codec">pref.using_media_codec</string>
     <string name="pref_key_using_media_codec_auto_rotate">pref.using_media_codec_auto_rotate</string>

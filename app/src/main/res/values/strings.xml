@@ -10,6 +10,7 @@
     <string name="lanSystem">Auto</string>
     <string name="lanChinse">简体中文</string>
     <string name="lanEnglish">English</string>
+    <string name="saveLanguage">save</string>
     <string name="checkVersion">Check Version</string>
     <string name="checkVersionResult">The Latest Version.</string>
     <string name="copyRight">Copyright © 2017-2018 GOSPELL.All Rights Reserved.</string>
@@ -193,7 +194,7 @@
     <string name="bit_rate">bit_rate</string>
     
     <!-- 直播部分 -->
-    <string name="jump_connect">There is no connection, please connect</string>
+    <string name="jump_connect">The connection is disconnected. Please reconnect.</string>
     <string name="jump">Click to connect</string>
     <string name="pref_key_using_media_codec">pref.using_media_codec</string>
     <string name="pref_key_using_media_codec_auto_rotate">pref.using_media_codec_auto_rotate</string>

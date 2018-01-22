@@ -32,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/remoter_one"
-                android:textSize="27sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item" />
@@ -44,7 +44,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_two"
                 android:layout_marginLeft="10dp"
-                android:textSize="27sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
@@ -56,7 +56,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_three"
                 android:layout_marginLeft="10dp"
-                android:textSize="27sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
@@ -75,7 +75,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/remoter_four"
-                android:textSize="27sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
@@ -87,7 +87,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_five"
                 android:layout_marginLeft="10dp"
-                android:textSize="27sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
@@ -98,7 +98,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/remoter_six"
-                android:textSize="27sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:layout_marginLeft="10dp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
@@ -118,7 +118,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/remoter_seven"
-                android:textSize="27sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
@@ -130,7 +130,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_eight"
                 android:layout_marginLeft="10dp"
-                android:textSize="27sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
@@ -142,7 +142,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_nine"
                 android:layout_marginLeft="10dp"
-                android:textSize="27sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
@@ -161,7 +161,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/remoter_back"
-                android:textSize="23sp"
+                android:textSize="@dimen/text_dimen_23sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
@@ -173,7 +173,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_zero"
                 android:layout_marginLeft="10dp"
-                android:textSize="27sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>
@@ -185,7 +185,7 @@
                 android:layout_weight="1"
                 android:text="@string/remoter_tv"
                 android:layout_marginLeft="10dp"
-                android:textSize="23sp"
+                android:textSize="@dimen/text_dimen_27sp"
                 android:onClick="remoterFuncOnClick"
                 android:textColor="@drawable/remoter_number_text_color"
                 android:background="@drawable/remoter_number_dialog_item"/>

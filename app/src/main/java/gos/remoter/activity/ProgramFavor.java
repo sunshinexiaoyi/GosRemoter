@@ -46,9 +46,10 @@ public class ProgramFavor extends Activity implements AdapterView.OnItemClickLis
 
     private ArrayList<Program> programFavorList;//列表
     private List<Program> programAll;//数据库
-    private Program favorProgram;
-    private List<Integer> nums;//删除的position集合
+    private Program favorProgram;//被修改的某一行
+    private List<Integer> nums;//删除的position集合，被选中
 
+    private TitleBarNew titleBar;
     private TextView programNull;
     private LinearLayout groupLinear;
     private LinearLayout deleteAllFavLin;
@@ -61,8 +62,7 @@ public class ProgramFavor extends Activity implements AdapterView.OnItemClickLis
     private Program curProgram = null;
 
     private boolean isDelete = false;
-    private boolean isSelectAll = false;
-    private boolean isSelectSinger = true;
+    private boolean isSelect = false;// false:单选；true：全选
 
     private DBDao db;
 
@@ -158,7 +158,7 @@ public class ProgramFavor extends Activity implements AdapterView.OnItemClickLis
         new ImmersionLayout(this).setImmersion();
 
         /*标题栏*/
-        TitleBarNew titleBar = (TitleBarNew)findViewById(R.id.titleBar);
+        titleBar = (TitleBarNew)findViewById(R.id.titleBar);
         titleBar.setTextTitle(R.string.program_favor_list);
         titleBar.setImageLeft(R.drawable.activity_return, new View.OnClickListener() {
             @Override
@@ -209,6 +209,7 @@ public class ProgramFavor extends Activity implements AdapterView.OnItemClickLis
     }
 
     private void setVisibleLayout() {
+        titleBar.setRightVisible(View.GONE);
         programNull.setVisibility(View.GONE);
         groupLinear.setVisibility(View.VISIBLE);
         deleteOk.setVisibility(View.VISIBLE);
@@ -268,44 +269,20 @@ public class ProgramFavor extends Activity implements AdapterView.OnItemClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fav_delete_all_lin:
-
-                if(isSelectAll) {
-                    deleteAllFav.setBackgroundResource(R.drawable.programlist_fav_uncaceled);
-                    isSelectAll = false;
-                    if(programFavorList.size() != 0) {
-                        setSelectedAll(true, false);
-                    }
-                } else {
-                    deleteAllFav.setBackgroundResource(R.drawable.programlist_fav_canceled);
-                    deleteSingle.setBackgroundResource(R.drawable.programlist_fav_uncaceled);
-                    isSelectAll = true;
-                    isSelectSinger = false;
-                    //设置全选
-                    if(programFavorList.size() != 0) {
-                        setSelectedAll(false, true);
-                    }
+                if(!isSelect) {
+                    AllStatus();
                 }
 
                 break;
             case R.id.fav_delete_single_lin:
-
-                if(isSelectSinger) {
-                    deleteSingle.setBackgroundResource(R.drawable.programlist_fav_uncaceled);
-                    isSelectSinger = false;
-                } else {
-                    deleteSingle.setBackgroundResource(R.drawable.programlist_fav_canceled);
-                    deleteAllFav.setBackgroundResource(R.drawable.programlist_fav_uncaceled);
-                    isSelectSinger = true;
-                    isSelectAll = false;
-
-                    if(programFavorList.size() != 0) {
-                        setSelectedAll(true, false);
-                    }
+                if(isSelect) {
+                    SingerStatus();
                 }
 
                 break;
             case R.id.fav_delete_ok:
                 isDelete = false;
+                titleBar.setRightVisible(View.VISIBLE);
                 groupLinear.setVisibility(View.GONE);
                 deleteOk.setVisibility(View.GONE);
                 showDeleteIamge(View.GONE);
@@ -318,13 +295,39 @@ public class ProgramFavor extends Activity implements AdapterView.OnItemClickLis
     }
 
     /**
+     *  设置全选状态
+     */
+    private void AllStatus() {
+        deleteAllFav.setBackgroundResource(R.drawable.programlist_fav_canceled);
+        deleteSingle.setBackgroundResource(R.drawable.programlist_fav_uncaceled);
+        isSelect = true;
+        if(programFavorList.size() != 0) {
+            setSelectedAll(false, true);
+        }
+    }
+
+    /**
+     * 设置选择状态
+     */
+    private void SingerStatus() {
+        deleteAllFav.setBackgroundResource(R.drawable.programlist_fav_uncaceled);
+        deleteSingle.setBackgroundResource(R.drawable.programlist_fav_canceled);
+        isSelect = false;
+        if(programFavorList.size() != 0) {
+            setSelectedAll(true, false);
+        }
+    }
+
+    /**
      * 只有点击确定时才修改数据
      */
     private void upDateData() {
-        if(nums.size() != 0) {
+        Log.e(TAG, "被选中的删除项" + nums);
+        if(nums.size() != 0 && nums != null) {
             for (int i = 0; i < nums.size(); i ++) {
                 changeFavorStatus(nums.get(i));
             }
+            nums.clear();
             setProgramList();
         }
     }
@@ -368,8 +371,32 @@ public class ProgramFavor extends Activity implements AdapterView.OnItemClickLis
     private void setSelectSinger(int position, boolean favor, boolean select) {
         programFavorList.get(position).setFavor(favor);
         programFavorList.get(position).setSelect(select);
-        nums.add(position);
+
+        changeNumbers(select, position);
 //        changeFavorStatus(position);
+    }
+
+    /**
+     * 修改List--nums 里的数值
+     * @param select
+     * @param position
+     */
+    private void changeNumbers(boolean select, int position) {
+        if(select && ! nums.contains(position)) {
+            nums.add(position);
+//            Log.e(TAG, "----nums---num---" + nums.get(0));
+        } else if(!select && nums.contains(position)) {
+            for(int i= 0; i < nums.size(); i ++) {
+                int num = nums.get(i);
+                if(num == position) {
+                    nums.remove(i);
+                }
+            }
+        }
+      /*  for(int i : nums) {
+            Log.e(TAG, "----nums------" + i);
+        }*/
+
     }
 
     /**

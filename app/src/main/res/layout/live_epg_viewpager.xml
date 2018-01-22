@@ -23,7 +23,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/home_epg"
             android:textColor="@color/white"
-            android:textSize="@dimen/program_list_size"/>
+            android:textSize="@dimen/text_dimen_20sp"/>
 
         <TextView
             android:id="@+id/live_programTitle_null"
@@ -34,7 +34,7 @@
             android:layout_marginBottom="20dp"
             android:text="@string/empty_list"
             android:textColor="@color/white"
-            android:textSize="@dimen/program_list_size"/>
+            android:textSize="@dimen/text_dimen_20sp"/>
     </LinearLayout>
 
     <android.support.v4.view.ViewPager

@@ -45,4 +45,20 @@ public class  EventManager {
     public static  void unregister(Object subscriber){
         EventBus.getDefault().unregister(subscriber);
     }
+
+    /**
+     *  移除所有的粘性事件
+     */
+    public static  void removeAllSticky() {
+        EventBus.getDefault().removeAllStickyEvents();
+    }
+
+    /**
+     * 移除指定粘性事件
+     * @param subscriber
+     */
+    public static  void removeSticky(Object subscriber) {
+        EventBus.getDefault().removeStickyEvent(subscriber);
+    }
+
 }

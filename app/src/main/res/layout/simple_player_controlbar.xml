@@ -29,7 +29,7 @@
             android:layout_gravity="center_vertical"
             android:text="06:21"
             android:textColor="@android:color/white"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_dimen_12sp"
             android:visibility="visible" />
 
         <SeekBar
@@ -56,14 +56,14 @@
                 android:layout_height="wrap_content"
                 android:text="06:21"
                 android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_dimen_12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/"
                 android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_dimen_12sp" />
 
             <TextView
                 android:id="@+id/app_video_endTime_left"
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:text="10:10"
                 android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_dimen_12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -101,14 +101,14 @@
                     android:layout_height="wrap_content"
                     android:text="06:21"
                     android:textColor="@android:color/white"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_dimen_12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/"
                     android:textColor="@android:color/white"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_dimen_12sp" />
 
                 <TextView
                     android:id="@+id/app_video_endTime"
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:text="10:10"
                     android:textColor="@android:color/white"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_dimen_12sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -128,7 +128,7 @@
             android:layout_gravity="center_vertical"
             android:text="10:10"
             android:textColor="@android:color/white"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_dimen_12sp"
             android:visibility="visible" />
     </LinearLayout>
 
@@ -141,7 +141,7 @@
         android:padding="8dp"
         android:text="标清"
         android:textColor="@android:color/white"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_dimen_12sp"
         android:visibility="gone" />
 
     <ImageView

@@ -58,6 +58,7 @@ public class ConnectActivity extends Activity {
     private final static String SP_NAME = "ipAddress";//文件名
     private final static String SP_EMPTY_TAG = "empty";
     private final static String SP_KEY_SEARCH = "search";
+    public final static String SP_KEY_SUCCESS = "success";
 
     private AutoCompleteTextView autoTxt;
     private ImageView deleteIamge;
@@ -365,6 +366,8 @@ public class ConnectActivity extends Activity {
 
     /**
      * 发送查找设备
+     * Event事件已经发布，此时还没有注册订阅。
+     * 当设置了sticky = true，在Event的事件发布后，进行注册。依然能够接收到之前发布的事件
      */
     private void sendFindDevice(){
         Log.i(TAG,"发送粘性事件 获取设备");
@@ -507,6 +510,9 @@ public class ConnectActivity extends Activity {
         EventManager.send(COM_CONNECT_ATTACH,data, EventMode.OUT);
         //设置服务器设备信息
         SystemApplication.getInstance().setService(device);
+        Log.e(TAG, "getService().getIp()--" +  SystemApplication.getInstance().getService().getIp());
+
+        SharedPreferencesUtils.save(SP_KEY_SUCCESS, device.getIp());
 
     }
 

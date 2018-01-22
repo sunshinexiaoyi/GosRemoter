@@ -36,7 +36,7 @@
                 android:paddingLeft="30dp"
                 android:text="Button"
                 android:textColor="#323232"
-                android:textSize="@dimen/connect_driver_btn"
+                android:textSize="@dimen/text_dimen_22sp"
                 android:textStyle="normal"
                 android:typeface="normal"
                 app:layout_constraintRight_toRightOf="parent"

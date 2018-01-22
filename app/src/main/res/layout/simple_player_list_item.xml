@@ -9,5 +9,5 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:gravity="center"
-        android:textSize="14sp" />
+        android:textSize="@dimen/text_dimen_14sp" />
 </LinearLayout>

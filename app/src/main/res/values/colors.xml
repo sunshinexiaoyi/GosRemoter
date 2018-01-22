@@ -7,6 +7,7 @@
     <color name="epg_black">#ffffff</color>
 
     <color name="title_bar_text">#FFFFFFFF</color>
+    <color name="horizontalLine">#ffeeeeee</color>
 
     <!--主页-->
     <color name="home_split_line">#808080</color>
@@ -16,69 +17,36 @@
     <color name="live_program_split_line">#e5e5e5</color>
     <color name="live_program_bg">#fcfcfc</color>
 
-
-   <color name="connect_driver_btn">#808080</color>
-    <color name="connect_btn_text">#22A7FF</color>
-
-    <color name="remoter_hint">#b9cefa</color>
     <color name="colorPrimary">#e93700</color>
     <color name="colorPrimaryDark">#e93700</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="bg_topbar">#FF4081</color>
-    <color name="text_topbar">#FF4081</color>
-    <color name="div_white">#080808</color>
-    <color name="bg_white">#080808</color>
-
-
-    <color name="dialog_out_back">#e5e5e5</color>
     <color name="dialog_in_back">#FFE5E5E5</color>
     <color name="viewpager_bg">#FFe1e1e1</color>
 
-
     <color name="dialog">#0e000000</color>
     <color name="remoter_bg"> #f6f7fb </color>
-    <color name="textColorforItemTitle">#ff666666</color>
     <color name="buy">#ff22a7ff</color>
     <color name="black">#ff000000</color>
     <color name="bg1_whole">#ffdfe2e6</color>
-    <color name="bg2_title">#ffebecf0</color>
     <color name="bg4_default">#ffdadde0</color>
     <color name="red">#d53c3c</color>
-    <color name="red_1">#ff2400</color>
     <color name="green">#ff29a968</color>
     <color name="blue">#ff1384d4</color>
     <color name="dark3">#ff46494b</color>
     <color name="gray1">#ff75767b</color>
     <color name="gray2">#ff86878b</color>
     <color name="gray3">#ffa7a7ab</color>
-    <color name="gray4">#ff787878</color>
-    <color name="white1">#ffeeeef1</color>
-    <color name="white2">#ffffffff</color>
     <color name="transparent">#00000000</color>
-    <color name="dialog_divider_color">#ffcccdd1</color>
     <color name="gray">#eaeaea</color>
     <color name="deepgray">#80F75522</color>
     <color name="background_tab_pressed">#6633B5E5</color>
-    <color name="horizontalLine">#ffeeeeee</color>
 
     <color name="blue_scan">#2a96e6</color>
-    <color name="dark_blue">#22A7FF</color>
-    <color name="dark_bule_press">#1D7FC0</color>
-    <color name="gray_item">#d2d2d2</color>
-    <color name="blue_item">#22a7ff</color>
     <color name="black_text">#080808</color>
-    <color name="red_buy">#ff391e</color>
 
     <color name="white">#ffffff</color>
-    <color name="green_text">#ff7beb1d</color>
-    <color name="white_text">#ffffffff</color>
-    <color name="main_blue">#ff54bceb</color>
-    <color name="pay_green">#FF52CAFF</color>
     <color name="yellow">#ffffff00</color>
-    <color name="price_blue">#ff52caff</color>
-    <color name="lgtblue">#23b5f3</color>
-    <color name="translucent_background">#e0000000</color>
 
     <!-- Grey-->
     <color name="Grey_300">#E0E0E0</color>
@@ -92,7 +60,6 @@
    <color name="new_scan_title"> #e93700</color>
    <color name="new_scan_title_press"> #EA3737</color>
    <color name="underline"> #ff75767b</color>
-
 
 
 </resources>
